@@ -11,15 +11,8 @@ namespace tupenca_back.DataAccess
         {
         }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<Campeonato> Campeonatos { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<User>().ToTable("users");
-            modelBuilder.Entity<Campeonato>().ToTable("campeonatos");
-
-        }
+        public DbSet<User>? Users { get; set; }
+        public DbSet<Campeonato>? Campeonatos { get; set; }
 
     }
 
