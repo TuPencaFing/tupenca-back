@@ -12,9 +12,15 @@ namespace tupenca_back.DataAccess.Repository.IRepository
     {
         T GetFirstOrDefault(Expression<Func<T, bool>> filter);
         IEnumerable<T> GetAll();
+        IQueryable<T> FindAll();
+        IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression);
+
         void Add(T entity);
+        void Update(T entity);
         void Remove(T entity);
         void RemoveRange(IEnumerable<T> entity);
+
+
     }
 
 }

@@ -21,9 +21,6 @@ namespace tupenca_back.DataAccess.Repository
             _appDbContext.SaveChanges();
         }
 
-        public void Update(User obj)
-        {
-            _appDbContext.User.Add(obj);
-        }
+        
     }
 }

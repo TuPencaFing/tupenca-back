@@ -18,10 +18,15 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(
         SqlOperations.EnableRetryOnFailure();
     }
     ));
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ICampeonatoRepository, CampeonatoRepository>();
+
 builder.Services.AddScoped<UserService, UserService>();
+builder.Services.AddScoped<CampeonatoService, CampeonatoService>();
 
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
