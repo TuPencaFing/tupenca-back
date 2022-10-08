@@ -15,15 +15,20 @@ namespace tupenca_back.DataAccess.Repository
         private readonly AppDbContext _db;
         internal DbSet<T> dbSet;
 
-        public Repository(AppDbContext db)
+        public Repository(AppDbContext appDbContext)
         {
-            _db = db;
+            _db = appDbContext;
             this.dbSet = _db.Set<T>();
         }
-        public void Add(T entity)
-        {
-            dbSet.Add(entity);
-        }
+
+        
+        public IQueryable<T> FindAll() => dbSet.AsNoTracking();
+
+        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression) =>
+            dbSet.Where(expression)
+                 .AsNoTracking();
+
+
         public IEnumerable<T> GetAll()
         {
             IQueryable<T> query = dbSet;
@@ -32,20 +37,19 @@ namespace tupenca_back.DataAccess.Repository
 
         public T GetFirstOrDefault(Expression<Func<T, bool>> filter)
         {
-
             IQueryable<T> query = dbSet;
             query = query.Where(filter);
             return query.FirstOrDefault();
         }
 
-        public void Remove(T entity)
-        {
-            dbSet.Remove(entity);
-        }
+        public void Add(T entity) => dbSet.Add(entity);
 
-        public void RemoveRange(IEnumerable<T> entity)
-        {
-            dbSet.RemoveRange(entity);
-        }
+        public void Update(T entity) => dbSet.Update(entity);
+
+        public void Remove(T entity) => dbSet.Remove(entity);
+
+        public void RemoveRange(IEnumerable<T> entity) => dbSet.RemoveRange(entity);
+
+
     }
 }
