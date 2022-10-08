@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.EntityFrameworkCore;
 using tupenca_back.DataAccess.Repository.IRepository;
 using tupenca_back.Model;
 
@@ -17,7 +18,7 @@ namespace tupenca_back.Services
 
         public Campeonato? findCampeonato(int? id) => _campeonatoRepository.GetFirstOrDefault(c => c.Id == id);
 
-        public void addCampeonato(Campeonato campeonato)
+        public void AddCampeonato(Campeonato campeonato)
         {
             if (campeonato != null)
             {
@@ -26,16 +27,22 @@ namespace tupenca_back.Services
             }
         }
 
-        public void editCampeonato(Campeonato campeonato)
+        public void UpdateCampeonato(int id, Campeonato campeonato)
         {
             if (campeonato != null)
             {
-                _campeonatoRepository.Update(campeonato);
+                var entity = findCampeonato(id);
+
+                entity.Name = campeonato.Name;
+                entity.StartDate = campeonato.StartDate;
+                entity.FinishDate = campeonato.FinishDate;
+
+                _campeonatoRepository.Update(entity);
                 _campeonatoRepository.Save();
             }
         }
 
-        public void deleteUser(Campeonato campeonato)
+        public void RemoveCampeonato(Campeonato campeonato)
         {
             if (campeonato != null)
             {
@@ -43,6 +50,13 @@ namespace tupenca_back.Services
                 _campeonatoRepository.Save();
             }
         }
+
+
+        public bool CampeonatoExists(int id)
+        {
+            return findCampeonato(id) == null;
+        }
+
     }
 }
 

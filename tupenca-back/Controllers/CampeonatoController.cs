@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using tupenca_back.Services;
 using tupenca_back.Model;
+using Microsoft.EntityFrameworkCore;
 
 namespace tupenca_back.Controllers
 {
@@ -24,7 +25,76 @@ namespace tupenca_back.Controllers
         {
             return Ok(_campeonatoService.getCampeonatos());
         }
-      
+
+        // GET: api/campeonatos/1
+
+        [HttpGet("{id}")]
+        public ActionResult<Campeonato> GetCampeonato(int id)
+        {
+            var campeonato = _campeonatoService.findCampeonato(id);
+
+            if (campeonato == null)
+            {
+                return NotFound();
+            } else
+            {
+                return campeonato;
+            }
+        }
+
+
+        // POST: api/campeonatos
+        [HttpPost]
+        public ActionResult<Campeonato> PostCampeonato(Campeonato campeonato)
+        {
+            _campeonatoService.AddCampeonato(campeonato);
+
+            return CreatedAtAction("GetCampeonato", new { id = campeonato.Id }, campeonato);
+        }
+
+
+        // PUT: api/campeonatos/1
+        [HttpPut("{id}")]
+        public ActionResult<Campeonato> PutCampeonato(int id, Campeonato campeonato)
+        {
+
+            if (!ModelState.IsValid)
+                return BadRequest();
+
+
+            if (id != campeonato.Id)
+                return BadRequest();
+
+            if (_campeonatoService.CampeonatoExists(id))
+                return NotFound();
+
+
+            _campeonatoService.UpdateCampeonato(id, campeonato);
+
+            return CreatedAtAction("GetCampeonato", new { id = campeonato.Id }, campeonato);
+        }
+
+
+        // DELETE: api/campeonatos/1
+        [HttpDelete("{id}")]
+        public IActionResult DeleteEvento(int id)
+        {
+
+            var campeonato = _campeonatoService.findCampeonato(id);
+
+            if (campeonato == null)
+            {
+                return NotFound();
+            }
+
+            _campeonatoService.RemoveCampeonato(campeonato);
+
+            return NoContent();
+        }
+
+
+
+
     }
 }
 
