@@ -21,26 +21,15 @@ namespace tupenca_back.DataAccess.Repository
             this.dbSet = _db.Set<T>();
         }
 
-        
-        public IQueryable<T> FindAll() => dbSet.AsNoTracking();
+        public T GetFirstOrDefault(Expression<Func<T, bool>> filter) =>
+            dbSet.Where(filter)
+                 .FirstOrDefault();
+
+        public IEnumerable<T> GetAll() => dbSet.ToList();
 
         public IQueryable<T> FindByCondition(Expression<Func<T, bool>> expression) =>
             dbSet.Where(expression)
                  .AsNoTracking();
-
-
-        public IEnumerable<T> GetAll()
-        {
-            IQueryable<T> query = dbSet;
-            return query.ToList();
-        }
-
-        public T GetFirstOrDefault(Expression<Func<T, bool>> filter)
-        {
-            IQueryable<T> query = dbSet;
-            query = query.Where(filter);
-            return query.FirstOrDefault();
-        }
 
         public void Add(T entity) => dbSet.Add(entity);
 
@@ -49,7 +38,6 @@ namespace tupenca_back.DataAccess.Repository
         public void Remove(T entity) => dbSet.Remove(entity);
 
         public void RemoveRange(IEnumerable<T> entity) => dbSet.RemoveRange(entity);
-
 
     }
 }
