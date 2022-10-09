@@ -5,10 +5,15 @@ namespace tupenca_back.DataAccess
 {
     public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) 
+      
+        public AppDbContext(DbContextOptions<AppDbContext> options)
+            : base(options) 
         {
-
         }
-        public DbSet<User> User { get; set; }
+
+        public DbSet<User>? Users { get; set; }
+        public DbSet<Campeonato>? Campeonatos { get; set; }
+
     }
+
 }

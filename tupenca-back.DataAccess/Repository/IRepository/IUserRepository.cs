@@ -9,7 +9,6 @@ namespace tupenca_back.DataAccess.Repository.IRepository
 {
     public interface IUserRepository : IRepository<User>
     {
-        void Update(User obj);
         void Save();
     }
 }
