@@ -5,11 +5,11 @@ VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "tupenca-back", "tupenca-back\tupenca-back.csproj", "{0E512F5C-04E6-41BB-AABF-9EF2AA813AB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tupenca-back.Model", "tupenca-back.Model\tupenca-back.Model.csproj", "{A3063452-E608-4321-8DA6-C261F89B8721}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "tupenca-back.Model", "tupenca-back.Model\tupenca-back.Model.csproj", "{A3063452-E608-4321-8DA6-C261F89B8721}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tupenca-back.DataAccess", "tupenca-back.DataAccess\tupenca-back.DataAccess.csproj", "{70B852CB-A96F-420C-BF3E-C8D7B6B21CE1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "tupenca-back.DataAccess", "tupenca-back.DataAccess\tupenca-back.DataAccess.csproj", "{70B852CB-A96F-420C-BF3E-C8D7B6B21CE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tupenca-back.Services", "tupenca-back.Services\tupenca-back.Services.csproj", "{445E0A6C-2F87-47A7-B1D5-C25B748DAC0F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "tupenca-back.Services", "tupenca-back.Services\tupenca-back.Services.csproj", "{445E0A6C-2F87-47A7-B1D5-C25B748DAC0F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

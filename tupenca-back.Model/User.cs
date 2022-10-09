@@ -7,12 +7,17 @@ namespace tupenca_back.Model
         [Key]
         public int Id { get; set; }
         [Required]
-        public string Name { get; set; }
+        public string UserName { get; set; }
 
         [Required]
-        public string Apellido { get; set; }
+        public string Email { get; set; }
 
         [Required]
-        public string Password { get; set; }
+        [MaxLength(64)]
+        public byte[] HashedPassword { get; set; }
+
+        [Required]
+        [MaxLength(128)]
+        public byte[] PasswordSalt{ get; set; }
     }
 }
