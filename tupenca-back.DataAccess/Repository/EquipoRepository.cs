@@ -10,40 +10,9 @@ namespace tupenca_back.DataAccess.Repository
         {
             _appDbContext = db;
         }
-
-
-        public IEnumerable<Equipo> GetEquipos()
+        public void Save()
         {
-            return _appDbContext.Equipo.ToList();
-        }
-
-        public Equipo GetEquipoByID(int equipoId)
-        {
-            return _appDbContext.Equipo.Find(equipoId);
-        }
-
-        public Equipo GetEquipoByName(string nombreEquipo)
-        {
-            return _appDbContext.Equipo.Find(nombreEquipo);
-        }
-
-        public void Create(Equipo obj)
-        {
-            _appDbContext.Equipo.Add(obj);
             _appDbContext.SaveChanges();
         }
-
-        public void Update(Equipo obj)
-        {
-            _appDbContext.Equipo.Add(obj);
-            _appDbContext.SaveChanges();
-        }
-
-        public void Delete(int equipoID) 
-        {
-            _appDbContext.Equipo.Remove(equipoID);
-            _appDbContext.SaveChanges();
-        }
-
     }
 }
