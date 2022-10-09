@@ -11,7 +11,7 @@ namespace tupenca_back.DataAccess.Repository
             _appDbContext = db;
         }
 
-        IEnumerable<Evento> GetEventosProximos()
+        public IEnumerable<Evento> GetEventosProximos()
         {
             var today = DateTime.Today;
             return _appDbContext.Eventos.Where(evento => evento.FechaInicial > today & evento.FechaInicial < today.AddDays(7));

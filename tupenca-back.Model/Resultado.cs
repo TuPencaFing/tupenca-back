@@ -4,17 +4,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace tupenca_back.Model
 {
+    public enum TipoResultado
+    {
+        Empate,
+        VictoriaEquipoLocal,
+        VictoriaEquipoVisitante
+    }
+
     public class Resultado
     {
         [Key]
-        public int Id { get; set; }
-
-        public enum TipoResultado
-        {
-            Empate,
-            VictoriaEquipoLocal,
-            VictoriaEquipoVisitante
-        }
+        public int ID { get; set; }
 
         [Required]
         public TipoResultado resultado { get; set; }
