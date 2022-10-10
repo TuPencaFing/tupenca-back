@@ -31,9 +31,9 @@ namespace tupenca_back.Controllers
             return Ok(deportes);
         }
 
-        // GET: api/deportes/1        
+        // GET: api/deporte/1        
         [HttpGet]
-        [Route("api/deportes/{id}")]
+        [Route("api/deporte/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Deporte> GetDeporteById(int id)
@@ -49,9 +49,9 @@ namespace tupenca_back.Controllers
             }
         }
 
-        // GET: api/deportes/nombre        
+        // GET: api/deporte/nombre        
         [HttpGet]
-        [Route("api/deportes/{nombre}")]
+        [Route("api/deporte/{nombre}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Deporte> GetDeporteByNombre(string nombre)

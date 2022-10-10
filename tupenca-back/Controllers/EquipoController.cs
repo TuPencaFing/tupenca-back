@@ -31,9 +31,9 @@ namespace tupenca_back.Controllers
             return Ok(equipos);
         }
 
-        // GET: api/equipos/1        
+        // GET: api/equipo/1        
         [HttpGet]
-        [Route("api/equipos/{id}")]
+        [Route("api/equipo/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Equipo> GetEquipoById(int id)
@@ -49,9 +49,9 @@ namespace tupenca_back.Controllers
             }
         }
 
-        // GET: api/equipos/nombre        
+        // GET: api/equipo/nombre        
         [HttpGet]
-        [Route("api/equipos/{nombre}")]
+        [Route("api/equipo/{nombre}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Equipo> GetEquipoByNombre(string nombre)
@@ -67,9 +67,9 @@ namespace tupenca_back.Controllers
             }
         }
 
-        // POST: api/equipos        
+        // POST: api/equipo        
         [HttpPost]
-        [Route("api/equipos/create")]
+        [Route("api/equipo/create")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<Equipo> CreateEquipo(Equipo equipo)
@@ -84,9 +84,9 @@ namespace tupenca_back.Controllers
             return CreatedAtAction("GetEquipoById", new { id = equipo.Id }, equipo);
         }
 
-        // PUT: api/equipos/1
-        [HttpPut("{id}")]
-        [Route("api/eventos/{id}")]
+        // PUT: api/equipo/1
+        [HttpPut]
+        [Route("api/equipo/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]        
