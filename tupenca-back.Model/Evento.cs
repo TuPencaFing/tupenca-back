@@ -6,7 +6,7 @@ namespace tupenca_back.Model
     public class Evento
     {
         [Key]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public DateTime FechaInicial { get; set; }
@@ -14,20 +14,21 @@ namespace tupenca_back.Model
         [Required]
         public DateTime FechaFinal { get; set; }
 
-        [ForeignKey("Equipo")]
-        public int EquipoLocalID { get; set; }
-
-        [ForeignKey("Equipo")]
-        public int EquipoVisitanteID { get; set; }
-
-        public int ResultadoID { get; set; }
-
+                
         [Required]
-        public Equipo? EquipoLocal { get; set; }
-
+        public int EquipoLocalId { get; set; }
         [Required]
-        public Equipo? EquipoVisitante { get; set; }
+        [ForeignKey("EquipoLocalId")]
+        public Equipo EquipoLocal { get; set; }
 
+
+        [ForeignKey("EquipoVisitanteId")]
+        [Required]
+        public int EquipoVisitanteId { get; set; }
+        [Required]
+        public Equipo EquipoVisitante { get; set; }
+
+        public int ResultadoId { get; set; }
         public Resultado Resultado { get; set; }
 
     }

@@ -13,7 +13,7 @@ namespace tupenca_back.DataAccess.Repository
 
         public IEnumerable<Evento> GetEventosProximos()
         {
-            var today = DateTime.Today;
+            var today = DateTime.Now;
             return _appDbContext.Eventos.Where(evento => evento.FechaInicial > today & evento.FechaInicial < today.AddDays(7));
         }
 

@@ -26,6 +26,9 @@ builder.Services.AddScoped<IEquipoRepository, EquipoRepository>();
 
 builder.Services.AddScoped<UserService, UserService>();
 builder.Services.AddScoped<CampeonatoService, CampeonatoService>();
+builder.Services.AddScoped<EventoService, EventoService>();
+builder.Services.AddScoped<EquipoService, EquipoService>();
+builder.Services.AddScoped<Utils, Utils>();
 
 var app = builder.Build();
 

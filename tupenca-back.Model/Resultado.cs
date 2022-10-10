@@ -14,7 +14,7 @@ namespace tupenca_back.Model
     public class Resultado
     {
         [Key]
-        public int ID { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public TipoResultado resultado { get; set; }
@@ -22,6 +22,8 @@ namespace tupenca_back.Model
         public int PuntajeEquipoLocal { get; set; }
 
         public int PuntajeEquipoVisitante { get; set; }
+
+        public Evento Evento { get; set; }
 
     }
 }
