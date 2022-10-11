@@ -12,7 +12,7 @@ using tupenca_back.DataAccess;
 namespace tupenca_back.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221009231452_addEvento")]
+    [Migration("20221011024151_addEvento")]
     partial class addEvento
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,29 @@ namespace tupenca_back.DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("tupenca_back.Model.Campeonato", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("FinishDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Campeonatos");
+                });
 
             modelBuilder.Entity("tupenca_back.Model.Deporte", b =>
                 {
@@ -87,8 +110,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasIndex("EquipoVisitanteId");
 
-                    b.HasIndex("ResultadoId")
-                        .IsUnique();
+                    b.HasIndex("ResultadoId");
 
                     b.ToTable("Eventos");
                 });
@@ -115,24 +137,54 @@ namespace tupenca_back.DataAccess.Migrations
                     b.ToTable("Resultado");
                 });
 
- 
+            modelBuilder.Entity("tupenca_back.Model.User", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("HashedPassword")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("varbinary(64)");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasMaxLength(128)
+                        .HasColumnType("varbinary(128)");
+
+                    b.Property<string>("UserName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Users");
+                });
+
             modelBuilder.Entity("tupenca_back.Model.Evento", b =>
                 {
                     b.HasOne("tupenca_back.Model.Equipo", "EquipoLocal")
                         .WithMany("EventosLocal")
                         .HasForeignKey("EquipoLocalId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("tupenca_back.Model.Equipo", "EquipoVisitante")
                         .WithMany("EventosVisitante")
                         .HasForeignKey("EquipoVisitanteId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("tupenca_back.Model.Resultado", "Resultado")
-                        .WithOne("Evento")
-                        .HasForeignKey("tupenca_back.Model.Evento", "ResultadoId")
+                        .WithMany()
+                        .HasForeignKey("ResultadoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -148,12 +200,6 @@ namespace tupenca_back.DataAccess.Migrations
                     b.Navigation("EventosLocal");
 
                     b.Navigation("EventosVisitante");
-                });
-
-            modelBuilder.Entity("tupenca_back.Model.Resultado", b =>
-                {
-                    b.Navigation("Evento")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

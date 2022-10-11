@@ -53,16 +53,16 @@ namespace tupenca_back.Services
             if (getEventoById(id) == null) return false;
             else return true;
         }
-
+        
         public bool IsEventoCorrect(Evento evento)
         {
-            if (evento.EquipoVisitante != evento.EquipoLocal)
+            if (evento.EquipoLocalId != evento.EquipoVisitanteId)
             {
                 return true;
             }
             else return false;
         }
-
+        
 
         public bool IsDateCorrect(DateTime fechaInicial, DateTime fechaFinal)
         {

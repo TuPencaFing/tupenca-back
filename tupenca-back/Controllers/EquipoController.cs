@@ -77,8 +77,8 @@ namespace tupenca_back.Controllers
             if (_equipoService.EquipoExists(equipo.Id))            
                 return BadRequest();
             
-            if (!_equipoService.EquipoNombreExists(equipo.Nombre))          
-                return BadRequest("No puede tener los mismos equipos enfrentados");
+            if (_equipoService.EquipoNombreExists(equipo.Nombre))          
+                return BadRequest();
 
             _equipoService.CreateEquipo(equipo);
             return CreatedAtAction("GetEquipoById", new { id = equipo.Id }, equipo);
@@ -101,8 +101,8 @@ namespace tupenca_back.Controllers
             if (!_equipoService.EquipoExists(id))
                 return NotFound();
 
-            if (!_equipoService.EquipoNombreExists(equipo.Nombre))
-                return BadRequest("No puede tener los mismos equipos enfrentados");
+            if (_equipoService.EquipoNombreExists(equipo.Nombre))
+                return BadRequest();
 
             _equipoService.UpdateEquipo(equipo);
             return CreatedAtAction("GetEquipoById", new { id = equipo.Id }, equipo);

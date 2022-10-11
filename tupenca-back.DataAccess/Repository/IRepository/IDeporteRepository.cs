@@ -5,5 +5,6 @@ namespace tupenca_back.DataAccess.Repository.IRepository
     public interface IDeporteRepository : IRepository<Deporte>
     {
 
+        void Save();
     }
 }

@@ -23,7 +23,5 @@ namespace tupenca_back.Model
 
         public int PuntajeEquipoVisitante { get; set; }
 
-        public Evento Evento { get; set; }
-
     }
 }

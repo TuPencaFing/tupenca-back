@@ -10,6 +10,21 @@ namespace tupenca_back.DataAccess.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Campeonatos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FinishDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Campeonatos", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Deportes",
                 columns: table => new
                 {
@@ -50,7 +65,23 @@ namespace tupenca_back.DataAccess.Migrations
                     table.PrimaryKey("PK_Resultado", x => x.Id);
                 });
 
-             migrationBuilder.CreateTable(
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HashedPassword = table.Column<byte[]>(type: "varbinary(64)", maxLength: 64, nullable: false),
+                    PasswordSalt = table.Column<byte[]>(type: "varbinary(128)", maxLength: 128, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Eventos",
                 columns: table => new
                 {
@@ -70,13 +101,13 @@ namespace tupenca_back.DataAccess.Migrations
                         column: x => x.EquipoLocalId,
                         principalTable: "Equipos",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Eventos_Equipos_EquipoVisitanteId",
                         column: x => x.EquipoVisitanteId,
                         principalTable: "Equipos",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Eventos_Resultado_ResultadoId",
                         column: x => x.ResultadoId,
@@ -98,18 +129,22 @@ namespace tupenca_back.DataAccess.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Eventos_ResultadoId",
                 table: "Eventos",
-                column: "ResultadoId",
-                unique: true);
+                column: "ResultadoId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Campeonatos");
 
             migrationBuilder.DropTable(
                 name: "Deportes");
 
             migrationBuilder.DropTable(
                 name: "Eventos");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Equipos");
