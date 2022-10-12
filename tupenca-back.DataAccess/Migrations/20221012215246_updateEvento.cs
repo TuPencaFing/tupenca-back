@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace tupenca_back.DataAccess.Migrations
 {
-    public partial class addEvento : Migration
+    public partial class updateEvento : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -91,7 +91,7 @@ namespace tupenca_back.DataAccess.Migrations
                     FechaFinal = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EquipoLocalId = table.Column<int>(type: "int", nullable: false),
                     EquipoVisitanteId = table.Column<int>(type: "int", nullable: false),
-                    ResultadoId = table.Column<int>(type: "int", nullable: false)
+                    ResultadoId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -112,8 +112,7 @@ namespace tupenca_back.DataAccess.Migrations
                         name: "FK_Eventos_Resultado_ResultadoId",
                         column: x => x.ResultadoId,
                         principalTable: "Resultado",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(

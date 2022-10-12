@@ -1,4 +1,5 @@
-﻿using tupenca_back.DataAccess.Repository.IRepository;
+﻿using Microsoft.EntityFrameworkCore;
+using tupenca_back.DataAccess.Repository.IRepository;
 using tupenca_back.Model;
 
 namespace tupenca_back.DataAccess.Repository
@@ -15,6 +16,11 @@ namespace tupenca_back.DataAccess.Repository
         {
             var today = DateTime.Now;
             return _appDbContext.Eventos.Where(evento => evento.FechaInicial > today & evento.FechaInicial < today.AddDays(7));
+        }
+
+        public IEnumerable<Evento> GetEventos()
+        {
+            return _appDbContext.Eventos;                                                           
         }
 
         public void Save()

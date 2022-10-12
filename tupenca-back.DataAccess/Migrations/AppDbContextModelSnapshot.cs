@@ -87,10 +87,12 @@ namespace tupenca_back.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("EquipoLocalId")
+                    b.Property<int?>("EquipoLocalId")
+                        .IsRequired()
                         .HasColumnType("int");
 
-                    b.Property<int>("EquipoVisitanteId")
+                    b.Property<int?>("EquipoVisitanteId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<DateTime>("FechaFinal")

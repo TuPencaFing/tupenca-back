@@ -12,8 +12,8 @@ using tupenca_back.DataAccess;
 namespace tupenca_back.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221011030328_resultadoNull")]
-    partial class resultadoNull
+    [Migration("20221012215246_updateEvento")]
+    partial class updateEvento
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

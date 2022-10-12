@@ -11,8 +11,10 @@ namespace tupenca_back.Model
         [Required]
         public string Nombre { get; set; }
 
+        [InverseProperty("EquipoLocal")]
         public ICollection<Evento>? EventosLocal { get; set; }
 
+        [InverseProperty("EquipoVisitante")]
         public ICollection<Evento>? EventosVisitante { get; set; }
 
     }

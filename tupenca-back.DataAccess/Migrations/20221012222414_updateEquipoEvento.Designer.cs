@@ -12,8 +12,8 @@ using tupenca_back.DataAccess;
 namespace tupenca_back.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221011024151_addEvento")]
-    partial class addEvento
+    [Migration("20221012222414_updateEquipoEvento")]
+    partial class updateEquipoEvento
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -89,10 +89,12 @@ namespace tupenca_back.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("EquipoLocalId")
+                    b.Property<int?>("EquipoLocalId")
+                        .IsRequired()
                         .HasColumnType("int");
 
-                    b.Property<int>("EquipoVisitanteId")
+                    b.Property<int?>("EquipoVisitanteId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<DateTime>("FechaFinal")
@@ -101,7 +103,7 @@ namespace tupenca_back.DataAccess.Migrations
                     b.Property<DateTime>("FechaInicial")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("ResultadoId")
+                    b.Property<int?>("ResultadoId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -184,9 +186,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasOne("tupenca_back.Model.Resultado", "Resultado")
                         .WithMany()
-                        .HasForeignKey("ResultadoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ResultadoId");
 
                     b.Navigation("EquipoLocal");
 

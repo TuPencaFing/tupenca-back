@@ -12,7 +12,7 @@ namespace tupenca_back.Services
             _eventoRepository = eventoRepository;
         }
 
-        public IEnumerable<Evento> getEventos() => _eventoRepository.GetAll();
+        public IEnumerable<Evento> getEventos() => _eventoRepository.GetEventos();
 
         public Evento? getEventoById(int? id) => _eventoRepository.GetFirstOrDefault(e => e.Id == id);
 

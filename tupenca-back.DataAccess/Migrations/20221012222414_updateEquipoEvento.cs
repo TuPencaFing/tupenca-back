@@ -4,7 +4,7 @@
 
 namespace tupenca_back.DataAccess.Migrations
 {
-    public partial class resultadoNull : Migration
+    public partial class updateEquipoEvento : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

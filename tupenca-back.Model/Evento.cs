@@ -15,12 +15,14 @@ namespace tupenca_back.Model
         public DateTime FechaFinal { get; set; }
 
         [Required]
-        public int EquipoLocalId { get; set; }
-        public virtual Equipo? EquipoLocal { get; set; }
+        public int? EquipoLocalId { get; set; }
+        [ForeignKey("EquipoLocalId")]
+        public virtual Equipo EquipoLocal { get; set; }
 
         [Required]
-        public int EquipoVisitanteId { get; set; }
-        public virtual Equipo? EquipoVisitante { get; set; }
+        public int? EquipoVisitanteId { get; set; }
+        [ForeignKey("EquipoVisitanteId")]
+        public virtual Equipo EquipoVisitante { get; set; }
 
 
         public int? ResultadoId { get; set; }

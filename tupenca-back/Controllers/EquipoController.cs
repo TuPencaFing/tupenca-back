@@ -20,14 +20,9 @@ namespace tupenca_back.Controllers
         [HttpGet]
         [Route("api/equipos")]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
         public ActionResult<IEnumerable<Equipo>> GetEquipos()
         {
             var equipos = _equipoService.getEquipos();
-            if (equipos == null)
-            {
-                return NoContent();
-            }
             return Ok(equipos);
         }
 
