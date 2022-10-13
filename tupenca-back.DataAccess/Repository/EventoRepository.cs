@@ -20,7 +20,10 @@ namespace tupenca_back.DataAccess.Repository
 
         public IEnumerable<Evento> GetEventos()
         {
-            return _appDbContext.Eventos;                                                           
+            return _appDbContext.Eventos
+                .Include(evento => evento.EquipoLocal)
+                .Include(evento => evento.EquipoVisitante)
+                .ToList();
         }
 
         public void Save()

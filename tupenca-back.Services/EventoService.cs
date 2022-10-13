@@ -62,7 +62,6 @@ namespace tupenca_back.Services
             }
             else return false;
         }
-        
 
         public bool IsDateCorrect(DateTime fechaInicial, DateTime fechaFinal)
         {
