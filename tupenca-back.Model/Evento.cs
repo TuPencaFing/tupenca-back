@@ -24,9 +24,5 @@ namespace tupenca_back.Model
         [ForeignKey("EquipoVisitanteId")]
         public virtual Equipo EquipoVisitante { get; set; }
 
-
-        public int? ResultadoId { get; set; }
-        public virtual Resultado? Resultado { get; set; }
-
     }
 }
