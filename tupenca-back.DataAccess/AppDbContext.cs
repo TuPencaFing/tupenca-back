@@ -22,12 +22,15 @@ namespace tupenca_back.DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Equipo>().HasMany(t => t.EventosLocal)
-                .WithOne(g => g.EquipoLocal)
-                .HasForeignKey(g => g.EquipoLocalId);
-            modelBuilder.Entity<Equipo>().HasMany(t => t.EventosVisitante)
-                .WithOne(g => g.EquipoVisitante)
-                .HasForeignKey(g => g.EquipoVisitanteId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Evento>()
+                .HasOne(evento => evento.EquipoLocal)
+                .WithMany()
+                .HasForeignKey(evento => evento.EquipoLocalId);
+            modelBuilder.Entity<Evento>()
+                .HasOne(evento => evento.EquipoVisitante)
+                .WithMany()
+                .HasForeignKey(evento => evento.EquipoVisitanteId)
+                .OnDelete(DeleteBehavior.Restrict);
         }
 
     }
