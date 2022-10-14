@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace tupenca_back.DataAccess.Migrations
 {
-    public partial class updateEvento : Migration
+    public partial class addEvento : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -51,21 +51,6 @@ namespace tupenca_back.DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Resultado",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    resultado = table.Column<int>(type: "int", nullable: false),
-                    PuntajeEquipoLocal = table.Column<int>(type: "int", nullable: false),
-                    PuntajeEquipoVisitante = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Resultado", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -88,10 +73,8 @@ namespace tupenca_back.DataAccess.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FechaInicial = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FechaFinal = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EquipoLocalId = table.Column<int>(type: "int", nullable: false),
-                    EquipoVisitanteId = table.Column<int>(type: "int", nullable: false),
-                    ResultadoId = table.Column<int>(type: "int", nullable: true)
+                    EquipoVisitanteId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -108,11 +91,6 @@ namespace tupenca_back.DataAccess.Migrations
                         principalTable: "Equipos",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Eventos_Resultado_ResultadoId",
-                        column: x => x.ResultadoId,
-                        principalTable: "Resultado",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -124,11 +102,6 @@ namespace tupenca_back.DataAccess.Migrations
                 name: "IX_Eventos_EquipoVisitanteId",
                 table: "Eventos",
                 column: "EquipoVisitanteId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Eventos_ResultadoId",
-                table: "Eventos",
-                column: "ResultadoId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -147,9 +120,6 @@ namespace tupenca_back.DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "Equipos");
-
-            migrationBuilder.DropTable(
-                name: "Resultado");
         }
     }
 }

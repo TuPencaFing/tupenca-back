@@ -93,9 +93,6 @@ namespace tupenca_back.DataAccess.Migrations
                     b.Property<int>("EquipoVisitanteId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("FechaFinal")
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime>("FechaInicial")
                         .HasColumnType("datetime2");
 

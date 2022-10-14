@@ -9,10 +9,8 @@ namespace tupenca_back.Model
         public int Id { get; set; }
 
         [Required]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime FechaInicial { get; set; }
-
-        [Required]
-        public DateTime FechaFinal { get; set; }
 
         public int EquipoLocalId { get; set; }
         [ForeignKey("EquipoLocalId")]

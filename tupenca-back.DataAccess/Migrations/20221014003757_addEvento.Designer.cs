@@ -12,8 +12,8 @@ using tupenca_back.DataAccess;
 namespace tupenca_back.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221012222414_updateEquipoEvento")]
-    partial class updateEquipoEvento
+    [Migration("20221014003757_addEvento")]
+    partial class addEvento
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -89,22 +89,14 @@ namespace tupenca_back.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("EquipoLocalId")
-                        .IsRequired()
+                    b.Property<int>("EquipoLocalId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("EquipoVisitanteId")
-                        .IsRequired()
+                    b.Property<int>("EquipoVisitanteId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime>("FechaFinal")
-                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("FechaInicial")
                         .HasColumnType("datetime2");
-
-                    b.Property<int?>("ResultadoId")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -112,31 +104,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasIndex("EquipoVisitanteId");
 
-                    b.HasIndex("ResultadoId");
-
                     b.ToTable("Eventos");
-                });
-
-            modelBuilder.Entity("tupenca_back.Model.Resultado", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("PuntajeEquipoLocal")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PuntajeEquipoVisitante")
-                        .HasColumnType("int");
-
-                    b.Property<int>("resultado")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Resultado");
                 });
 
             modelBuilder.Entity("tupenca_back.Model.User", b =>
@@ -173,33 +141,20 @@ namespace tupenca_back.DataAccess.Migrations
             modelBuilder.Entity("tupenca_back.Model.Evento", b =>
                 {
                     b.HasOne("tupenca_back.Model.Equipo", "EquipoLocal")
-                        .WithMany("EventosLocal")
+                        .WithMany()
                         .HasForeignKey("EquipoLocalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("tupenca_back.Model.Equipo", "EquipoVisitante")
-                        .WithMany("EventosVisitante")
+                        .WithMany()
                         .HasForeignKey("EquipoVisitanteId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("tupenca_back.Model.Resultado", "Resultado")
-                        .WithMany()
-                        .HasForeignKey("ResultadoId");
-
                     b.Navigation("EquipoLocal");
 
                     b.Navigation("EquipoVisitante");
-
-                    b.Navigation("Resultado");
-                });
-
-            modelBuilder.Entity("tupenca_back.Model.Equipo", b =>
-                {
-                    b.Navigation("EventosLocal");
-
-                    b.Navigation("EventosVisitante");
                 });
 #pragma warning restore 612, 618
         }

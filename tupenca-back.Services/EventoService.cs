@@ -14,7 +14,7 @@ namespace tupenca_back.Services
 
         public IEnumerable<Evento> getEventos() => _eventoRepository.GetEventos();
 
-        public Evento? getEventoById(int? id) => _eventoRepository.GetFirstOrDefault(e => e.Id == id);
+        public Evento? getEventoById(int? id) => _eventoRepository.GetFirst(e => e.Id == id);
 
         public void CreateEvento(Evento evento)
         {
@@ -63,9 +63,9 @@ namespace tupenca_back.Services
             else return false;
         }
 
-        public bool IsDateCorrect(DateTime fechaInicial, DateTime fechaFinal)
+        public bool IsDateBeforeThan(DateTime fechaInicial, DateTime fechaFinal)
         {
-            if (DateTime.Compare(fechaInicial, fechaFinal) > 0)
+            if (DateTime.Compare(fechaInicial, fechaFinal) < 0)
             {
                 return true;
             }

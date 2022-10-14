@@ -70,10 +70,10 @@ namespace tupenca_back.Controllers
         public ActionResult<Equipo> CreateEquipo(Equipo equipo)
         {
             if (_equipoService.EquipoExists(equipo.Id))            
-                return BadRequest();
+                return BadRequest("Ya existe el equipo");
             
             if (_equipoService.EquipoNombreExists(equipo.Nombre))          
-                return BadRequest();
+                return BadRequest("Ya existe el equipo");
 
             _equipoService.CreateEquipo(equipo);
             return CreatedAtAction("GetEquipoById", new { id = equipo.Id }, equipo);

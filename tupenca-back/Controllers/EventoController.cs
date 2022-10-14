@@ -72,12 +72,10 @@ namespace tupenca_back.Controllers
             
             if (!_eventoService.IsEventoCorrect(evento))            
                 return BadRequest("No puede tener los mismos equipos enfrentados");
-            /*
-            if (!_eventoService.IsDateCorrect(evento.FechaFinal, evento.FechaFinal))            
-                return BadRequest("La fecha final no puede ser anterior a la fecha inicial");
-            */
-            if (!_eventoService.IsDateCorrect(evento.FechaFinal, DateTime.Now))            
+
+            if (!_eventoService.IsDateBeforeThan(DateTime.Now, evento.FechaInicial))            
                 return BadRequest("El evento debe ser en el futuro");
+
             _eventoService.CreateEvento(evento);
             return CreatedAtAction("GetEventoById", new { id = evento.Id }, evento);
         }
@@ -103,10 +101,7 @@ namespace tupenca_back.Controllers
             if (!_eventoService.IsEventoCorrect(evento))
                 return BadRequest("No puede tener los mismos equipos enfrentados");
             
-            if (!_eventoService.IsDateCorrect(evento.FechaFinal, evento.FechaFinal))
-                return BadRequest("La fecha final no puede ser anterior a la fecha inicial");
-
-            if (!_eventoService.IsDateCorrect(evento.FechaFinal, DateTime.Now))
+            if (!_eventoService.IsDateBeforeThan(DateTime.Now, evento.FechaInicial))
                 return BadRequest("El evento debe ser en el futuro");
 
             _eventoService.UpdateEvento(evento);

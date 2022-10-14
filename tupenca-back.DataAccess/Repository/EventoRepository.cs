@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using tupenca_back.DataAccess.Repository.IRepository;
 using tupenca_back.Model;
 
@@ -15,7 +16,11 @@ namespace tupenca_back.DataAccess.Repository
         public IEnumerable<Evento> GetEventosProximos()
         {
             var today = DateTime.Now;
-            return _appDbContext.Eventos.Where(evento => evento.FechaInicial > today & evento.FechaInicial < today.AddDays(7));
+            return _appDbContext.Eventos
+                .Where(evento => evento.FechaInicial > today & evento.FechaInicial < today.AddDays(7))
+                .Include(evento => evento.EquipoLocal)
+                .Include(evento => evento.EquipoVisitante)
+                .ToList();
         }
 
         public IEnumerable<Evento> GetEventos()
@@ -24,6 +29,14 @@ namespace tupenca_back.DataAccess.Repository
                 .Include(evento => evento.EquipoLocal)
                 .Include(evento => evento.EquipoVisitante)
                 .ToList();
+        }
+
+        public Evento GetFirst(Expression<Func<Evento, bool>> filter)
+        {
+            return dbSet.Where(filter)
+                .Include(evento => evento.EquipoLocal)
+                .Include(evento => evento.EquipoVisitante)
+                .FirstOrDefault();
         }
 
         public void Save()
