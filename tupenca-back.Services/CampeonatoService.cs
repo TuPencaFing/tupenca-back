@@ -18,6 +18,8 @@ namespace tupenca_back.Services
 
         public Campeonato? findCampeonato(int? id) => _campeonatoRepository.GetFirstOrDefault(c => c.Id == id);
 
+        public Campeonato? findCampeonatoByName(string name) => _campeonatoRepository.GetFirstOrDefault(c => c.Name == name);
+
         public void AddCampeonato(Campeonato campeonato)
         {
             if (campeonato != null)
@@ -55,6 +57,11 @@ namespace tupenca_back.Services
         public bool CampeonatoExists(int id)
         {
             return findCampeonato(id) == null;
+        }
+
+        public bool CampeonatoNameExists(string name)
+        {
+            return findCampeonatoByName(name) != null;
         }
 
     }

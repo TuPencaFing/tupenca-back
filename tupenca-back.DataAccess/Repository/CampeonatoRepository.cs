@@ -15,7 +15,7 @@ namespace tupenca_back.DataAccess.Repository.IRepository
 
         public void Save()
         {
-            _appDbContext.SaveChangesAsync();
+            _appDbContext.SaveChanges();
         }
     }
 }

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using tupenca_back.Services;
 using tupenca_back.Model;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Mail;
+using tupenca_back.Services.Exceptions;
 
 namespace tupenca_back.Controllers
 {
@@ -47,6 +49,11 @@ namespace tupenca_back.Controllers
         [HttpPost]
         public ActionResult<Campeonato> PostCampeonato(Campeonato campeonato)
         {
+            if (_campeonatoService.CampeonatoNameExists(campeonato.Name))
+            {
+                throw new HttpResponseException(400, "Nombre campeonato repetido");
+            }
+
             _campeonatoService.AddCampeonato(campeonato);
 
             return CreatedAtAction("GetCampeonato", new { id = campeonato.Id }, campeonato);
