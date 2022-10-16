@@ -14,6 +14,25 @@ namespace tupenca_back.DataAccess
         public DbSet<User>? Users { get; set; }
         public DbSet<Campeonato>? Campeonatos { get; set; }
 
+        public DbSet<Equipo>? Equipos { get; set; }
+
+        public DbSet<Deporte>? Deportes { get; set; }
+
+        public DbSet<Evento>? Eventos { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Evento>()
+                .HasOne(evento => evento.EquipoLocal)
+                .WithMany()
+                .HasForeignKey(evento => evento.EquipoLocalId);
+            modelBuilder.Entity<Evento>()
+                .HasOne(evento => evento.EquipoVisitante)
+                .WithMany()
+                .HasForeignKey(evento => evento.EquipoVisitanteId)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
+
     }
 
 }
