@@ -28,7 +28,7 @@ namespace tupenca_back.Controllers
 
         // GET: api/equipo/1        
         [HttpGet]
-        [Route("api/equipo/{id}")]
+        [Route("api/equipo/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Equipo> GetEquipoById(int id)
@@ -81,7 +81,7 @@ namespace tupenca_back.Controllers
 
         // PUT: api/equipo/1
         [HttpPut]
-        [Route("api/equipo/{id}")]
+        [Route("api/equipo/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]        
@@ -94,10 +94,10 @@ namespace tupenca_back.Controllers
                 return BadRequest();
 
             if (!_equipoService.EquipoExists(id))
-                return NotFound();
+                return NotFound("No existe el equipo");
 
             if (_equipoService.EquipoNombreExists(equipo.Nombre))
-                return BadRequest();
+                return BadRequest("Ya existe el equipo");
 
             _equipoService.UpdateEquipo(equipo);
             return CreatedAtAction("GetEquipoById", new { id = equipo.Id }, equipo);
@@ -105,7 +105,7 @@ namespace tupenca_back.Controllers
 
         // DELETE: api/equipo/1
         [HttpDelete]
-        [Route("api/equipo/delete/{id}")]
+        [Route("api/equipo/delete/{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult DeleteEquipo(int id)

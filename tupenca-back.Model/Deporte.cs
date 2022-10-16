@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace tupenca_back.Model
 {
@@ -9,7 +11,6 @@ namespace tupenca_back.Model
 
         [Required]
         public string Nombre { get; set; }
-
 
     }
 }

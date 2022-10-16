@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using tupenca_back.Services;
 using tupenca_back.Model;
+using tupenca_back.Controllers.Dto;
 
 namespace tupenca_back.Controllers
 {
@@ -43,7 +44,7 @@ namespace tupenca_back.Controllers
 
         // GET: api/evento/1        
         [HttpGet]
-        [Route("api/evento/{id}")]
+        [Route("api/evento/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Evento> GetEventoById(int id)
@@ -83,27 +84,25 @@ namespace tupenca_back.Controllers
 
         // PUT: api/evento/1
         [HttpPut]
-        [Route("api/evento/{id}")]
+        [Route("api/evento/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]        
-        public ActionResult<Evento> UpdateEvento(int id, [FromBody] Evento evento)
+        public ActionResult<Evento> UpdateEvento(int id, [FromBody] EventoDto eventoDto)
         {
-            if (id != evento.Id)
+            if (!eventoDto.FechaInicial.HasValue)
                 return BadRequest();
             
-            if (!ModelState.IsValid)
-                return BadRequest();
+            var fechaInicial = eventoDto.FechaInicial ?? DateTime.MinValue;
 
             if (!_eventoService.EventoExists(id))
                 return NotFound();
-            
-            if (!_eventoService.IsEventoCorrect(evento))
-                return BadRequest("No puede tener los mismos equipos enfrentados");
-            
-            if (!_eventoService.IsDateBeforeThan(DateTime.Now, evento.FechaInicial))
+
+            if (!_eventoService.IsDateBeforeThan(DateTime.Now, fechaInicial))
                 return BadRequest("El evento debe ser en el futuro");
 
+            var evento = _eventoService.getEventoById(id);
+            evento.FechaInicial = fechaInicial;
             _eventoService.UpdateEvento(evento);
             return CreatedAtAction("GetEventoById", new { id = evento.Id }, evento);
         }
@@ -111,7 +110,7 @@ namespace tupenca_back.Controllers
 
         // DELETE: api/evento/1
         [HttpDelete]
-        [Route("api/evento/delete/{id}")]
+        [Route("api/evento/delete/{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult DeleteEvento(int id)
