@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
@@ -57,6 +59,8 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(
         SqlOperations.EnableRetryOnFailure();
     }
     ));
+
+
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICampeonatoRepository, CampeonatoRepository>();

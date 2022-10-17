@@ -113,6 +113,21 @@ namespace tupenca_back.Controllers
             return NoContent();
         }
 
+        // PUT: api/campeonatos/1/eventos
+        [HttpPut("{id}/eventos")]
+        public ActionResult<Campeonato> AddEvento(int id, Evento evento)
+        {
+            try
+            {
+                return _campeonatoService.addEvento(id, evento);
+
+            }
+            catch (NotFoundException e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.NotFound, e.Message);
+            }
+
+        }
 
 
 

@@ -10,14 +10,18 @@ namespace tupenca_back.Services
     {
         private readonly ICampeonatoRepository _campeonatoRepository;
         private readonly DeporteService _deporteService;
+        private readonly EventoService _eventoService;
 
-        public CampeonatoService(ICampeonatoRepository campeonatoRepository, DeporteService deporteService)
+
+        public CampeonatoService(ICampeonatoRepository campeonatoRepository,
+            DeporteService deporteService, EventoService eventoService )
         {
             _campeonatoRepository = campeonatoRepository;
             _deporteService = deporteService;
+            _eventoService = eventoService;
         }
 
-        public IEnumerable<Campeonato> getCampeonatos() => _campeonatoRepository.GetAll();
+        public IEnumerable<Campeonato> getCampeonatos() => _campeonatoRepository.GetCampeonatos();
 
         public Campeonato? findCampeonato(int? id) => _campeonatoRepository.GetFirstOrDefault(c => c.Id == id);
 
@@ -71,6 +75,32 @@ namespace tupenca_back.Services
         public bool CampeonatoNameExists(string name)
         {
             return findCampeonatoByName(name) != null;
+        }
+
+        public Campeonato addEvento(int id, Evento evento)
+        {
+            var campeonato = findCampeonato(id);
+
+            if (campeonato == null)
+            {
+                throw new NotFoundException("Campeonato no encontrado");
+            }
+
+            var eventoToAdd = _eventoService.getEventoById(evento.Id);
+
+
+            if (eventoToAdd == null)
+            {
+                throw new NotFoundException("Evento no encontrado");
+            }
+
+            campeonato.Eventos.Add(eventoToAdd);
+
+            _campeonatoRepository.Update(campeonato);
+            _campeonatoRepository.Save();
+
+            return campeonato;
+
         }
 
     }

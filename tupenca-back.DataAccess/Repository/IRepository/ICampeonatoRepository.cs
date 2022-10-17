@@ -5,6 +5,8 @@ namespace tupenca_back.DataAccess.Repository.IRepository
 {
     public interface ICampeonatoRepository : IRepository<Campeonato>
     {
+        IEnumerable<Campeonato> GetCampeonatos();
+
         void Save();
     }
 }

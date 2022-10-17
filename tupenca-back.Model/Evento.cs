@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace tupenca_back.Model
 {
@@ -20,6 +21,7 @@ namespace tupenca_back.Model
         [ForeignKey("EquipoVisitanteId")]
         public virtual Equipo? EquipoVisitante { get; set; }
 
+        [JsonIgnore]
         public List<Campeonato> Campeonatos { get; set; } = new List<Campeonato>();
     }
 }
