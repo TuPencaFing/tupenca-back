@@ -19,5 +19,7 @@ namespace tupenca_back.Model
         public int EquipoVisitanteId { get; set; }
         [ForeignKey("EquipoVisitanteId")]
         public virtual Equipo? EquipoVisitante { get; set; }
+
+        public List<Campeonato> Campeonatos { get; set; } = new List<Campeonato>();
     }
 }

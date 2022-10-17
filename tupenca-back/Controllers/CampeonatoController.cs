@@ -5,6 +5,7 @@ using tupenca_back.Model;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Mail;
 using tupenca_back.Services.Exceptions;
+using System.Net;
 
 namespace tupenca_back.Controllers
 {
@@ -49,14 +50,27 @@ namespace tupenca_back.Controllers
         [HttpPost]
         public ActionResult<Campeonato> PostCampeonato(Campeonato campeonato)
         {
-            if (_campeonatoService.CampeonatoNameExists(campeonato.Name))
+            if (campeonato == null)
             {
-                throw new HttpResponseException(400, "Nombre campeonato repetido");
+                throw new HttpResponseException((int)HttpStatusCode.BadRequest, "Campeonato no debe ser nulo");
             }
 
-            _campeonatoService.AddCampeonato(campeonato);
+            if (_campeonatoService.CampeonatoNameExists(campeonato.Name))
+            {
+                throw new HttpResponseException((int)HttpStatusCode.BadRequest, "Nombre campeonato repetido");
+            }
 
-            return CreatedAtAction("GetCampeonato", new { id = campeonato.Id }, campeonato);
+            try
+            {
+                _campeonatoService.AddCampeonato(campeonato);
+
+                return CreatedAtAction("GetCampeonato", new { id = campeonato.Id }, campeonato);
+            }
+            catch (NotFoundException e)
+            {
+                throw new HttpResponseException((int) HttpStatusCode.NotFound, e.Message);
+            }
+           
         }
 
 

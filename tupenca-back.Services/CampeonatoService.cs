@@ -2,16 +2,19 @@
 using Microsoft.EntityFrameworkCore;
 using tupenca_back.DataAccess.Repository.IRepository;
 using tupenca_back.Model;
+using tupenca_back.Services.Exceptions;
 
 namespace tupenca_back.Services
 {
     public class CampeonatoService
     {
         private readonly ICampeonatoRepository _campeonatoRepository;
+        private readonly DeporteService _deporteService;
 
-        public CampeonatoService(ICampeonatoRepository campeonatoRepository)
+        public CampeonatoService(ICampeonatoRepository campeonatoRepository, DeporteService deporteService)
         {
             _campeonatoRepository = campeonatoRepository;
+            _deporteService = deporteService;
         }
 
         public IEnumerable<Campeonato> getCampeonatos() => _campeonatoRepository.GetAll();
@@ -22,11 +25,17 @@ namespace tupenca_back.Services
 
         public void AddCampeonato(Campeonato campeonato)
         {
-            if (campeonato != null)
+            var deporte = _deporteService.getDeporteById(campeonato.Deporte.Id);
+
+            if (deporte == null)
             {
-                _campeonatoRepository.Add(campeonato);
-                _campeonatoRepository.Save();
+                throw new NotFoundException("El Deporte no existe");
             }
+
+            campeonato.Deporte = deporte;
+
+            _campeonatoRepository.Add(campeonato);
+            _campeonatoRepository.Save();
         }
 
         public void UpdateCampeonato(int id, Campeonato campeonato)
