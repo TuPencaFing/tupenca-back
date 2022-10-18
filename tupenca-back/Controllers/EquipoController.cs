@@ -26,9 +26,9 @@ namespace tupenca_back.Controllers
             return Ok(equipos);
         }
 
-        // GET: api/equipo/1        
+        // GET: api/equipos/1        
         [HttpGet]
-        [Route("api/equipo/{id:int}")]
+        [Route("api/equipos/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Equipo> GetEquipoById(int id)
@@ -44,9 +44,9 @@ namespace tupenca_back.Controllers
             }
         }
 
-        // GET: api/equipo/nombre        
+        // GET: api/equipos/nombre        
         [HttpGet]
-        [Route("api/equipo/{nombre}")]
+        [Route("api/equipos/{nombre}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Equipo> GetEquipoByNombre(string nombre)
@@ -62,9 +62,9 @@ namespace tupenca_back.Controllers
             }
         }
 
-        // POST: api/equipo        
+        // POST: api/equipos        
         [HttpPost]
-        [Route("api/equipo/create")]
+        [Route("api/equipos")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<Equipo> CreateEquipo(Equipo equipo)
@@ -79,9 +79,9 @@ namespace tupenca_back.Controllers
             return CreatedAtAction("GetEquipoById", new { id = equipo.Id }, equipo);
         }
 
-        // PUT: api/equipo/1
+        // PUT: api/equipos/1
         [HttpPut]
-        [Route("api/equipo/{id:int}")]
+        [Route("api/equipos/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]        
@@ -105,7 +105,7 @@ namespace tupenca_back.Controllers
 
         // DELETE: api/equipo/1
         [HttpDelete]
-        [Route("api/equipo/delete/{id:int}")]
+        [Route("api/equipos/{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult DeleteEquipo(int id)

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using tupenca_back.DataAccess;
 
@@ -11,9 +12,10 @@ using tupenca_back.DataAccess;
 namespace tupenca_back.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class DemoAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221017014344_fix2AddEventosinCampeonatos")]
+    partial class fix2AddEventosinCampeonatos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -174,7 +176,7 @@ namespace tupenca_back.DataAccess.Migrations
             modelBuilder.Entity("tupenca_back.Model.Campeonato", b =>
                 {
                     b.HasOne("tupenca_back.Model.Deporte", "Deporte")
-                        .WithMany()
+                        .WithMany("Campeonatos")
                         .HasForeignKey("DeporteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -199,6 +201,11 @@ namespace tupenca_back.DataAccess.Migrations
                     b.Navigation("EquipoLocal");
 
                     b.Navigation("EquipoVisitante");
+                });
+
+            modelBuilder.Entity("tupenca_back.Model.Deporte", b =>
+                {
+                    b.Navigation("Campeonatos");
                 });
 #pragma warning restore 612, 618
         }

@@ -29,9 +29,9 @@ namespace tupenca_back.Controllers
             return Ok(deportes);
         }
 
-        // GET: api/deporte/1        
+        // GET: api/deportes/1        
         [HttpGet]
-        [Route("api/deporte/{id:int}")]
+        [Route("api/deportes/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Deporte> GetDeporteById(int id)
@@ -47,9 +47,9 @@ namespace tupenca_back.Controllers
             }
         }
 
-        // GET: api/deporte/nombre        
+        // GET: api/deportes/nombre        
         [HttpGet]
-        [Route("api/deporte/{nombre}")]
+        [Route("api/deportes/{nombre}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Deporte> GetDeporteByNombre(string nombre)
@@ -65,9 +65,9 @@ namespace tupenca_back.Controllers
             }
         }
 
-        // POST: api/deporte        
+        // POST: api/deportes        
         [HttpPost]
-        [Route("api/deporte/create")]
+        [Route("api/deportes")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<Deporte> CreateDeporte(DeporteDto deporteDto)
@@ -81,9 +81,9 @@ namespace tupenca_back.Controllers
             return CreatedAtAction("GetDeporteById", new { id = deporte.Id }, deporte);
         }
 
-        // PUT: api/deporte/1
+        // PUT: api/deportes/1
         [HttpPut]
-        [Route("api/deporte/{id:int}")]
+        [Route("api/deportes/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -107,9 +107,9 @@ namespace tupenca_back.Controllers
             return CreatedAtAction("GetDeporteById", new { id = deporte.Id }, deporte);
         }
 
-        // DELETE: api/deporte/1
+        // DELETE: api/deportes/1
         [HttpDelete]
-        [Route("api/deporte/delete/{id:int}")]
+        [Route("api/deportes/{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult DeleteDeporte(int id)

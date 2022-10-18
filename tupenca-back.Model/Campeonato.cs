@@ -18,6 +18,11 @@ namespace tupenca_back.Model
         [Required]
         public DateTime FinishDate { get; set; }
 
+        [Required]
+        public Deporte? Deporte { get; set; }
+
+        public List<Evento> Eventos { get; set; } = new List<Evento>();
+
     }
 }
 

@@ -8,9 +8,9 @@ using Swashbuckle.AspNetCore.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Hosting;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc;
+
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
@@ -60,6 +60,8 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(
     }
     ));
 
+
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICampeonatoRepository, CampeonatoRepository>();
 builder.Services.AddScoped<IEventoRepository, EventoRepository>();
@@ -73,6 +75,8 @@ builder.Services.AddScoped<EquipoService, EquipoService>();
 builder.Services.AddScoped<DeporteService, DeporteService>();
 var app = builder.Build();
 
+
+//Image create directory
 var commonpath = Path.Combine(app.Environment.ContentRootPath, "Images");
 if (!System.IO.Directory.Exists(commonpath))
 {
@@ -84,6 +88,12 @@ if (app.Environment.IsDevelopment())
 {
     //app.UseSwagger();
     //app.UseSwaggerUI();
+    app.UseExceptionHandler("/error-development");
+}
+else
+{
+    //app.UseExceptionHandler("/error");
+    app.UseExceptionHandler("/error-development");
 }
 
 app.UseSwagger();

@@ -42,9 +42,9 @@ namespace tupenca_back.Controllers
             return Ok(eventos);
         }
 
-        // GET: api/evento/1        
+        // GET: api/eventos/1        
         [HttpGet]
-        [Route("api/evento/{id:int}")]
+        [Route("api/eventos/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Evento> GetEventoById(int id)
@@ -61,9 +61,9 @@ namespace tupenca_back.Controllers
         }
 
 
-        // POST: api/evento        
+        // POST: api/eventos       
         [HttpPost]
-        [Route("api/evento/create")]
+        [Route("api/eventos")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<Evento> CreateEvento(Evento evento)
@@ -82,9 +82,9 @@ namespace tupenca_back.Controllers
         }
 
 
-        // PUT: api/evento/1
+        // PUT: api/eventos/1
         [HttpPut]
-        [Route("api/evento/{id:int}")]
+        [Route("api/eventos/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]        
@@ -108,9 +108,9 @@ namespace tupenca_back.Controllers
         }
 
 
-        // DELETE: api/evento/1
+        // DELETE: api/eventos/1
         [HttpDelete]
-        [Route("api/evento/delete/{id:int}")]
+        [Route("api/eventos/{id:int}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult DeleteEvento(int id)
