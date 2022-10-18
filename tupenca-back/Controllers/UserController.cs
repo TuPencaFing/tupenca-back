@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using tupenca_back.Model;
 using tupenca_back.Services;
+using tupenca_back.Controllers.Dto;
 
 namespace tupenca_back.Controllers
 {
@@ -84,7 +85,7 @@ namespace tupenca_back.Controllers
         }
 
         [HttpPost("login"), AllowAnonymous]
-        public async Task<ActionResult<string>> Login(LoginRequest request)
+        public async Task<ActionResult<UserDto>> Login(LoginRequest request)
         {
             var user = _userService.findUserByEmail(request.Email);
             if (user?.Email != request.Email)
@@ -98,7 +99,9 @@ namespace tupenca_back.Controllers
             }
 
             string token = _userService.CreateToken(user);
-            return Ok(token);
+            UserDto userDto = new UserDto();
+            userDto.token = token;
+            return Ok(userDto);
         }
     }
 }
