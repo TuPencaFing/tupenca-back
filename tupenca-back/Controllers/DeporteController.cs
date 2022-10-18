@@ -2,6 +2,8 @@
 using tupenca_back.Services;
 using tupenca_back.Model;
 using tupenca_back.Controllers.Dto;
+using System.Net;
+using tupenca_back.Services.Exceptions;
 
 namespace tupenca_back.Controllers
 {
@@ -74,11 +76,17 @@ namespace tupenca_back.Controllers
         {
             if (_deporteService.DeporteNombreExists(deporteDto.Nombre))
                 return BadRequest("Ya existe el deporte");
-
-            Deporte deporte = new Deporte();
-            deporte.Nombre = deporteDto.Nombre;
-            _deporteService.CreateDeporte(deporte);
-            return CreatedAtAction("GetDeporteById", new { id = deporte.Id }, deporte);
+            try
+            {               
+                Deporte deporte = new Deporte();
+                deporte.Nombre = deporteDto.Nombre;
+                _deporteService.CreateDeporte(deporte);
+                return CreatedAtAction("GetDeporteById", new { id = deporte.Id }, deporte);
+            }
+            catch (NotFoundException e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.NotFound, e.Message);
+            }
         }
 
         // PUT: api/deportes/1
@@ -134,9 +142,9 @@ namespace tupenca_back.Controllers
 
 
 
-        // POST: api/deporte/Image        
+        // POST: api/deportes/Image        
         [HttpPost]
-        [Route("api/deporte/Image/{id:int}")]
+        [Route("api/deportes/Image/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<ActionResult> UploadDeporteImage(int id, [FromForm] ImagenDto imagenDto)
@@ -154,7 +162,7 @@ namespace tupenca_back.Controllers
 
 
         [HttpGet]
-        [Route("api/deporte/Image/{id:int}")]
+        [Route("api/deportes/Image/{id:int}")]
         public async Task<IActionResult> GetImage(int id)
         {
             var deporte = _deporteService.getDeporteById(id);
@@ -172,7 +180,7 @@ namespace tupenca_back.Controllers
 
         // DELETE: api/deporte/Image/1
         [HttpDelete]
-        [Route("api/deporte/delete/Image/{id:int}")]
+        [Route("api/deportes/delete/Image/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

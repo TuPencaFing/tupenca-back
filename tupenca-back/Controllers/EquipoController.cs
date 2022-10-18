@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using tupenca_back.Services;
 using tupenca_back.Model;
+using tupenca_back.Controllers.Dto;
 
 namespace tupenca_back.Controllers
 {
@@ -67,14 +68,13 @@ namespace tupenca_back.Controllers
         [Route("api/equipos")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<Equipo> CreateEquipo(Equipo equipo)
-        {
-            if (_equipoService.EquipoExists(equipo.Id))            
-                return BadRequest("Ya existe el equipo");
-            
-            if (_equipoService.EquipoNombreExists(equipo.Nombre))          
+        public ActionResult<Equipo> CreateEquipo(EquipoDto equipoDto)
+        {           
+            if (_equipoService.EquipoNombreExists(equipoDto.Nombre))          
                 return BadRequest("Ya existe el equipo");
 
+            Equipo equipo = new Equipo();
+            equipo.Nombre = equipoDto.Nombre;
             _equipoService.CreateEquipo(equipo);
             return CreatedAtAction("GetEquipoById", new { id = equipo.Id }, equipo);
         }
@@ -85,22 +85,19 @@ namespace tupenca_back.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]        
-        public ActionResult<Equipo> UpdateEquipo(int id, [FromBody] Equipo equipo)
+        public ActionResult<Equipo> UpdateEquipo(int id, [FromBody] EquipoDto equipoDto)
         {
-            if (id != equipo.Id)
-                return BadRequest();
-            
-            if (!ModelState.IsValid)
-                return BadRequest();
-
-            if (!_equipoService.EquipoExists(id))
+            var equipo = _equipoService.getEquipoById(id);
+            if (equipo == null)
+            {
                 return NotFound("No existe el equipo");
-
-            if (_equipoService.EquipoNombreExists(equipo.Nombre))
+            }
+            if (_equipoService.EquipoNombreExists(equipoDto.Nombre))
                 return BadRequest("Ya existe el equipo");
 
+            equipo.Nombre = equipoDto.Nombre;
             _equipoService.UpdateEquipo(equipo);
-            return CreatedAtAction("GetEquipoById", new { id = equipo.Id }, equipo);
+            return Ok(equipo);                                    
         }
 
         // DELETE: api/equipo/1

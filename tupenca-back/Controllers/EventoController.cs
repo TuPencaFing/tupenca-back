@@ -10,11 +10,13 @@ namespace tupenca_back.Controllers
     {
         private readonly ILogger<EventoController> _logger;
         private readonly EventoService _eventoService;
+        private readonly EquipoService _equipoService;
 
-        public EventoController(ILogger<EventoController> logger, EventoService eventoService)
+        public EventoController(ILogger<EventoController> logger, EventoService eventoService, EquipoService equipoService)
         {
             _logger = logger;
             _eventoService = eventoService;
+            _equipoService = equipoService;
         }
 
         //GET: api/eventos        
@@ -48,8 +50,9 @@ namespace tupenca_back.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Evento> GetEventoById(int id)
-        {           
+        {
             var evento = _eventoService.getEventoById(id);
+
             if (evento == null)
             {
                 return NotFound();
@@ -64,20 +67,31 @@ namespace tupenca_back.Controllers
         // POST: api/eventos       
         [HttpPost]
         [Route("api/eventos")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<Evento> CreateEvento(Evento evento)
+        public ActionResult<Evento> CreateEvento(EventoDto eventoDto)
         {
-            if (_eventoService.EventoExists(evento.Id))            
-                return BadRequest();
-            
-            if (!_eventoService.IsEventoCorrect(evento))            
+            Evento evento = new Evento();
+            evento.EquipoLocalId = eventoDto.EquipoLocalId;
+            evento.EquipoVisitanteId = eventoDto.EquipoVisitanteId;
+            evento.FechaInicial = eventoDto.FechaInicial;
+
+            if (!_eventoService.IsEventoCorrect(evento))
                 return BadRequest("No puede tener los mismos equipos enfrentados");
 
-            if (!_eventoService.IsDateBeforeThan(DateTime.Now, evento.FechaInicial))            
+            if (!_equipoService.EquipoExists(evento.EquipoVisitanteId))
+                return BadRequest("El equipo Visitante ingresado no existe");
+
+            if (!_equipoService.EquipoExists(evento.EquipoLocalId))
+                return BadRequest("El equipo Local ingresado no existe");
+
+            if (!_eventoService.IsDateBeforeThan(DateTime.Now, evento.FechaInicial))
                 return BadRequest("El evento debe ser en el futuro");
 
             _eventoService.CreateEvento(evento);
+            evento.EquipoLocal = _equipoService.getEquipoById(evento.EquipoLocalId);
+            evento.EquipoVisitante = _equipoService.getEquipoById(evento.EquipoVisitanteId);
+
             return CreatedAtAction("GetEventoById", new { id = evento.Id }, evento);
         }
 
@@ -88,23 +102,20 @@ namespace tupenca_back.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]        
-        public ActionResult<Evento> UpdateEvento(int id, [FromBody] EventoDto eventoDto)
+        public ActionResult<Evento> UpdateEvento(int id, [FromBody] EventoFechaDto eventoFechaDto)
         {
-            if (!eventoDto.FechaInicial.HasValue)
-                return BadRequest();
-            
-            var fechaInicial = eventoDto.FechaInicial ?? DateTime.MinValue;
-
-            if (!_eventoService.EventoExists(id))
+            var evento = _eventoService.getEventoById(id);
+            if (evento == null)
+            {
                 return NotFound();
+            }
 
-            if (!_eventoService.IsDateBeforeThan(DateTime.Now, fechaInicial))
+            if (!_eventoService.IsDateBeforeThan(DateTime.Now, eventoFechaDto.FechaInicial))
                 return BadRequest("El evento debe ser en el futuro");
 
-            var evento = _eventoService.getEventoById(id);
-            evento.FechaInicial = fechaInicial;
+            evento.FechaInicial = eventoFechaDto.FechaInicial;
             _eventoService.UpdateEvento(evento);
-            return CreatedAtAction("GetEventoById", new { id = evento.Id }, evento);
+            return Ok(evento);
         }
 
 
