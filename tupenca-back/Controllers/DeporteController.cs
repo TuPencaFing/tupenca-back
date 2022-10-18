@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using tupenca_back.Services;
 using tupenca_back.Model;
+using tupenca_back.Controllers.Dto;
 
 namespace tupenca_back.Controllers
 {
-    [ApiController]    
+    [ApiController]
     public class DeporteController : ControllerBase
     {
         private readonly ILogger<DeporteController> _logger;
@@ -34,12 +35,12 @@ namespace tupenca_back.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Deporte> GetDeporteById(int id)
-        {           
+        {
             var deporte = _deporteService.getDeporteById(id);
             if (deporte == null)
             {
                 return NotFound();
-            } 
+            }
             else
             {
                 return Ok(deporte);
@@ -69,11 +70,13 @@ namespace tupenca_back.Controllers
         [Route("api/deporte/create")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<Deporte> CreateDeporte(Deporte deporte)
+        public ActionResult<Deporte> CreateDeporte(DeporteDto deporteDto)
         {
-            if (_deporteService.DeporteNombreExists(deporte.Nombre))
+            if (_deporteService.DeporteNombreExists(deporteDto.Nombre))
                 return BadRequest("Ya existe el deporte");
 
+            Deporte deporte = new Deporte();
+            deporte.Nombre = deporteDto.Nombre;
             _deporteService.CreateDeporte(deporte);
             return CreatedAtAction("GetDeporteById", new { id = deporte.Id }, deporte);
         }
@@ -84,17 +87,22 @@ namespace tupenca_back.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<Deporte> UpdateEquipo(int id, [FromBody] Deporte deporte)
+        public ActionResult<Deporte> UpdateEquipo(int id, [FromBody] DeporteDto deporteDto)
         {
-            if (id != deporte.Id)
-                return BadRequest();
+            var deporte = _deporteService.getDeporteById(id);
+
+            if (deporte == null)
+            {
+                return NotFound();
+            }
 
             if (!ModelState.IsValid)
                 return BadRequest();
 
-            if (_deporteService.DeporteNombreExists(deporte.Nombre))
+            if (_deporteService.DeporteNombreExists(deporteDto.Nombre))
                 return BadRequest("Ya existe el deporte");
 
+            deporte.Nombre = deporteDto.Nombre;
             _deporteService.UpdateDeporte(deporte);
             return CreatedAtAction("GetDeporteById", new { id = deporte.Id }, deporte);
         }
@@ -112,8 +120,92 @@ namespace tupenca_back.Controllers
             {
                 return NotFound();
             }
+
+            if (deporte.ImagenName != null)
+            {
+                var path = Path.Combine(_hostEnvironment.ContentRootPath, "Images", deporte.ImagenName);
+                System.IO.File.Delete(path);
+            }        
+
             _deporteService.RemoveDeporte(deporte);
+
             return NoContent();
+        }
+
+
+
+        // POST: api/deporte/Image        
+        [HttpPost]
+        [Route("api/deporte/Image/{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<ActionResult> UploadDeporteImage(int id, [FromForm] ImagenDto imagenDto)
+        {           
+            var deporte = _deporteService.getDeporteById(id);
+            if (deporte == null)
+            {
+                return NotFound();
+            }
+            var filepath = await SaveImagen(imagenDto.file);
+            deporte.ImagenName= filepath;
+            _deporteService.UpdateDeporte(deporte);
+            return CreatedAtAction("GetDeporteById", new { id = deporte.Id }, deporte);
+        }
+
+
+        [HttpGet]
+        [Route("api/deporte/Image/{id:int}")]
+        public async Task<IActionResult> GetImage(int id)
+        {
+            var deporte = _deporteService.getDeporteById(id);
+            if (deporte == null)
+            {
+                return NotFound();
+            }
+            var commonpath = Path.Combine(_hostEnvironment.ContentRootPath, "Images");
+            
+            Byte[] b;
+            b = await System.IO.File.ReadAllBytesAsync(Path.Combine(commonpath, deporte.ImagenName));
+            return File(b, "image/jpeg");
+        }
+
+
+        // DELETE: api/deporte/Image/1
+        [HttpDelete]
+        [Route("api/deporte/delete/Image/{id:int}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public IActionResult DeleteDeporteImage(int id)
+        {
+            var deporte = _deporteService.getDeporteById(id);
+
+            if (deporte == null)
+            {
+                return NotFound();
+            }
+
+            if (deporte.ImagenName != null)
+            {
+                var path = Path.Combine(_hostEnvironment.ContentRootPath, "Images", deporte.ImagenName);
+                System.IO.File.Delete(path);
+            }
+            deporte.ImagenName = null;
+            _deporteService.UpdateDeporte(deporte);
+            return CreatedAtAction("GetDeporteById", new { id = deporte.Id }, deporte);
+        }
+
+        [NonAction]
+        public async Task<string> SaveImagen(IFormFile imageFile)
+        {
+            var commonpath = Path.Combine(_hostEnvironment.ContentRootPath, "Images");
+            var imagePath = Path.Combine(commonpath, imageFile.FileName);
+
+            using (var fileStream = new FileStream(imagePath, FileMode.Create))
+            {
+                await imageFile.CopyToAsync(fileStream);
+            }
+            return imageFile.FileName;
         }
 
     }

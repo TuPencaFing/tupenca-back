@@ -23,8 +23,4 @@
     <ProjectReference Include="..\tupenca-back.Services\tupenca-back.Services.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Images\" />
-  </ItemGroup>
-
 </Project>

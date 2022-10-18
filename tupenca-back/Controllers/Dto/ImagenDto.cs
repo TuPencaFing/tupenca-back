@@ -2,9 +2,9 @@
 
 namespace tupenca_back.Controllers.Dto
 {
-    public class DeporteDto
+    public class ImagenDto
     {
         [Required]
-        public string Nombre { get; set; }
+        public IFormFile file { get; set; }
     }
 }
