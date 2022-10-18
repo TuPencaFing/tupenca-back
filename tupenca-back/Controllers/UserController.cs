@@ -1,5 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 using tupenca_back.Model;
 using tupenca_back.Services;
 
@@ -10,17 +13,14 @@ namespace tupenca_back.Controllers
     [Authorize]
     public class UserController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
-
+        private readonly IConfiguration _configuration;
         private readonly ILogger<UserController> _logger;
         private readonly UserService _userService;
-        public UserController(ILogger<UserController> logger, UserService userService)
+        public UserController(ILogger<UserController> logger, UserService userService, IConfiguration configuration)
         {
             _logger = logger;
             _userService = userService;
+            _configuration = configuration;
         }
 
         //GET: api/user
@@ -100,5 +100,17 @@ namespace tupenca_back.Controllers
             string token = _userService.CreateToken(user);
             return Ok(token);
         }
+
+        // GoogleAuthenticate
+        [AllowAnonymous]
+        [HttpPost("googleLogin")]
+        public async Task<ActionResult<string>> GoogleAuthenticate( string access_token)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState.Values.SelectMany(it => it.Errors).Select(it => it.ErrorMessage));
+            return Ok(_userService.CreateToken(await _userService.AuthenticateGoogleUserAsync(access_token, _configuration["Google:Id"])));
+        }
     }
+
+
 }

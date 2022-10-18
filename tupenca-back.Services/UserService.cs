@@ -1,10 +1,14 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
+using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using tupenca_back.DataAccess.Repository.IRepository;
 using tupenca_back.Model;
+using static Google.Apis.Auth.GoogleJsonWebSignature;
 
 namespace tupenca_back.Services
 {
@@ -102,5 +106,51 @@ namespace tupenca_back.Services
 
             return jwt;
         }
+        public async Task<User> AuthenticateGoogleUserAsync(string request, string userToken)
+        {
+            try
+            {
+                Payload payload = await ValidateAsync(request, new ValidationSettings
+                {
+                    Audience = new[] { userToken }
+                });
+                return await GetOrCreateExternalLoginUser("google", payload.Subject, payload.Email, payload.Name);
+
+            }
+            catch (Exception e)
+            {
+                int a = 5;
+            }
+            return null;
+
+        }
+
+        private async Task<User> GetOrCreateExternalLoginUser(string provider, string key, string email, string name)
+        {
+            var user = findUserByEmail(email);
+            if (user != null)
+                return user;
+            CreatePasswordHash("123456", out byte[] passwordHash, out byte[] passwordSalt);
+            if (user == null)
+            {
+                if(name == null)
+                {
+                    name = "anonimo";
+                }
+                user = new User
+                {
+                    Email = email,
+                    UserName = name,
+                    PasswordSalt = passwordSalt,
+                    HashedPassword = passwordHash,
+                };
+                addUser(user);
+            }
+            return user;
+
+        }
     }
+
+    
+
 }
