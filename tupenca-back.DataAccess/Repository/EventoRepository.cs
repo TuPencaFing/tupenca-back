@@ -33,7 +33,7 @@ namespace tupenca_back.DataAccess.Repository
 
         public Evento GetFirst(Expression<Func<Evento, bool>> filter)
         {
-            return dbSet.Where(filter)
+            return _appDbContext.Eventos.Where(filter)
                 .Include(evento => evento.EquipoLocal)
                 .Include(evento => evento.EquipoVisitante)
                 .FirstOrDefault();

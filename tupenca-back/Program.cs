@@ -8,9 +8,9 @@ using Swashbuckle.AspNetCore.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
+
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
@@ -73,9 +73,15 @@ builder.Services.AddScoped<CampeonatoService, CampeonatoService>();
 builder.Services.AddScoped<EventoService, EventoService>();
 builder.Services.AddScoped<EquipoService, EquipoService>();
 builder.Services.AddScoped<DeporteService, DeporteService>();
-
 var app = builder.Build();
 
+
+//Image create directory
+var commonpath = Path.Combine(app.Environment.ContentRootPath, "Images");
+if (!System.IO.Directory.Exists(commonpath))
+{
+    System.IO.Directory.CreateDirectory(commonpath);
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
