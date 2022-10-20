@@ -20,6 +20,8 @@ namespace tupenca_back.DataAccess
 
         public DbSet<Evento>? Eventos { get; set; }
 
+        public DbSet<Empresa>? Empresa { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Evento>()
