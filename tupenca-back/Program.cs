@@ -61,18 +61,27 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(
     ));
 
 
-
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+// Repository
 builder.Services.AddScoped<ICampeonatoRepository, CampeonatoRepository>();
-builder.Services.AddScoped<IEventoRepository, EventoRepository>();
-builder.Services.AddScoped<IEquipoRepository, EquipoRepository>();
 builder.Services.AddScoped<IDeporteRepository, DeporteRepository>();
+builder.Services.AddScoped<IEquipoRepository, EquipoRepository>();
+builder.Services.AddScoped<IEventoRepository, EventoRepository>();
+builder.Services.AddScoped<IPencaCompartidaRepository, PencaCompartidaRepository>();
+builder.Services.AddScoped<IPencaEmpresaRepository, PencaEmpresaRepository>();
+builder.Services.AddScoped<IPlanRepository, PlanRepository>();
+builder.Services.AddScoped<IPremioRepository, PremioRepository>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
-builder.Services.AddScoped<UserService, UserService>();
+
+// Service
 builder.Services.AddScoped<CampeonatoService, CampeonatoService>();
-builder.Services.AddScoped<EventoService, EventoService>();
-builder.Services.AddScoped<EquipoService, EquipoService>();
 builder.Services.AddScoped<DeporteService, DeporteService>();
+builder.Services.AddScoped<EquipoService, EquipoService>();
+builder.Services.AddScoped<EventoService, EventoService>();
+builder.Services.AddScoped<UserService, UserService>();
+
+
+
 var app = builder.Build();
 
 
