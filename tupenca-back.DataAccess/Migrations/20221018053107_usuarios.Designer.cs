@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using tupenca_back.DataAccess;
 
@@ -11,9 +12,10 @@ using tupenca_back.DataAccess;
 namespace tupenca_back.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class DemoAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221018053107_usuarios")]
+    partial class usuarios
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,10 +55,6 @@ namespace tupenca_back.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -78,29 +76,6 @@ namespace tupenca_back.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Personas");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Persona");
-                });
-
-            modelBuilder.Entity("tupenca_back.Model.Administrador", b =>
-                {
-                    b.HasBaseType("tupenca_back.Model.Persona");
-
-                    b.HasDiscriminator().HasValue("Administrador");
-                });
-
-            modelBuilder.Entity("tupenca_back.Model.Funcionario", b =>
-                {
-                    b.HasBaseType("tupenca_back.Model.Persona");
-
-                    b.HasDiscriminator().HasValue("Funcionario");
-                });
-
-            modelBuilder.Entity("tupenca_back.Model.Usuario", b =>
-                {
-                    b.HasBaseType("tupenca_back.Model.Persona");
-
-                    b.HasDiscriminator().HasValue("Usuario");
                 });
 #pragma warning restore 612, 618
         }

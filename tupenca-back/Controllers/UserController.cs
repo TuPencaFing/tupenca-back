@@ -11,12 +11,12 @@ namespace tupenca_back.Controllers
     [ApiController]
     [Route("[controller]")]
     [Authorize]
-    public class UserController : ControllerBase
+    public class UsuarioController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        private readonly ILogger<UserController> _logger;
-        private readonly UserService _userService;
-        public UserController(ILogger<UserController> logger, UserService userService, IConfiguration configuration)
+        private readonly ILogger<UsuarioController> _logger;
+        private readonly UsuarioService _userService;
+        public UsuarioController(ILogger<UsuarioController> logger, UsuarioService userService, IConfiguration configuration)
         {
             _logger = logger;
             _userService = userService;
@@ -24,16 +24,16 @@ namespace tupenca_back.Controllers
         }
 
         //GET: api/user
-        [HttpGet]
-        public ActionResult<IEnumerable<User>> GetUsers()
+        [HttpGet, AllowAnonymous]
+        public ActionResult<IEnumerable<Usuario>> GetUsuarios()
         {
-            return Ok(_userService.getUsers());
+            return Ok(_userService.getUsuarios());
         }
         //GET: api/user/1
         [HttpGet("{id}")]
-        public ActionResult<User> GetUser(int id)
+        public ActionResult<Usuario> GetUsuario(int id)
         {
-            var user = _userService.findUser(id);
+            Usuario user = _userService.findUsuario(id);
 
             if (user == null)
             {
@@ -47,17 +47,17 @@ namespace tupenca_back.Controllers
 
         // DELETE: api/campeonatos/1
         [HttpDelete("{id}")]
-        public IActionResult DeleteUser(int id)
+        public IActionResult DeleteUsuario(int id)
         {
 
-            var user = _userService.findUser(id);
+            var user = _userService.findUsuario(id);
 
             if (user == null)
             {
                 return NotFound();
             }
 
-            _userService.deleteUser(user);
+            _userService.deleteUsuario(user);
 
             return NoContent();
         }
@@ -69,24 +69,24 @@ namespace tupenca_back.Controllers
             {
                 return UnprocessableEntity(ModelState);
             }
-            if(_userService.findUserByEmail(request.Email) != null)
+            if(_userService.findUsuarioByEmail(request.Email) != null)
             {
                 return BadRequest("Email already exists.");
             }
-            if (_userService.findUserByUserName(request.Username) != null)
+            if (_userService.findUsuarioByUserName(request.Username) != null)
             {
                 return BadRequest("Username already exists.");
             }
             _userService.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
-            var user = new User {UserName = request.Username, Email = request.Email ,HashedPassword = passwordHash, PasswordSalt = passwordSalt};
-            _userService.addUser(user);
+            var user = new Usuario {UserName = request.Username, Email = request.Email ,HashedPassword = passwordHash, PasswordSalt = passwordSalt};
+            _userService.addUsuario(user);
             return Ok(new { message = "User added" });
         }
 
         [HttpPost("login"), AllowAnonymous]
         public async Task<ActionResult<string>> Login(LoginRequest request)
         {
-            var user = _userService.findUserByEmail(request.Email);
+            var user = _userService.findUsuarioByEmail(request.Email);
             if (user?.Email != request.Email)
             {
                 return BadRequest("User not found.");
@@ -97,7 +97,7 @@ namespace tupenca_back.Controllers
                 return BadRequest("Wrong password.");
             }
 
-            string token = _userService.CreateToken(user);
+            string token = _userService.CreateToken(user, "Usuario");
             return Ok(token);
         }
 
@@ -108,7 +108,7 @@ namespace tupenca_back.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.Values.SelectMany(it => it.Errors).Select(it => it.ErrorMessage));
-            return Ok(_userService.CreateToken(await _userService.AuthenticateGoogleUserAsync(access_token, _configuration["Google:Id"])));
+            return Ok(_userService.CreateToken(await _userService.AuthenticateGoogleUserAsync(access_token, _configuration["Google:Id"]), "Usuario"));
         }
     }
 

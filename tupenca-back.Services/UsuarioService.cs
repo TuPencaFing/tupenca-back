@@ -12,17 +12,17 @@ using static Google.Apis.Auth.GoogleJsonWebSignature;
 
 namespace tupenca_back.Services
 {
-    public class UserService
+    public class UsuarioService
     {
-        private readonly IUserRepository _db;
+        private readonly IPersonaRepository _db;
         private readonly IConfiguration _configuration;
 
-        public UserService(IUserRepository db,IConfiguration configuration)
+        public UsuarioService(IPersonaRepository db,IConfiguration configuration)
         {
             _db = db;
             _configuration = configuration;
         }
-        public void deleteUser(User usr)
+        public void deleteUsuario(Usuario usr)
         {
             if (usr != null)
             {
@@ -30,26 +30,27 @@ namespace tupenca_back.Services
                 _db.Save();
             }
         }
-        public User? findUser(int? id)
+        public Usuario? findUsuario(int? id)
         {
-            return _db.GetFirstOrDefault(u=> u.Id == id);
+            return _db.GetFirstOrDefault(u=> u.Id == id) as Usuario;
         }
-        public User? findUserByEmail(string email)
+        public Usuario? findUsuarioByEmail(string email)
         {
-            return _db.GetFirstOrDefault(u => u.Email == email);
-        }
-
-        public User? findUserByUserName(string username)
-        {
-            return _db.GetFirstOrDefault(u => u.UserName == username);
+            var a = _db.GetFirstOrDefault(u => u.Email == email);
+            return a as Usuario;
         }
 
-        public IEnumerable<User> getUsers()
+        public Usuario? findUsuarioByUserName(string username)
+        {
+            return _db.GetFirstOrDefault(u => u.UserName == username) as Usuario;
+        }
+
+        public IEnumerable<Usuario> getUsuarios()
         {
 
-            return _db.GetAll();
+            return _db.GetAll().OfType<Usuario>();
         }
-        public void editUser(User usr)
+        public void editUsuario(Usuario usr)
         {
             if (usr != null)
             {
@@ -57,7 +58,7 @@ namespace tupenca_back.Services
                 _db.Save();
             }
         }
-        public void addUser(User usr)
+        public void addUsuario(Usuario usr)
         {
             if (usr != null)
             {
@@ -83,13 +84,13 @@ namespace tupenca_back.Services
                 return computedHash.SequenceEqual(passwordHash);
             }
         }
-        public string CreateToken(User user)
+        public string CreateToken(Usuario user, string role)
         {
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Email, user.Email),
                 new Claim(ClaimTypes.GivenName, user.UserName),
-                new Claim(ClaimTypes.Role, "User")
+                new Claim(ClaimTypes.Role, role)
             };
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
@@ -106,7 +107,7 @@ namespace tupenca_back.Services
 
             return jwt;
         }
-        public async Task<User> AuthenticateGoogleUserAsync(string request, string userToken)
+        public async Task<Usuario> AuthenticateGoogleUserAsync(string request, string userToken)
         {
             try
             {
@@ -125,9 +126,9 @@ namespace tupenca_back.Services
 
         }
 
-        private async Task<User> GetOrCreateExternalLoginUser(string provider, string key, string email, string name)
+        private async Task<Usuario> GetOrCreateExternalLoginUser(string provider, string key, string email, string name)
         {
-            var user = findUserByEmail(email);
+            var user = findUsuarioByEmail(email);
             if (user != null)
                 return user;
             CreatePasswordHash("123456", out byte[] passwordHash, out byte[] passwordSalt);
@@ -137,14 +138,14 @@ namespace tupenca_back.Services
                 {
                     name = "anonimo";
                 }
-                user = new User
+                user = new Usuario
                 {
                     Email = email,
                     UserName = name,
                     PasswordSalt = passwordSalt,
                     HashedPassword = passwordHash,
                 };
-                addUser(user);
+                addUsuario(user);
             }
             return user;
 

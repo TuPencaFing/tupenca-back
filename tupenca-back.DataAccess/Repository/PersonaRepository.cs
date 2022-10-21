@@ -8,10 +8,10 @@ using tupenca_back.Model;
 
 namespace tupenca_back.DataAccess.Repository
 {
-    public class UserRepository : Repository<User>, IUserRepository
+    public class PersonaRepository : Repository<Persona>, IPersonaRepository
     {
         private AppDbContext _appDbContext;
-        public UserRepository(AppDbContext db) : base(db)
+        public PersonaRepository(AppDbContext db) : base(db)
         {
             _appDbContext = db;
         }

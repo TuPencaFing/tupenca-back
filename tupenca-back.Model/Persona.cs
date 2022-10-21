@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace tupenca_back.Model
 {
-    public class User
+    public class Persona
     {
         [Key]
         public int Id { get; set; }
@@ -12,12 +13,12 @@ namespace tupenca_back.Model
         [Required]
         public string Email { get; set; }
 
-        [Required]
         [MaxLength(64)]
+        [JsonIgnore]
         public byte[] HashedPassword { get; set; }
 
-        [Required]
         [MaxLength(128)]
+        [JsonIgnore]
         public byte[] PasswordSalt{ get; set; }
     }
 }

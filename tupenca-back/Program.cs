@@ -58,10 +58,10 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(
     }
     ));
 
-builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IPersonaRepository, PersonaRepository>();
 builder.Services.AddScoped<ICampeonatoRepository, CampeonatoRepository>();
 
-builder.Services.AddScoped<UserService, UserService>();
+builder.Services.AddScoped<UsuarioService, UsuarioService>();
 builder.Services.AddScoped<CampeonatoService, CampeonatoService>();
 
 var app = builder.Build();
