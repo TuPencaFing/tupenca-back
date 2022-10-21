@@ -10,6 +10,7 @@ namespace tupenca_back.Model
         [Display(Name = "Razon Social")]
         public string Razonsocial { get; set; }
 
+        [Required]
         [RegularExpression(@"^[0-9]*", ErrorMessage = "Debe contener unicamente numeros.")]
         [MaxLength(12)]
         [MinLength(12)]

@@ -2,6 +2,8 @@
 using tupenca_back.Services;
 using tupenca_back.Model;
 using tupenca_back.Controllers.Dto;
+using System.Net;
+using tupenca_back.Services.Exceptions;
 
 namespace tupenca_back.Controllers
 {
@@ -71,7 +73,8 @@ namespace tupenca_back.Controllers
         public ActionResult<Equipo> CreateEquipo(EquipoDto equipoDto)
         {           
             if (_equipoService.EquipoNombreExists(equipoDto.Nombre))          
-                return BadRequest("Ya existe el equipo");
+                //return BadRequest("Ya existe el equipo");
+                throw new HttpResponseException((int)HttpStatusCode.BadRequest, "Ya existe el equipo");
 
             Equipo equipo = new Equipo();
             equipo.Nombre = equipoDto.Nombre;

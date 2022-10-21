@@ -17,6 +17,8 @@ namespace tupenca_back.Services
 
         public Empresa? getEmpresaById(int? id) => _empresaRepository.GetFirstOrDefault(e => e.Id == id);
 
+        public Empresa? getEmpresaByRUT(string? rut) => _empresaRepository.GetFirstOrDefault(e => e.RUT == rut);
+
         public void CreateEmpresa(Empresa empresa)
         {
             if (empresa != null)
