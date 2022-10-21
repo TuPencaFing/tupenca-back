@@ -67,12 +67,15 @@ builder.Services.AddScoped<ICampeonatoRepository, CampeonatoRepository>();
 builder.Services.AddScoped<IEventoRepository, EventoRepository>();
 builder.Services.AddScoped<IEquipoRepository, EquipoRepository>();
 builder.Services.AddScoped<IDeporteRepository, DeporteRepository>();
+builder.Services.AddScoped<IEmpresaRepository, EmpresaRepository>();
 
 builder.Services.AddScoped<UserService, UserService>();
 builder.Services.AddScoped<CampeonatoService, CampeonatoService>();
 builder.Services.AddScoped<EventoService, EventoService>();
 builder.Services.AddScoped<EquipoService, EquipoService>();
 builder.Services.AddScoped<DeporteService, DeporteService>();
+builder.Services.AddScoped<EmpresaService, EmpresaService>();
+
 var app = builder.Build();
 
 

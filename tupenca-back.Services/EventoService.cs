@@ -47,13 +47,7 @@ namespace tupenca_back.Services
         {
             return _eventoRepository.GetEventosProximos();        
         }
-
-        public bool EventoExists(int id)
-        {
-            if (getEventoById(id) == null) return false;
-            else return true;
-        }
-        
+       
         public bool IsEventoCorrect(Evento evento)
         {
             if (evento.EquipoLocalId != evento.EquipoVisitanteId)
