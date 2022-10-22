@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using tupenca_back.DataAccess;
 
@@ -12,10 +11,9 @@ using tupenca_back.DataAccess;
 namespace tupenca_back.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221021013019_addEmpresa")]
-    partial class addEmpresa
+    partial class AppDbContextModelSnapshot : ModelSnapshot
     {
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,13 +153,17 @@ namespace tupenca_back.DataAccess.Migrations
                     b.ToTable("Eventos");
                 });
 
-            modelBuilder.Entity("tupenca_back.Model.User", b =>
+            modelBuilder.Entity("tupenca_back.Model.Persona", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -183,7 +185,30 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Personas");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Persona");
+                });
+
+            modelBuilder.Entity("tupenca_back.Model.Administrador", b =>
+                {
+                    b.HasBaseType("tupenca_back.Model.Persona");
+
+                    b.HasDiscriminator().HasValue("Administrador");
+                });
+
+            modelBuilder.Entity("tupenca_back.Model.Funcionario", b =>
+                {
+                    b.HasBaseType("tupenca_back.Model.Persona");
+
+                    b.HasDiscriminator().HasValue("Funcionario");
+                });
+
+            modelBuilder.Entity("tupenca_back.Model.Usuario", b =>
+                {
+                    b.HasBaseType("tupenca_back.Model.Persona");
+
+                    b.HasDiscriminator().HasValue("Usuario");
                 });
 
             modelBuilder.Entity("CampeonatoEvento", b =>

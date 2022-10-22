@@ -12,8 +12,8 @@ using tupenca_back.DataAccess;
 namespace tupenca_back.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221017020030_fix3AddEventosinCampeonatos")]
-    partial class fix3AddEventosinCampeonatos
+    [Migration("20221021234037_persona")]
+    partial class persona
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -75,6 +75,9 @@ namespace tupenca_back.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("ImagenName")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -82,6 +85,31 @@ namespace tupenca_back.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Deportes");
+                });
+
+            modelBuilder.Entity("tupenca_back.Model.Empresa", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("RUT")
+                        .IsRequired()
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
+
+                    b.Property<string>("Razonsocial")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Empresa");
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Equipo", b =>
@@ -127,13 +155,17 @@ namespace tupenca_back.DataAccess.Migrations
                     b.ToTable("Eventos");
                 });
 
-            modelBuilder.Entity("tupenca_back.Model.User", b =>
+            modelBuilder.Entity("tupenca_back.Model.Persona", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -155,7 +187,30 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Personas");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Persona");
+                });
+
+            modelBuilder.Entity("tupenca_back.Model.Administrador", b =>
+                {
+                    b.HasBaseType("tupenca_back.Model.Persona");
+
+                    b.HasDiscriminator().HasValue("Administrador");
+                });
+
+            modelBuilder.Entity("tupenca_back.Model.Funcionario", b =>
+                {
+                    b.HasBaseType("tupenca_back.Model.Persona");
+
+                    b.HasDiscriminator().HasValue("Funcionario");
+                });
+
+            modelBuilder.Entity("tupenca_back.Model.Usuario", b =>
+                {
+                    b.HasBaseType("tupenca_back.Model.Persona");
+
+                    b.HasDiscriminator().HasValue("Usuario");
                 });
 
             modelBuilder.Entity("CampeonatoEvento", b =>
