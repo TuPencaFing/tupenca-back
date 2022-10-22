@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using tupenca_back.DataAccess;
 
@@ -11,9 +12,10 @@ using tupenca_back.DataAccess;
 namespace tupenca_back.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class DemoAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221017014344_fix2AddEventosinCampeonatos")]
+    partial class fix2AddEventosinCampeonatos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,9 +75,6 @@ namespace tupenca_back.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("ImagenName")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -83,31 +82,6 @@ namespace tupenca_back.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Deportes");
-                });
-
-            modelBuilder.Entity("tupenca_back.Model.Empresa", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("RUT")
-                        .IsRequired()
-                        .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
-
-                    b.Property<string>("Razonsocial")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Empresa");
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Equipo", b =>
@@ -202,7 +176,7 @@ namespace tupenca_back.DataAccess.Migrations
             modelBuilder.Entity("tupenca_back.Model.Campeonato", b =>
                 {
                     b.HasOne("tupenca_back.Model.Deporte", "Deporte")
-                        .WithMany()
+                        .WithMany("Campeonatos")
                         .HasForeignKey("DeporteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -227,6 +201,11 @@ namespace tupenca_back.DataAccess.Migrations
                     b.Navigation("EquipoLocal");
 
                     b.Navigation("EquipoVisitante");
+                });
+
+            modelBuilder.Entity("tupenca_back.Model.Deporte", b =>
+                {
+                    b.Navigation("Campeonatos");
                 });
 #pragma warning restore 612, 618
         }

@@ -15,4 +15,10 @@
     <ProjectReference Include="..\tupenca-back.DataAccess\tupenca-back.DataAccess.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Exceptions\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Exceptions\" />
+  </ItemGroup>
 </Project>
