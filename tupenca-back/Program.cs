@@ -74,6 +74,9 @@ builder.Services.AddScoped<EquipoService, EquipoService>();
 builder.Services.AddScoped<DeporteService, DeporteService>();
 builder.Services.AddScoped<EmpresaService, EmpresaService>();
 
+// Mapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 var app = builder.Build();
 
 
