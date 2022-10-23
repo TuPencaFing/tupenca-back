@@ -26,7 +26,11 @@ namespace tupenca_back.DataAccess
 
         public DbSet<Evento>? Eventos { get; set; }
 
-        public DbSet<Empresa>? Empresa { get; set; }
+        public DbSet<Empresa>? Empresas { get; set; }
+
+        public DbSet<Resultado>? Resultados { get; set; }
+
+        public DbSet<Prediccion>? Predicciones { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

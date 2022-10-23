@@ -40,7 +40,7 @@ namespace tupenca_back.Controllers
         {
             var deporte = _deporteService.getDeporteById(id);
             if (deporte == null)
-            {
+            {                
                 return NotFound();
             }
             else
@@ -70,12 +70,12 @@ namespace tupenca_back.Controllers
         // POST: api/deportes        
         [HttpPost]
         [Route("api/deportes")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<Deporte> CreateDeporte(DeporteDto deporteDto)
         {
             if (_deporteService.DeporteNombreExists(deporteDto.Nombre))
-                return BadRequest("Ya existe el deporte");
+               return BadRequest("Ya existe el deporte");
             try
             {               
                 Deporte deporte = new Deporte();
