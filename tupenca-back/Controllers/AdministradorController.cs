@@ -12,29 +12,29 @@ namespace tupenca_back.Controllers
     [ApiController]
     [Route("[controller]")]
     [Authorize]
-    public class FuncionarioController : ControllerBase
+    public class AdministradorController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        private readonly ILogger<FuncionarioController> _logger;
-        private readonly FuncionarioService _funcionarioService;
-        public FuncionarioController(ILogger<FuncionarioController> logger, FuncionarioService funcionarioService, IConfiguration configuration)
+        private readonly ILogger<AdministradorController> _logger;
+        private readonly AdministradorService _administradorService;
+        public AdministradorController(ILogger<AdministradorController> logger, AdministradorService administradorService, IConfiguration configuration)
         {
             _logger = logger;
-            _funcionarioService = funcionarioService;
+            _administradorService = administradorService;
             _configuration = configuration;
         }
 
         //GET: api/user
         [HttpGet, AllowAnonymous]
-        public ActionResult<IEnumerable<Funcionario>> GetFuncionarios()
+        public ActionResult<IEnumerable<Administrador>> GetAdministradors()
         {
-            return Ok(_funcionarioService.get());
+            return Ok(_administradorService.get());
         }
         //GET: api/user/1
         [HttpGet("{id}")]
-        public ActionResult<Funcionario> GetFuncionario(int id)
+        public ActionResult<Administrador> GetAdministrador(int id)
         {
-            Funcionario user = _funcionarioService.find(id);
+            Administrador user = _administradorService.find(id);
 
             if (user == null)
             {
@@ -48,17 +48,17 @@ namespace tupenca_back.Controllers
 
         // DELETE: api/campeonatos/1
         [HttpDelete("{id}")]
-        public IActionResult DeleteFuncionario(int id)
+        public IActionResult DeleteAdministrador(int id)
         {
 
-            var user = _funcionarioService.find(id);
+            var user = _administradorService.find(id);
 
             if (user == null)
             {
                 return NotFound();
             }
 
-            _funcionarioService.delete(user);
+            _administradorService.delete(user);
 
             return NoContent();
         }
@@ -70,35 +70,35 @@ namespace tupenca_back.Controllers
             {
                 return UnprocessableEntity(ModelState);
             }
-            if (_funcionarioService.findByEmail(request.Email) != null)
+            if (_administradorService.findByEmail(request.Email) != null)
             {
                 return BadRequest("Email already exists.");
             }
-            if (_funcionarioService.findByUserName(request.Username) != null)
+            if (_administradorService.findByUserName(request.Username) != null)
             {
                 return BadRequest("Username already exists.");
             }
-            _funcionarioService.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
-            var user = new Funcionario { UserName = request.Username, Email = request.Email, HashedPassword = passwordHash, PasswordSalt = passwordSalt };
-            _funcionarioService.add(user);
+            _administradorService.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
+            var user = new Administrador { UserName = request.Username, Email = request.Email, HashedPassword = passwordHash, PasswordSalt = passwordSalt };
+            _administradorService.add(user);
             return Ok(new { message = "User added" });
         }
 
         [HttpPost("login"), AllowAnonymous]
         public async Task<ActionResult<UserDto>> Login(LoginRequest request)
         {
-            var user = _funcionarioService.findByEmail(request.Email);
+            var user = _administradorService.findByEmail(request.Email);
             if (user?.Email != request.Email)
             {
                 return BadRequest("User not found.");
             }
 
-            if (!_funcionarioService.VerifyPasswordHash(request.Password, user.HashedPassword, user.PasswordSalt))
+            if (!_administradorService.VerifyPasswordHash(request.Password, user.HashedPassword, user.PasswordSalt))
             {
                 return BadRequest("Wrong password.");
             }
 
-            string token = _funcionarioService.CreateToken(user, "Funcionario");
+            string token = _administradorService.CreateToken(user, "Administrador");
             UserDto userDto = new UserDto();
             userDto.token = token;
             return Ok(userDto);

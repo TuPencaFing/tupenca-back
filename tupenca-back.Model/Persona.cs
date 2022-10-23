@@ -15,10 +15,10 @@ namespace tupenca_back.Model
 
         [MaxLength(64)]
         [JsonIgnore]
-        public byte[] HashedPassword { get; set; }
+        public byte[]? HashedPassword { get; set; }
 
         [MaxLength(128)]
         [JsonIgnore]
-        public byte[] PasswordSalt{ get; set; }
+        public byte[]? PasswordSalt{ get; set; }
     }
 }

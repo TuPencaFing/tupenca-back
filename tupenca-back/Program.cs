@@ -70,6 +70,9 @@ builder.Services.AddScoped<IResultadoRepository, ResultadoRepository>();
 builder.Services.AddScoped<IPrediccionRepository, PrediccionRepository>();
 
 builder.Services.AddScoped<UsuarioService, UsuarioService>();
+builder.Services.AddScoped<FuncionarioService, FuncionarioService>();
+builder.Services.AddScoped<AdministradorService, AdministradorService>();
+
 builder.Services.AddScoped<CampeonatoService, CampeonatoService>();
 builder.Services.AddScoped<EventoService, EventoService>();
 builder.Services.AddScoped<EquipoService, EquipoService>();

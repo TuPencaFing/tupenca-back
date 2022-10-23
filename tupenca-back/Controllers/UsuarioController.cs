@@ -28,13 +28,13 @@ namespace tupenca_back.Controllers
         [HttpGet, AllowAnonymous]
         public ActionResult<IEnumerable<Usuario>> GetUsuarios()
         {
-            return Ok(_userService.getUsuarios());
+            return Ok(_userService.get());
         }
         //GET: api/user/1
         [HttpGet("{id}"), AllowAnonymous]
         public ActionResult<Usuario> GetUsuario(int id)
         {
-            Usuario user = _userService.findUsuario(id);
+            Usuario user = _userService.find(id);
 
             if (user == null)
             {
@@ -51,14 +51,14 @@ namespace tupenca_back.Controllers
         public IActionResult DeleteUsuario(int id)
         {
 
-            var user = _userService.findUsuario(id);
+            var user = _userService.find(id);
 
             if (user == null)
             {
                 return NotFound();
             }
 
-            _userService.deleteUsuario(user);
+            _userService.delete(user);
 
             return NoContent();
         }
@@ -70,24 +70,24 @@ namespace tupenca_back.Controllers
             {
                 return UnprocessableEntity(ModelState);
             }
-            if(_userService.findUsuarioByEmail(request.Email) != null)
+            if(_userService.findByEmail(request.Email) != null)
             {
                 return BadRequest("Email already exists.");
             }
-            if (_userService.findUsuarioByUserName(request.Username) != null)
+            if (_userService.findByUserName(request.Username) != null)
             {
                 return BadRequest("Username already exists.");
             }
             _userService.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
             var user = new Usuario {UserName = request.Username, Email = request.Email ,HashedPassword = passwordHash, PasswordSalt = passwordSalt};
-            _userService.addUsuario(user);
+            _userService.add(user);
             return Ok(new { message = "User added" });
         }
 
         [HttpPost("login"), AllowAnonymous]
         public async Task<ActionResult<UserDto>> Login(LoginRequest request)
         {
-            var user = _userService.findUsuarioByEmail(request.Email);
+            var user = _userService.findByEmail(request.Email);
             if (user?.Email != request.Email)
             {
                 return BadRequest("User not found.");
@@ -111,7 +111,11 @@ namespace tupenca_back.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.Values.SelectMany(it => it.Errors).Select(it => it.ErrorMessage));
-            return Ok(_userService.CreateToken(await _userService.AuthenticateGoogleUserAsync(access_token, _configuration["Google:Id"]), "Usuario"));
+
+            string token = _userService.CreateToken(await _userService.AuthenticateGoogleUserAsync(access_token, _configuration["Google:Id"]), "Usuario");
+            UserDto userDto = new UserDto();
+            userDto.token = token;
+            return Ok(userDto);
         }
     }
 

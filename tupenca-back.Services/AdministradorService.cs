@@ -12,15 +12,16 @@ using static Google.Apis.Auth.GoogleJsonWebSignature;
 
 namespace tupenca_back.Services
 {
-    public class FuncionarioService : PersonaService<Funcionario>
+    public class AdministradorService : PersonaService<Administrador>
     {
         private readonly IPersonaRepository _db;
         private readonly IConfiguration _configuration;
 
-        public FuncionarioService(IPersonaRepository db, IConfiguration configuration) : base(db, configuration)
+        public AdministradorService(IPersonaRepository db, IConfiguration configuration) : base(db, configuration)
         {
             _db = db;
             _configuration = configuration;
         }
+
     }
 }
