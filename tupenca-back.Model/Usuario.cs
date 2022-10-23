@@ -10,6 +10,7 @@ namespace tupenca_back.Model
 {
     public class Usuario : Persona
     {
+        //public List<Prediccion> Funcionarios { get; set; }
 
     }
 }

@@ -10,6 +10,8 @@ namespace tupenca_back.Model
 {
     public class Funcionario : Persona
     {
+        public Empresa Empresa { get; set; }
 
+        public int EmpresaId { get; set; }
     }
 }
