@@ -24,7 +24,7 @@ namespace tupenca_back.Model
         public int? PuntajeEquipoVisitante { get; set; }
 
         [Required]
-        public int EventoID { get; set; }
+        public int EventoId { get; set; }
 
     }
 }
