@@ -6,5 +6,6 @@ namespace tupenca_back.Controllers.Dto
     {
         [Required]
         public string Nombre { get; set; }
+
     }
 }

@@ -1,23 +1,14 @@
-﻿
-
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace tupenca_back.Model
 {
-    public enum TipoResultado
-    {
-        Empate,
-        VictoriaEquipoLocal,
-        VictoriaEquipoVisitante
-    }
-
-    public class Resultado
+    public class Prediccion
     {
         [Key]
         public int Id { get; set; }
 
         [Required]
-        public TipoResultado resultado { get; set; }
+        public TipoResultado prediccion { get; set; }
 
         public int? PuntajeEquipoLocal { get; set; }
 

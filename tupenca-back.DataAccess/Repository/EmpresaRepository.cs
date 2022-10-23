@@ -15,7 +15,7 @@ namespace tupenca_back.DataAccess.Repository
         public int GetCantEmpresasNuevas()
         {
             var today = DateTime.Now;
-            return _appDbContext.Empresa
+            return _appDbContext.Empresas
                 .Where(empresa => empresa.FechaCreacion.AddDays(7) > today)
                 .Count();
         }
