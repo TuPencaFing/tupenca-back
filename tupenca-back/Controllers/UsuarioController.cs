@@ -93,6 +93,11 @@ namespace tupenca_back.Controllers
                 return BadRequest("User not found.");
             }
 
+            if (user?.HashedPassword == null)
+            {
+                return BadRequest("User already logged in with google");
+            }
+
             if (!_userService.VerifyPasswordHash(request.Password, user.HashedPassword, user.PasswordSalt))
             {
                 return BadRequest("Wrong password.");

@@ -45,7 +45,8 @@ namespace tupenca_back.Services
         private async Task<Usuario> GetOrCreateExternalLoginUser(string provider, string key, string email, string name)
         {
             var user = findByEmail(email);
-            if (user != null)
+            if (user != null && user.HashedPassword != null)
+                //error
                 return user;
             if (user == null)
             {
