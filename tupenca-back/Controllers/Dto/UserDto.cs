@@ -2,13 +2,9 @@
 
 namespace tupenca_back.Controllers.Dto
 {
-    public class EquipoDto
+    public class UserDto
     {
-
-        public int Id { get; set; }
-
         [Required]
-        public string Nombre { get; set; }
-
+        public string token { get; set; }
     }
 }

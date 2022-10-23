@@ -6,6 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using System.Net.Mail;
 using tupenca_back.Services.Exceptions;
 using System.Net;
+using AutoMapper;
+using System.Collections.Generic;
+using tupenca_back.Controllers.Dto;
 
 namespace tupenca_back.Controllers
 {
@@ -14,11 +17,13 @@ namespace tupenca_back.Controllers
     public class CampeonatoController : ControllerBase
     {
         private readonly ILogger<CampeonatoController> _logger;
+        public readonly IMapper _mapper;
         private readonly CampeonatoService _campeonatoService;
 
-        public CampeonatoController(ILogger<CampeonatoController> logger, CampeonatoService campeonatoService)
+        public CampeonatoController(ILogger<CampeonatoController> logger, IMapper mapper, CampeonatoService campeonatoService)
         {
             _logger = logger;
+            _mapper = mapper;
             _campeonatoService = campeonatoService;
         }
 
@@ -26,7 +31,11 @@ namespace tupenca_back.Controllers
         [HttpGet]
         public  ActionResult<IEnumerable<Campeonato>> GetCampeonatos()
         {
-            return Ok(_campeonatoService.getCampeonatos());
+            var campeonatos = _campeonatoService.getCampeonatos();
+
+            var campeonatosDto = _mapper.Map<List<CampeonatoDto>>(campeonatos);
+
+            return Ok(campeonatosDto);
         }
 
         // GET: api/campeonatos/1
@@ -39,9 +48,11 @@ namespace tupenca_back.Controllers
             if (campeonato == null)
             {
                 return NotFound();
-            } else
+            }
+            else
             {
-                return campeonato;
+                var campeonatoDto = _mapper.Map<CampeonatoDto>(campeonato);
+                return Ok(campeonatoDto);
             }
         }
 
