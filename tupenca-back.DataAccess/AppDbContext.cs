@@ -30,6 +30,8 @@ namespace tupenca_back.DataAccess
 
         public DbSet<Resultado>? Resultados { get; set; }
 
+        public DbSet<Prediccion>? Predicciones { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Evento>()

@@ -67,6 +67,7 @@ builder.Services.AddScoped<IEquipoRepository, EquipoRepository>();
 builder.Services.AddScoped<IDeporteRepository, DeporteRepository>();
 builder.Services.AddScoped<IEmpresaRepository, EmpresaRepository>();
 builder.Services.AddScoped<IResultadoRepository, ResultadoRepository>();
+builder.Services.AddScoped<IPrediccionRepository, PrediccionRepository>();
 
 builder.Services.AddScoped<UsuarioService, UsuarioService>();
 builder.Services.AddScoped<CampeonatoService, CampeonatoService>();
@@ -74,6 +75,7 @@ builder.Services.AddScoped<EventoService, EventoService>();
 builder.Services.AddScoped<EquipoService, EquipoService>();
 builder.Services.AddScoped<DeporteService, DeporteService>();
 builder.Services.AddScoped<EmpresaService, EmpresaService>();
+builder.Services.AddScoped<PrediccionService, PrediccionService>();
 builder.Services.AddScoped<ResultadoService, ResultadoService>();
 
 // Mapper

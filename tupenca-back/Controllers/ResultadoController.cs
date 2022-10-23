@@ -62,7 +62,7 @@ namespace tupenca_back.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<Resultado> CreateResultado(ResultadoDto resultadoDto)
         {
-            if (_resultadoService.getResultadoByEventoId(resultadoDto.EventoId) == null)
+            if (_resultadoService.getResultadoByEventoId(resultadoDto.EventoId) != null)
                 return BadRequest("Ya existe resultado ingresado para el evento");
             try
             {               
