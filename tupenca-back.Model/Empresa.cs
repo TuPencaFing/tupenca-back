@@ -20,5 +20,10 @@ namespace tupenca_back.Model
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime FechaCreacion { get; set; }
 
+        public List<Funcionario> Funcionarios { get; set; }
+
+        public List<Usuario> Usuarios { get; set; }
+
+
     }
 }

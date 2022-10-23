@@ -16,6 +16,9 @@ namespace tupenca_back.Model
 
         [Required]
         public int EventoId { get; set; }
+        [Required]
+        public Usuario Usuario { get; set; }
+        public int UsuarioId { get; set; }
 
     }
 }

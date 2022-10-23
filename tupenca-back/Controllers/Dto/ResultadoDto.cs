@@ -14,5 +14,8 @@ namespace tupenca_back.Controllers.Dto
 
         [Required]
         public int EventoId { get; set; }
+
+        [Required]
+        public int UsuarioId { get; set; }
     }
 }

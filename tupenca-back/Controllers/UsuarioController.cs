@@ -31,7 +31,7 @@ namespace tupenca_back.Controllers
             return Ok(_userService.getUsuarios());
         }
         //GET: api/user/1
-        [HttpGet("{id}")]
+        [HttpGet("{id}"), AllowAnonymous]
         public ActionResult<Usuario> GetUsuario(int id)
         {
             Usuario user = _userService.findUsuario(id);
@@ -47,7 +47,7 @@ namespace tupenca_back.Controllers
         }
 
         // DELETE: api/campeonatos/1
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), AllowAnonymous]
         public IActionResult DeleteUsuario(int id)
         {
 

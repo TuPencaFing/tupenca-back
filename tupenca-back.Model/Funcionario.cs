@@ -12,6 +12,6 @@ namespace tupenca_back.Model
     {
         public Empresa Empresa { get; set; }
 
-        public int EmpresaId { get; set; }
+        public int? EmpresaId { get; set; }
     }
 }
