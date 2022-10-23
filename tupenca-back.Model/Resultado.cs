@@ -19,10 +19,11 @@ namespace tupenca_back.Model
         [Required]
         public TipoResultado resultado { get; set; }
 
-        public int PuntajeEquipoLocal { get; set; }
+        public int? PuntajeEquipoLocal { get; set; }
 
-        public int PuntajeEquipoVisitante { get; set; }
+        public int? PuntajeEquipoVisitante { get; set; }
 
+        [Required]
         public int EventoID { get; set; }
 
     }
