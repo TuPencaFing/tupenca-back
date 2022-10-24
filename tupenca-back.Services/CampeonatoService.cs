@@ -23,7 +23,7 @@ namespace tupenca_back.Services
 
         public IEnumerable<Campeonato> getCampeonatos() => _campeonatoRepository.GetCampeonatos();
 
-        public Campeonato? findCampeonato(int? id) => _campeonatoRepository.GetFirstOrDefault(c => c.Id == id);
+        public Campeonato? findCampeonatoById(int? id) => _campeonatoRepository.GetFirstOrDefault(c => c.Id == id);
 
         public Campeonato? findCampeonatoByName(string name) => _campeonatoRepository.GetFirstOrDefault(c => c.Name == name);
 
@@ -46,7 +46,7 @@ namespace tupenca_back.Services
         {
             if (campeonato != null)
             {
-                var entity = findCampeonato(id);
+                var entity = findCampeonatoById(id);
 
                 entity.Name = campeonato.Name;
                 entity.StartDate = campeonato.StartDate;
@@ -69,7 +69,7 @@ namespace tupenca_back.Services
 
         public bool CampeonatoExists(int id)
         {
-            return findCampeonato(id) == null;
+            return findCampeonatoById(id) == null;
         }
 
         public bool CampeonatoNameExists(string name)
@@ -79,7 +79,7 @@ namespace tupenca_back.Services
 
         public Campeonato addEvento(int id, Evento evento)
         {
-            var campeonato = findCampeonato(id);
+            var campeonato = findCampeonatoById(id);
 
             if (campeonato == null)
             {

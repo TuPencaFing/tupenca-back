@@ -12,25 +12,23 @@ namespace tupenca_back.DataAccess
         {
         }
 
-        public DbSet<Persona>? Personas { get; set; }
-        public DbSet<Usuario>? Usuarios { get; set; }
         public DbSet<Administrador>? Administradores { get; set; }
-        public DbSet<Funcionario>? Funcionarios { get; set; }
-
-
         public DbSet<Campeonato>? Campeonatos { get; set; }
-
-        public DbSet<Equipo>? Equipos { get; set; }
-
         public DbSet<Deporte>? Deportes { get; set; }
-
-        public DbSet<Evento>? Eventos { get; set; }
-
         public DbSet<Empresa>? Empresas { get; set; }
-
-        public DbSet<Resultado>? Resultados { get; set; }
-
+        public DbSet<Equipo>? Equipos { get; set; }
+        public DbSet<Evento>? Eventos { get; set; }
+        public DbSet<Funcionario>? Funcionarios { get; set; }
+        public DbSet<Penca>? Pencas { get; set; }
+        public DbSet<PencaCompartida>? PencaCompartidas { get; set; }
+        public DbSet<PencaEmpresa>? PencaEmpresas { get; set; }
+        public DbSet<Persona>? Personas { get; set; }
+        public DbSet<Plan>? Planes { get; set; }
         public DbSet<Prediccion>? Predicciones { get; set; }
+        public DbSet<Premio>? Premios { get; set; }
+        public DbSet<Resultado>? Resultados { get; set; }
+        public DbSet<Usuario>? Usuarios { get; set; }
+        
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

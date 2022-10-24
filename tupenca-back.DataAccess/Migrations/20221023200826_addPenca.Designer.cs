@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using tupenca_back.DataAccess;
 
@@ -11,9 +12,10 @@ using tupenca_back.DataAccess;
 namespace tupenca_back.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221023200826_addPenca")]
+    partial class addPenca
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,21 +37,6 @@ namespace tupenca_back.DataAccess.Migrations
                     b.HasIndex("EventosId");
 
                     b.ToTable("CampeonatoEvento");
-                });
-
-            modelBuilder.Entity("EmpresaUsuario", b =>
-                {
-                    b.Property<int>("EmpresasId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UsuariosId")
-                        .HasColumnType("int");
-
-                    b.HasKey("EmpresasId", "UsuariosId");
-
-                    b.HasIndex("UsuariosId");
-
-                    b.ToTable("EmpresaUsuario");
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Campeonato", b =>
@@ -356,10 +343,12 @@ namespace tupenca_back.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("HashedPassword")
+                        .IsRequired()
                         .HasMaxLength(64)
                         .HasColumnType("varbinary(64)");
 
                     b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("varbinary(128)");
 
@@ -417,17 +406,12 @@ namespace tupenca_back.DataAccess.Migrations
                     b.Property<int?>("PuntajeEquipoVisitante")
                         .HasColumnType("int");
 
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("int");
-
                     b.Property<int>("prediccion")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("PencaId");
-
-                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Predicciones");
                 });
@@ -493,11 +477,6 @@ namespace tupenca_back.DataAccess.Migrations
                 {
                     b.HasBaseType("tupenca_back.Model.Persona");
 
-                    b.Property<int?>("EmpresaId")
-                        .HasColumnType("int");
-
-                    b.HasIndex("EmpresaId");
-
                     b.HasDiscriminator().HasValue("Funcionario");
                 });
 
@@ -559,21 +538,6 @@ namespace tupenca_back.DataAccess.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EmpresaUsuario", b =>
-                {
-                    b.HasOne("tupenca_back.Model.Empresa", null)
-                        .WithMany()
-                        .HasForeignKey("EmpresasId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("tupenca_back.Model.Usuario", null)
-                        .WithMany()
-                        .HasForeignKey("UsuariosId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("tupenca_back.Model.Campeonato", b =>
                 {
                     b.HasOne("tupenca_back.Model.Deporte", "Deporte")
@@ -602,36 +566,6 @@ namespace tupenca_back.DataAccess.Migrations
                     b.Navigation("EquipoLocal");
 
                     b.Navigation("EquipoVisitante");
-                });
-
-            modelBuilder.Entity("tupenca_back.Model.Prediccion", b =>
-                {
-                    b.HasOne("tupenca_back.Model.Usuario", "Usuario")
-                        .WithMany("Predicciones")
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("tupenca_back.Model.Funcionario", b =>
-                {
-                    b.HasOne("tupenca_back.Model.Empresa", "Empresa")
-                        .WithMany("Funcionarios")
-                        .HasForeignKey("EmpresaId");
-
-                    b.Navigation("Empresa");
-                });
-
-            modelBuilder.Entity("tupenca_back.Model.Empresa", b =>
-                {
-                    b.Navigation("Funcionarios");
-                });
-
-            modelBuilder.Entity("tupenca_back.Model.Usuario", b =>
-                {
-                    b.Navigation("Predicciones");
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Penca", b =>

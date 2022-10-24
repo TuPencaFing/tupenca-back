@@ -43,7 +43,7 @@ namespace tupenca_back.Controllers
         [HttpGet("{id}")]
         public ActionResult<Campeonato> GetCampeonato(int id)
         {
-            var campeonato = _campeonatoService.findCampeonato(id);
+            var campeonato = _campeonatoService.findCampeonatoById(id);
 
             if (campeonato == null)
             {
@@ -112,7 +112,7 @@ namespace tupenca_back.Controllers
         public IActionResult DeleteEvento(int id)
         {
 
-            var campeonato = _campeonatoService.findCampeonato(id);
+            var campeonato = _campeonatoService.findCampeonatoById(id);
 
             if (campeonato == null)
             {
