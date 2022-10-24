@@ -12,101 +12,17 @@ using static Google.Apis.Auth.GoogleJsonWebSignature;
 
 namespace tupenca_back.Services
 {
-    public class UsuarioService
+    public class UsuarioService : PersonaService<Usuario>
     {
         private readonly IPersonaRepository _db;
         private readonly IConfiguration _configuration;
 
-        public UsuarioService(IPersonaRepository db,IConfiguration configuration)
+        public UsuarioService(IPersonaRepository db, IConfiguration configuration) : base(db, configuration)
         {
             _db = db;
             _configuration = configuration;
         }
-        public void deleteUsuario(Usuario usr)
-        {
-            if (usr != null)
-            {
-                _db.Remove(usr);
-                _db.Save();
-            }
-        }
-        public Usuario? findUsuario(int? id)
-        {
-            return _db.GetFirstOrDefault(u=> u.Id == id) as Usuario;
-        }
-        public Usuario? findUsuarioByEmail(string email)
-        {
-            var a = _db.GetFirstOrDefault(u => u.Email == email);
-            return a as Usuario;
-        }
 
-        public Usuario? findUsuarioByUserName(string username)
-        {
-            return _db.GetFirstOrDefault(u => u.UserName == username) as Usuario;
-        }
-
-        public IEnumerable<Usuario> getUsuarios()
-        {
-
-            return _db.GetAll().OfType<Usuario>();
-        }
-        public void editUsuario(Usuario usr)
-        {
-            if (usr != null)
-            {
-                _db.Update(usr);
-                _db.Save();
-            }
-        }
-        public void addUsuario(Usuario usr)
-        {
-            if (usr != null)
-            {
-                _db.Add(usr);
-                _db.Save();
-            }
-        }
-
-        public void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
-        {
-            using (var hmac = new HMACSHA512())
-            {
-                passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-            }
-        }
-
-        public bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
-        {
-            using (var hmac = new HMACSHA512(passwordSalt))
-            {
-                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
-                return computedHash.SequenceEqual(passwordHash);
-            }
-        }
-        public string CreateToken(Usuario user, string role)
-        {
-            List<Claim> claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Email, user.Email),
-                new Claim(ClaimTypes.GivenName, user.UserName),
-                new Claim(ClaimTypes.Role, role)
-            };
-
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
-                _configuration.GetSection("AppSettings:Token").Value));
-
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
-            var token = new JwtSecurityToken(
-                claims: claims,
-                expires: DateTime.Now.AddDays(1),
-                signingCredentials: creds);
-
-            var jwt = new JwtSecurityTokenHandler().WriteToken(token);
-
-            return jwt;
-        }
         public async Task<Usuario> AuthenticateGoogleUserAsync(string request, string userToken)
         {
             try
@@ -128,10 +44,10 @@ namespace tupenca_back.Services
 
         private async Task<Usuario> GetOrCreateExternalLoginUser(string provider, string key, string email, string name)
         {
-            var user = findUsuarioByEmail(email);
-            if (user != null)
+            var user = findByEmail(email);
+            if (user != null && user.HashedPassword != null)
+                //error
                 return user;
-            CreatePasswordHash("123456", out byte[] passwordHash, out byte[] passwordSalt);
             if (user == null)
             {
                 if(name == null)
@@ -141,11 +57,9 @@ namespace tupenca_back.Services
                 user = new Usuario
                 {
                     Email = email,
-                    UserName = name,
-                    PasswordSalt = passwordSalt,
-                    HashedPassword = passwordHash,
+                    UserName = name
                 };
-                addUsuario(user);
+                add(user);
             }
             return user;
 

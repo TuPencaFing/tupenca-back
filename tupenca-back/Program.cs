@@ -81,6 +81,9 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 // Service
 builder.Services.AddScoped<UsuarioService, UsuarioService>();
+builder.Services.AddScoped<FuncionarioService, FuncionarioService>();
+builder.Services.AddScoped<AdministradorService, AdministradorService>();
+
 builder.Services.AddScoped<CampeonatoService, CampeonatoService>();
 builder.Services.AddScoped<DeporteService, DeporteService>();
 builder.Services.AddScoped<EquipoService, EquipoService>();

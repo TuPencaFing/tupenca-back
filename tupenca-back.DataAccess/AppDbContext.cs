@@ -44,17 +44,16 @@ namespace tupenca_back.DataAccess
                 .HasForeignKey(evento => evento.EquipoVisitanteId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-
             #region DeporteSeed
             modelBuilder.Entity<Deporte>().HasData(
-                new Deporte { Id = 1, Nombre = "Futbol"});
+                new Deporte { Id = 1, Nombre = "Futbol" });
             #endregion
 
             #region EquipoSeed
             modelBuilder.Entity<Equipo>().HasData(
                 //grupo A
                 new Equipo { Id = 1, Nombre = "Qatar" },
-                new Equipo { Id = 2, Nombre = "Ecuador"},
+                new Equipo { Id = 2, Nombre = "Ecuador" },
                 new Equipo { Id = 3, Nombre = "Senegal" },
                 new Equipo { Id = 4, Nombre = "Holanda" },
                 //grupo H
@@ -63,7 +62,7 @@ namespace tupenca_back.DataAccess
                 new Equipo { Id = 7, Nombre = "Uruguay" },
                 new Equipo { Id = 8, Nombre = "Corea del Sur" });
             #endregion
-            
+
             //primera jornada
             DateTime date1 = new DateTime(2022, 11, 20, 13, 00, 00);
 

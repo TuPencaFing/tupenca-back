@@ -96,6 +96,7 @@ namespace tupenca_back.Controllers
                 prediccion.PuntajeEquipoLocal = prediccionDto.PuntajeEquipoLocal;
                 prediccion.PuntajeEquipoVisitante = prediccionDto.PuntajeEquipoVisitante;
                 prediccion.EventoId = prediccionDto.EventoId;
+                prediccion.UsuarioId = prediccionDto.UsuarioId;
                 _prediccionService.CreatePrediccion(prediccion);
                 return CreatedAtAction("GetPrediccionById", new { id = prediccion.Id }, prediccion);
             }

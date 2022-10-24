@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using tupenca_back.DataAccess;
 
@@ -11,9 +12,10 @@ using tupenca_back.DataAccess;
 namespace tupenca_back.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221023184332_fixx")]
+    partial class fixx
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,21 +37,6 @@ namespace tupenca_back.DataAccess.Migrations
                     b.HasIndex("EventosId");
 
                     b.ToTable("CampeonatoEvento");
-                });
-
-            modelBuilder.Entity("EmpresaUsuario", b =>
-                {
-                    b.Property<int>("EmpresasId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UsuariosId")
-                        .HasColumnType("int");
-
-                    b.HasKey("EmpresasId", "UsuariosId");
-
-                    b.HasIndex("UsuariosId");
-
-                    b.ToTable("EmpresaUsuario");
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Campeonato", b =>
@@ -320,10 +307,12 @@ namespace tupenca_back.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("HashedPassword")
+                        .IsRequired()
                         .HasMaxLength(64)
                         .HasColumnType("varbinary(64)");
 
                     b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
                         .HasMaxLength(128)
                         .HasColumnType("varbinary(128)");
 
@@ -430,21 +419,6 @@ namespace tupenca_back.DataAccess.Migrations
                     b.HasOne("tupenca_back.Model.Evento", null)
                         .WithMany()
                         .HasForeignKey("EventosId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("EmpresaUsuario", b =>
-                {
-                    b.HasOne("tupenca_back.Model.Empresa", null)
-                        .WithMany()
-                        .HasForeignKey("EmpresasId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("tupenca_back.Model.Usuario", null)
-                        .WithMany()
-                        .HasForeignKey("UsuariosId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

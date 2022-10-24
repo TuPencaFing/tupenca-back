@@ -12,29 +12,29 @@ namespace tupenca_back.Controllers
     [ApiController]
     [Route("[controller]")]
     [Authorize]
-    public class UsuarioController : ControllerBase
+    public class FuncionarioController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        private readonly ILogger<UsuarioController> _logger;
-        private readonly UsuarioService _userService;
-        public UsuarioController(ILogger<UsuarioController> logger, UsuarioService userService, IConfiguration configuration)
+        private readonly ILogger<FuncionarioController> _logger;
+        private readonly FuncionarioService _funcionarioService;
+        public FuncionarioController(ILogger<FuncionarioController> logger, FuncionarioService funcionarioService, IConfiguration configuration)
         {
             _logger = logger;
-            _userService = userService;
+            _funcionarioService = funcionarioService;
             _configuration = configuration;
         }
 
         //GET: api/user
         [HttpGet, AllowAnonymous]
-        public ActionResult<IEnumerable<Usuario>> GetUsuarios()
+        public ActionResult<IEnumerable<Funcionario>> GetFuncionarios()
         {
-            return Ok(_userService.getUsuarios());
+            return Ok(_funcionarioService.get());
         }
         //GET: api/user/1
         [HttpGet("{id}")]
-        public ActionResult<Usuario> GetUsuario(int id)
+        public ActionResult<Funcionario> GetFuncionario(int id)
         {
-            Usuario user = _userService.findUsuario(id);
+            Funcionario user = _funcionarioService.find(id);
 
             if (user == null)
             {
@@ -48,17 +48,17 @@ namespace tupenca_back.Controllers
 
         // DELETE: api/campeonatos/1
         [HttpDelete("{id}")]
-        public IActionResult DeleteUsuario(int id)
+        public IActionResult DeleteFuncionario(int id)
         {
 
-            var user = _userService.findUsuario(id);
+            var user = _funcionarioService.find(id);
 
             if (user == null)
             {
                 return NotFound();
             }
 
-            _userService.deleteUsuario(user);
+            _funcionarioService.delete(user);
 
             return NoContent();
         }
@@ -70,48 +70,38 @@ namespace tupenca_back.Controllers
             {
                 return UnprocessableEntity(ModelState);
             }
-            if(_userService.findUsuarioByEmail(request.Email) != null)
+            if (_funcionarioService.findByEmail(request.Email) != null)
             {
                 return BadRequest("Email already exists.");
             }
-            if (_userService.findUsuarioByUserName(request.Username) != null)
+            if (_funcionarioService.findByUserName(request.Username) != null)
             {
                 return BadRequest("Username already exists.");
             }
-            _userService.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
-            var user = new Usuario {UserName = request.Username, Email = request.Email ,HashedPassword = passwordHash, PasswordSalt = passwordSalt};
-            _userService.addUsuario(user);
+            _funcionarioService.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
+            var user = new Funcionario { UserName = request.Username, Email = request.Email, HashedPassword = passwordHash, PasswordSalt = passwordSalt };
+            _funcionarioService.add(user);
             return Ok(new { message = "User added" });
         }
 
         [HttpPost("login"), AllowAnonymous]
         public async Task<ActionResult<UserDto>> Login(LoginRequest request)
         {
-            var user = _userService.findUsuarioByEmail(request.Email);
+            var user = _funcionarioService.findByEmail(request.Email);
             if (user?.Email != request.Email)
             {
                 return BadRequest("User not found.");
             }
 
-            if (!_userService.VerifyPasswordHash(request.Password, user.HashedPassword, user.PasswordSalt))
+            if (!_funcionarioService.VerifyPasswordHash(request.Password, user.HashedPassword, user.PasswordSalt))
             {
                 return BadRequest("Wrong password.");
             }
 
-            string token = _userService.CreateToken(user, "Usuario");
+            string token = _funcionarioService.CreateToken(user, "Funcionario");
             UserDto userDto = new UserDto();
             userDto.token = token;
             return Ok(userDto);
-        }
-
-        // GoogleAuthenticate
-        [AllowAnonymous]
-        [HttpPost("googleLogin")]
-        public async Task<ActionResult<string>> GoogleAuthenticate( string access_token)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState.Values.SelectMany(it => it.Errors).Select(it => it.ErrorMessage));
-            return Ok(_userService.CreateToken(await _userService.AuthenticateGoogleUserAsync(access_token, _configuration["Google:Id"]), "Usuario"));
         }
     }
 
