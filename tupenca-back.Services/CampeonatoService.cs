@@ -46,13 +46,13 @@ namespace tupenca_back.Services
         {
             if (campeonato != null)
             {
-                var entity = findCampeonatoById(id);
+                var campeonatoToUpdate = findCampeonatoById(id);
 
-                entity.Name = campeonato.Name;
-                entity.StartDate = campeonato.StartDate;
-                entity.FinishDate = campeonato.FinishDate;
+                campeonatoToUpdate.Name = campeonato.Name;
+                campeonatoToUpdate.StartDate = campeonato.StartDate;
+                campeonatoToUpdate.FinishDate = campeonato.FinishDate;
 
-                _campeonatoRepository.Update(entity);
+                _campeonatoRepository.Update(campeonatoToUpdate);
                 _campeonatoRepository.Save();
             }
         }
