@@ -10,8 +10,8 @@ using tupenca_back.Controllers.Dto;
 namespace tupenca_back.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    [Authorize]
+    [Route("api/funcionarios")]
+    [Authorize(Roles ="Funcionario")]
     public class FuncionarioController : ControllerBase
     {
         private readonly IConfiguration _configuration;
@@ -85,6 +85,26 @@ namespace tupenca_back.Controllers
         }
 
         [HttpPost("login"), AllowAnonymous]
+        public async Task<ActionResult<UserDto>> Login(LoginRequest request)
+        {
+            var user = _funcionarioService.findByEmail(request.Email);
+            if (user?.Email != request.Email)
+            {
+                return BadRequest("User not found.");
+            }
+
+            if (!_funcionarioService.VerifyPasswordHash(request.Password, user.HashedPassword, user.PasswordSalt))
+            {
+                return BadRequest("Wrong password.");
+            }
+
+            string token = _funcionarioService.CreateToken(user, "Funcionario");
+            UserDto userDto = new UserDto();
+            userDto.token = token;
+            return Ok(userDto);
+        }
+
+        [HttpPost("invitar"), AllowAnonymous]
         public async Task<ActionResult<UserDto>> Login(LoginRequest request)
         {
             var user = _funcionarioService.findByEmail(request.Email);

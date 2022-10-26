@@ -10,8 +10,8 @@ using tupenca_back.Controllers.Dto;
 namespace tupenca_back.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    [Authorize]
+    [Route("api/administradores")]
+    [Authorize(Roles = "Administrador")]
     public class AdministradorController : ControllerBase
     {
         private readonly IConfiguration _configuration;
