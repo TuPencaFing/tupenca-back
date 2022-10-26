@@ -60,26 +60,37 @@ builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(
     }
     ));
 
-builder.Services.AddScoped<IPersonaRepository, PersonaRepository>();
+
+// Repository
 builder.Services.AddScoped<ICampeonatoRepository, CampeonatoRepository>();
-builder.Services.AddScoped<IEventoRepository, EventoRepository>();
-builder.Services.AddScoped<IEquipoRepository, EquipoRepository>();
 builder.Services.AddScoped<IDeporteRepository, DeporteRepository>();
 builder.Services.AddScoped<IEmpresaRepository, EmpresaRepository>();
-builder.Services.AddScoped<IResultadoRepository, ResultadoRepository>();
+builder.Services.AddScoped<IEquipoRepository, EquipoRepository>();
+builder.Services.AddScoped<IEventoRepository, EventoRepository>();
+builder.Services.AddScoped<IPencaCompartidaRepository, PencaCompartidaRepository>();
+builder.Services.AddScoped<IPencaEmpresaRepository, PencaEmpresaRepository>();
+builder.Services.AddScoped<IPersonaRepository, PersonaRepository>();
+builder.Services.AddScoped<IPlanRepository, PlanRepository>();
 builder.Services.AddScoped<IPrediccionRepository, PrediccionRepository>();
+builder.Services.AddScoped<IPremioRepository, PremioRepository>();
+builder.Services.AddScoped<IResultadoRepository, ResultadoRepository>();
 
-builder.Services.AddScoped<UsuarioService, UsuarioService>();
-builder.Services.AddScoped<FuncionarioService, FuncionarioService>();
+
+// Service
 builder.Services.AddScoped<AdministradorService, AdministradorService>();
-
 builder.Services.AddScoped<CampeonatoService, CampeonatoService>();
-builder.Services.AddScoped<EventoService, EventoService>();
-builder.Services.AddScoped<EquipoService, EquipoService>();
 builder.Services.AddScoped<DeporteService, DeporteService>();
 builder.Services.AddScoped<EmpresaService, EmpresaService>();
+builder.Services.AddScoped<EquipoService, EquipoService>();
+builder.Services.AddScoped<EventoService, EventoService>();
+builder.Services.AddScoped<FuncionarioService, FuncionarioService>();
+builder.Services.AddScoped<PencaService, PencaService>();
+builder.Services.AddScoped<PlanService, PlanService>();
 builder.Services.AddScoped<PrediccionService, PrediccionService>();
+builder.Services.AddScoped<PremioService, PremioService>();
 builder.Services.AddScoped<ResultadoService, ResultadoService>();
+builder.Services.AddScoped<UsuarioService, UsuarioService>();
+
 
 // Mapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

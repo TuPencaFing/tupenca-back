@@ -9,16 +9,12 @@ namespace tupenca_back.Controllers.Dto
         
         public int Id { get; set; }
 
-        [Required]
         public string? Name { get; set; }
 
-        [Required]
         public DateTime StartDate { get; set; }
 
-        [Required]
         public DateTime FinishDate { get; set; }
 
-        [Required]
         public DeporteDto? Deporte { get; set; }
 
         public List<EventoDto> Eventos { get; set; } = new List<EventoDto>();

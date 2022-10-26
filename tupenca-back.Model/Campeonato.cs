@@ -23,6 +23,8 @@ namespace tupenca_back.Model
 
         public List<Evento> Eventos { get; set; } = new List<Evento>();
 
+        public List<Penca> Pencas { get; set; } = new List<Penca>();
+
     }
 }
 

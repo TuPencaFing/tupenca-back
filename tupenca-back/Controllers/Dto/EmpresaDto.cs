@@ -5,14 +5,14 @@ namespace tupenca_back.Controllers.Dto
     public class EmpresaDto
     {
 
-        [Required]
-        [Display(Name = "Razon Social")]
-        public string Razonsocial { get; set; }
+        public int Id { get; set; }
 
-        [Required]
+        [Display(Name = "Razon Social")]
+        public string? Razonsocial { get; set; }
+
         [RegularExpression(@"^[0-9]*", ErrorMessage = "Debe contener unicamente numeros.")]
         [MaxLength(12)]
         [MinLength(12)]
-        public string RUT { get; set; }
+        public string? RUT { get; set; }
     }
 }
