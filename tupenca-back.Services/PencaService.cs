@@ -59,7 +59,7 @@ namespace tupenca_back.Services
 
             foreach (Premio premio in pencaCompartida.Premios)
             {
-                var premioToAdd = _premioService.findPremioById(premio.Id);
+                var premioToAdd = _premioService.FindPremioById(premio.Id);
 
                 if (premioToAdd == null)
                 {
@@ -92,12 +92,10 @@ namespace tupenca_back.Services
 
             foreach (Premio premio in pencaEmpresa.Premios)
             {
-                var premioToAdd = _premioService.findPremioById(premio.Id);
+                var premioToAdd = _premioService.FindPremioById(premio.Id);
 
                 if (premioToAdd == null)
-                {
                     throw new NotFoundException("El Premio no existe");
-                }
 
                 premios.Add(premioToAdd);
             }
@@ -107,10 +105,16 @@ namespace tupenca_back.Services
 
             var empresa = _empresaService.getEmpresaById(pencaEmpresa.Empresa.Id);
 
+            if (empresa == null)
+                throw new NotFoundException("La Empresa no existe");
+
             pencaEmpresa.Empresa = empresa;
 
 
-            var plan = _planService.findPlanById(pencaEmpresa.Plan.Id);
+            var plan = _planService.FindPlanById(pencaEmpresa.Plan.Id);
+
+            if (plan == null)
+                throw new NotFoundException("El Plan no existe");
 
             pencaEmpresa.Plan = plan;
 
@@ -123,6 +127,9 @@ namespace tupenca_back.Services
         {
             var pencaToUpdate = findPencaCompartidaById(id);
 
+            if (pencaToUpdate == null)
+                throw new NotFoundException("La Penca no existe");
+
             pencaToUpdate.Title = pencaCompartida.Title;
             pencaToUpdate.Description = pencaCompartida.Description;
             pencaToUpdate.Image = pencaCompartida.Image;
@@ -131,12 +138,14 @@ namespace tupenca_back.Services
 
             _pencaCompartidaRepository.Update(pencaToUpdate);
             _pencaCompartidaRepository.Save();
-
         }
 
         public void UpdatePencaEmpresa(int id, PencaEmpresa pencaEmpresa)
         {
             var pencaToUpdate = findPencaEmpresaById(id);
+
+            if (pencaToUpdate == null)
+                throw new NotFoundException("La Penca no existe");
 
             pencaToUpdate.Title = pencaEmpresa.Title;
             pencaToUpdate.Description = pencaEmpresa.Description;
@@ -144,7 +153,38 @@ namespace tupenca_back.Services
   
             _pencaEmpresaRepository.Update(pencaToUpdate);
             _pencaEmpresaRepository.Save();
+        }
 
+        public void RemovePencaCompartida(int id)
+        {
+            var penca = findPencaCompartidaById(id);
+
+            if (penca == null)
+                throw new NotFoundException("La Penca no existe");
+
+            _pencaCompartidaRepository.Remove(penca);
+            _pencaCompartidaRepository.Save();
+        }
+
+        public void RemovePencaEmpresa(int id)
+        {
+            var penca = findPencaEmpresaById(id);
+
+            if (penca == null)
+                throw new NotFoundException("La Penca no existe");
+
+            _pencaEmpresaRepository.Remove(penca);
+            _pencaEmpresaRepository.Save();
+        }
+
+        public bool PencaCompartidaExists(int id)
+        {
+            return findPencaCompartidaById(id) == null;
+        }
+
+        public bool PencaEmpresaExists(int id)
+        {
+            return findPencaEmpresaById(id) == null;
         }
     }
 }

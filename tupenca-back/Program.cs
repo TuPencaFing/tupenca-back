@@ -77,16 +77,17 @@ builder.Services.AddScoped<IResultadoRepository, ResultadoRepository>();
 
 
 // Service
-builder.Services.AddScoped<UsuarioService, UsuarioService>();
-builder.Services.AddScoped<FuncionarioService, FuncionarioService>();
 builder.Services.AddScoped<AdministradorService, AdministradorService>();
-
 builder.Services.AddScoped<CampeonatoService, CampeonatoService>();
 builder.Services.AddScoped<DeporteService, DeporteService>();
 builder.Services.AddScoped<EmpresaService, EmpresaService>();
 builder.Services.AddScoped<EquipoService, EquipoService>();
 builder.Services.AddScoped<EventoService, EventoService>();
+builder.Services.AddScoped<FuncionarioService, FuncionarioService>();
+builder.Services.AddScoped<PencaService, PencaService>();
+builder.Services.AddScoped<PlanService, PlanService>();
 builder.Services.AddScoped<PrediccionService, PrediccionService>();
+builder.Services.AddScoped<PremioService, PremioService>();
 builder.Services.AddScoped<ResultadoService, ResultadoService>();
 builder.Services.AddScoped<UsuarioService, UsuarioService>();
 

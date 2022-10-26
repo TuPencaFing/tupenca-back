@@ -48,6 +48,11 @@ namespace tupenca_back.Services
             {
                 var campeonatoToUpdate = findCampeonatoById(id);
 
+                if (campeonatoToUpdate == null)
+                {
+                    throw new NotFoundException("El Campeonato no existe");
+                }
+
                 campeonatoToUpdate.Name = campeonato.Name;
                 campeonatoToUpdate.StartDate = campeonato.StartDate;
                 campeonatoToUpdate.FinishDate = campeonato.FinishDate;
