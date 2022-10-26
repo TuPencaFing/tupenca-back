@@ -23,7 +23,7 @@ namespace tupenca_back.Services
 
         public IEnumerable<Campeonato> getCampeonatos() => _campeonatoRepository.GetCampeonatos();
 
-        public Campeonato? findCampeonato(int? id) => _campeonatoRepository.GetFirstOrDefault(c => c.Id == id);
+        public Campeonato? findCampeonatoById(int? id) => _campeonatoRepository.GetFirstOrDefault(c => c.Id == id);
 
         public Campeonato? findCampeonatoByName(string name) => _campeonatoRepository.GetFirstOrDefault(c => c.Name == name);
 
@@ -46,13 +46,18 @@ namespace tupenca_back.Services
         {
             if (campeonato != null)
             {
-                var entity = findCampeonato(id);
+                var campeonatoToUpdate = findCampeonatoById(id);
 
-                entity.Name = campeonato.Name;
-                entity.StartDate = campeonato.StartDate;
-                entity.FinishDate = campeonato.FinishDate;
+                if (campeonatoToUpdate == null)
+                {
+                    throw new NotFoundException("El Campeonato no existe");
+                }
 
-                _campeonatoRepository.Update(entity);
+                campeonatoToUpdate.Name = campeonato.Name;
+                campeonatoToUpdate.StartDate = campeonato.StartDate;
+                campeonatoToUpdate.FinishDate = campeonato.FinishDate;
+
+                _campeonatoRepository.Update(campeonatoToUpdate);
                 _campeonatoRepository.Save();
             }
         }
@@ -69,7 +74,7 @@ namespace tupenca_back.Services
 
         public bool CampeonatoExists(int id)
         {
-            return findCampeonato(id) == null;
+            return findCampeonatoById(id) == null;
         }
 
         public bool CampeonatoNameExists(string name)
@@ -79,7 +84,7 @@ namespace tupenca_back.Services
 
         public Campeonato addEvento(int id, Evento evento)
         {
-            var campeonato = findCampeonato(id);
+            var campeonato = findCampeonatoById(id);
 
             if (campeonato == null)
             {

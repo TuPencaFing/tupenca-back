@@ -2,6 +2,7 @@
 using tupenca_back.Services;
 using tupenca_back.Model;
 using tupenca_back.Controllers.Dto;
+using AutoMapper;
 
 namespace tupenca_back.Controllers
 {
@@ -9,9 +10,12 @@ namespace tupenca_back.Controllers
     public class EmpresaController : ControllerBase
     {
         private readonly ILogger<EmpresaController> _logger;
+        public readonly IMapper _mapper;
         private readonly EmpresaService _empresaService;
 
-        public EmpresaController(ILogger<EmpresaController> logger, EmpresaService empresaService)
+        public EmpresaController(ILogger<EmpresaController> logger,
+                                 IMapper mapper,
+                                 EmpresaService empresaService)
         {
             _logger = logger;
             _empresaService = empresaService;
@@ -78,7 +82,7 @@ namespace tupenca_back.Controllers
 
             _empresaService.CreateEmpresa(empresa);
 
-            return CreatedAtAction("GetEmpresaById", new { id = empresa.Id }, empresa);
+            return CreatedAtAction("GetEmpresaById", new { id = empresa.Id }, _mapper.Map<EmpresaDto>(empresa));
         }
 
 

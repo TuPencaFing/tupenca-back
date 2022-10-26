@@ -31,79 +31,94 @@ namespace tupenca_back.Controllers
         [HttpGet]
         public  ActionResult<IEnumerable<Campeonato>> GetCampeonatos()
         {
-            var campeonatos = _campeonatoService.getCampeonatos();
+            try
+            {
+                var campeonatos = _campeonatoService.getCampeonatos();
 
-            var campeonatosDto = _mapper.Map<List<CampeonatoDto>>(campeonatos);
+                var campeonatosDto = _mapper.Map<List<CampeonatoDto>>(campeonatos);
 
-            return Ok(campeonatosDto);
+                return Ok(campeonatosDto);
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+            } 
         }
 
         // GET: api/campeonatos/1
-
         [HttpGet("{id}")]
         public ActionResult<Campeonato> GetCampeonato(int id)
         {
-            var campeonato = _campeonatoService.findCampeonato(id);
+            try
+            {
+                var campeonato = _campeonatoService.findCampeonatoById(id);
 
-            if (campeonato == null)
-            {
-                return NotFound();
+                if (campeonato == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    var campeonatoDto = _mapper.Map<CampeonatoDto>(campeonato);
+                    return Ok(campeonatoDto);
+                }
             }
-            else
+            catch (Exception e)
             {
-                var campeonatoDto = _mapper.Map<CampeonatoDto>(campeonato);
-                return Ok(campeonatoDto);
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
 
 
         // POST: api/campeonatos
         [HttpPost]
-        public ActionResult<Campeonato> PostCampeonato(Campeonato campeonato)
+        public IActionResult PostCampeonato(Campeonato campeonato)
         {
             if (campeonato == null)
-            {
                 throw new HttpResponseException((int)HttpStatusCode.BadRequest, "Campeonato no debe ser nulo");
-            }
+            
 
             if (_campeonatoService.CampeonatoNameExists(campeonato.Name))
-            {
                 throw new HttpResponseException((int)HttpStatusCode.BadRequest, "Nombre campeonato repetido");
-            }
 
             try
             {
                 _campeonatoService.AddCampeonato(campeonato);
 
-                return CreatedAtAction("GetCampeonato", new { id = campeonato.Id }, campeonato);
+
+                return CreatedAtAction("GetCampeonato", new { id = campeonato.Id }, _mapper.Map<CampeonatoDto>(campeonato));
             }
             catch (NotFoundException e)
             {
                 throw new HttpResponseException((int) HttpStatusCode.NotFound, e.Message);
             }
-           
+            catch (Exception e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+            }
         }
 
 
         // PUT: api/campeonatos/1
         [HttpPut("{id}")]
-        public ActionResult<Campeonato> PutCampeonato(int id, Campeonato campeonato)
+        public IActionResult PutCampeonato(int id, Campeonato campeonato)
         {
-
             if (!ModelState.IsValid)
-                return BadRequest();
-
-
-            if (id != campeonato.Id)
                 return BadRequest();
 
             if (_campeonatoService.CampeonatoExists(id))
                 return NotFound();
 
+            try
+            {
+                _campeonatoService.UpdateCampeonato(id, campeonato);
 
-            _campeonatoService.UpdateCampeonato(id, campeonato);
-
-            return CreatedAtAction("GetCampeonato", new { id = campeonato.Id }, campeonato);
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+            }
         }
 
 
@@ -112,30 +127,41 @@ namespace tupenca_back.Controllers
         public IActionResult DeleteEvento(int id)
         {
 
-            var campeonato = _campeonatoService.findCampeonato(id);
+            var campeonato = _campeonatoService.findCampeonatoById(id);
 
             if (campeonato == null)
-            {
                 return NotFound();
+
+            try
+            {
+                _campeonatoService.RemoveCampeonato(campeonato);
+
+                return NoContent();
             }
-
-            _campeonatoService.RemoveCampeonato(campeonato);
-
-            return NoContent();
+            catch (Exception e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+            }
         }
 
-        // PUT: api/campeonatos/1/eventos
-        [HttpPut("{id}/eventos")]
-        public ActionResult<Campeonato> AddEvento(int id, Evento evento)
+
+        // Patch: api/campeonatos/1/eventos
+        [HttpPatch("{id}/eventos")]
+        public IActionResult AddEvento(int id, Evento evento)
         {
             try
             {
-                return _campeonatoService.addEvento(id, evento);
+                _campeonatoService.addEvento(id, evento);
 
+                return NoContent();
             }
             catch (NotFoundException e)
             {
                 throw new HttpResponseException((int)HttpStatusCode.NotFound, e.Message);
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
             }
 
         }
