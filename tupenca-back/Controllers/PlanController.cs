@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Net;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using tupenca_back.Controllers.Dto;
 using tupenca_back.Model;
@@ -11,6 +12,7 @@ namespace tupenca_back.Controllers
 {
     [ApiController]
     [Route("api/planes")]
+    [Authorize]
     public class PlanController : ControllerBase
     {
 

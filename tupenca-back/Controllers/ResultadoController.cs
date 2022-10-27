@@ -4,10 +4,12 @@ using tupenca_back.Model;
 using tupenca_back.Controllers.Dto;
 using System.Net;
 using tupenca_back.Services.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace tupenca_back.Controllers
 {
     [ApiController]
+    [Authorize]
     public class ResultadoController : ControllerBase
     {
         private readonly ILogger<ResultadoController> _logger;
