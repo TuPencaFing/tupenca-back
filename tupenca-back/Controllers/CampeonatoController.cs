@@ -29,7 +29,7 @@ namespace tupenca_back.Controllers
 
         //GET: api/campeonatos
         [HttpGet]
-        public  ActionResult<IEnumerable<Campeonato>> GetCampeonatos()
+        public  ActionResult<IEnumerable<CampeonatoDto>> GetCampeonatos()
         {
             try
             {
@@ -47,7 +47,7 @@ namespace tupenca_back.Controllers
 
         // GET: api/campeonatos/1
         [HttpGet("{id}")]
-        public ActionResult<Campeonato> GetCampeonato(int id)
+        public ActionResult<CampeonatoDto> GetCampeonato(int id)
         {
             try
             {
@@ -72,21 +72,23 @@ namespace tupenca_back.Controllers
 
         // POST: api/campeonatos
         [HttpPost]
-        public IActionResult PostCampeonato(Campeonato campeonato)
+        public IActionResult PostCampeonato(CampeonatoDto campeonatoDto)
         {
-            if (campeonato == null)
+            if (campeonatoDto == null)
                 throw new HttpResponseException((int)HttpStatusCode.BadRequest, "Campeonato no debe ser nulo");
             
 
-            if (_campeonatoService.CampeonatoNameExists(campeonato.Name))
+            if (_campeonatoService.CampeonatoNameExists(campeonatoDto.Name))
                 throw new HttpResponseException((int)HttpStatusCode.BadRequest, "Nombre campeonato repetido");
 
             try
             {
+                var campeonato = _mapper.Map<Campeonato>(campeonatoDto);
+
                 _campeonatoService.AddCampeonato(campeonato);
 
 
-                return CreatedAtAction("GetCampeonato", new { id = campeonato.Id }, _mapper.Map<CampeonatoDto>(campeonato));
+                return CreatedAtAction("GetCampeonato", new { id = campeonatoDto.Id }, _mapper.Map<CampeonatoDto>(campeonato));
             }
             catch (NotFoundException e)
             {
@@ -101,7 +103,7 @@ namespace tupenca_back.Controllers
 
         // PUT: api/campeonatos/1
         [HttpPut("{id}")]
-        public IActionResult PutCampeonato(int id, Campeonato campeonato)
+        public IActionResult PutCampeonato(int id, CampeonatoDto campeonatoDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
@@ -111,6 +113,8 @@ namespace tupenca_back.Controllers
 
             try
             {
+                var campeonato = _mapper.Map<Campeonato>(campeonatoDto);
+
                 _campeonatoService.UpdateCampeonato(id, campeonato);
 
                 return NoContent();
@@ -147,10 +151,12 @@ namespace tupenca_back.Controllers
 
         // Patch: api/campeonatos/1/eventos
         [HttpPatch("{id}/eventos")]
-        public IActionResult AddEvento(int id, Evento evento)
+        public IActionResult AddEvento(int id, EventoDto eventoDto)
         {
             try
             {
+                var evento = _mapper.Map<Evento>(eventoDto);
+
                 _campeonatoService.addEvento(id, evento);
 
                 return NoContent();
