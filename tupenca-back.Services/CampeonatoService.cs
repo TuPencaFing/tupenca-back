@@ -38,6 +38,24 @@ namespace tupenca_back.Services
 
             campeonato.Deporte = deporte;
 
+            var eventos = new List<Evento>();
+
+            campeonato.Eventos.ForEach(e => eventos.Add(e));
+
+            campeonato.Eventos.Clear();
+
+            foreach (Evento evento in eventos)
+            {
+                var eventoToAdd = _eventoService.getEventoById(evento.Id);
+
+                if (eventoToAdd == null)
+                {
+                    throw new NotFoundException("Evento no encontrado");
+                }
+
+                campeonato.Eventos.Add(eventoToAdd);
+            }
+
             _campeonatoRepository.Add(campeonato);
             _campeonatoRepository.Save();
         }

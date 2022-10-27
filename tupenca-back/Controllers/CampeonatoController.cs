@@ -9,11 +9,13 @@ using System.Net;
 using AutoMapper;
 using System.Collections.Generic;
 using tupenca_back.Controllers.Dto;
+using Microsoft.AspNetCore.Authorization;
 
 namespace tupenca_back.Controllers
 {
     [ApiController]
     [Route("api/campeonatos")]
+    [Authorize]
     public class CampeonatoController : ControllerBase
     {
         private readonly ILogger<CampeonatoController> _logger;
