@@ -64,7 +64,7 @@ namespace tupenca_back.Controllers
         }
 
         [HttpPost("register"), AllowAnonymous]
-        public IActionResult Register(RegisterRequest request)
+        public IActionResult Register(RegisterDTO request)
         {
             if (!ModelState.IsValid)
             {
@@ -85,7 +85,7 @@ namespace tupenca_back.Controllers
         }
 
         [HttpPost("login"), AllowAnonymous]
-        public async Task<ActionResult<UserDto>> Login(LoginRequest request)
+        public async Task<ActionResult<UserDto>> Login(LoginDto request)
         {
             var user = _userService.findByEmail(request.Email);
             if (user?.Email != request.Email)

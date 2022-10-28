@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace tupenca_back.Model
 {
-    public class LoginRequest
+    public class LoginDto
     {
         [Required]
         public string Email { get; set; }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace tupenca_back.Model
 {
-    public class RegisterRequest
+    public class RegisterDTO
     {
         [Required]
         [EmailAddress]

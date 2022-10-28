@@ -33,6 +33,7 @@
   <ItemGroup>
     <ProjectReference Include="..\tupenca-back.DataAccess\tupenca-back.DataAccess.csproj" />
     <ProjectReference Include="..\tupenca-back.Services\tupenca-back.Services.csproj" />
+    <ProjectReference Include="..\tupenca-back.Utilities\tupenca-back.Utilities.csproj" />
   </ItemGroup>
 
   <ItemGroup>
