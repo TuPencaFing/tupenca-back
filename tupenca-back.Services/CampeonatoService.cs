@@ -23,7 +23,7 @@ namespace tupenca_back.Services
 
         public IEnumerable<Campeonato> getCampeonatos() => _campeonatoRepository.GetCampeonatos();
 
-        public Campeonato? findCampeonatoById(int? id) => _campeonatoRepository.GetFirstOrDefault(c => c.Id == id);
+        public Campeonato? findCampeonatoById(int id) => _campeonatoRepository.FindCampeonatoById(id);
 
         public Campeonato? findCampeonatoByName(string name) => _campeonatoRepository.GetFirstOrDefault(c => c.Name == name);
 
