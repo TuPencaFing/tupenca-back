@@ -120,7 +120,7 @@ namespace tupenca_back.Controllers
             //_emailSender.SendEmail(message);
             //var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
             //var penca =_funcionarioService.findPenca(int.Parse(id),request.PencaId);
-            var penca =_funcionarioService.findPenca(14,0);
+            var penca =_funcionarioService.findPenca(14,1);
 
             return Ok();
         }

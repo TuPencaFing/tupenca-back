@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,10 +29,13 @@ namespace tupenca_back.DataAccess.Repository
             //from func in _appDbContext.Funcionarios
             //where func.I d == id
             //select func;
-            Funcionario func = _appDbContext.Funcionarios.FirstOrDefault(f => f.Id == id);
-            Empresa emp = _appDbContext.Empresas.FirstOrDefault(f => f.Id == func.EmpresaId);
-            var je = (from d in func.Empresa.Pencas
-                 where d.Id == id
+            Funcionario func = _appDbContext.Funcionarios.Include(p=>p.Empresa).FirstOrDefault(f => f.Id == id);
+            var emp =  _appDbContext.Empresas.Where(p => p.Id == func.EmpresaId).Include(p => p.Pencas).FirstOrDefault();
+
+            //Empresa emp = _appDbContext.Empresas.FirstOrDefault(f => f.Id == func.EmpresaId);
+            var pencas = emp.Pencas;
+            var je = (from d in pencas
+                 where d.Id == pencaId
                  select d);
             return je;
             //Empresa empresa = _appDbContext.Empresas.Select(e => e.Funcionarios.)
