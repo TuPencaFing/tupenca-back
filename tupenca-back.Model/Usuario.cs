@@ -11,8 +11,6 @@ namespace tupenca_back.Model
 {
     public class Usuario : Persona
     {
-        public List<Prediccion> Predicciones { get; set; }
-
         public List<Empresa> Empresas { get; set; }
 
         public List<UsuarioPenca> UsuariosPencas { get; set; }
