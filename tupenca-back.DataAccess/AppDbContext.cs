@@ -29,6 +29,8 @@ namespace tupenca_back.DataAccess
         public DbSet<Resultado>? Resultados { get; set; }
         public DbSet<Usuario>? Usuarios { get; set; }
         public DbSet<UsuarioPenca>? UsuariosPencas { get; set; }
+        public DbSet<UserInviteToken>? UserInviteTokens { get; set; }
+
 
 
 

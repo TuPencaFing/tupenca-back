@@ -113,15 +113,15 @@ namespace tupenca_back.Controllers
             return Ok(userDto);
         }
 
-        [HttpPost("invitar"),AllowAnonymous]
+        [HttpPost("invitar")]
         public  IActionResult Invite(InviteUserDto request)
         {
-            //var message = new Message(new string[] { "mati98bor@gmail.com" }, "Test email", "This is the content from our email.");
-            //_emailSender.SendEmail(message);
-            //var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            
+            var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
             //var penca =_funcionarioService.findPenca(int.Parse(id),request.PencaId);
-            var penca =_funcionarioService.findPenca(14,1);
-
+            string token = _funcionarioService.createInviteToken(int.Parse(id), request.PencaId);
+            var message = new Message(new string[] { request.Email }, "Invitation to join penca", "Join penca in http://localhost:3000/invitar/" + token);
+            _emailSender.SendEmail(message);
             return Ok();
         }
     }

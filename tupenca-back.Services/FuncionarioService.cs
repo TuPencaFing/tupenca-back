@@ -23,9 +23,9 @@ namespace tupenca_back.Services
             _configuration = configuration;
         }
 
-        public object findPenca(int id, int pencaId)
+        public string createInviteToken(int id, int pencaId)
         {
-            return _db.findPenca( id,  pencaId);
+            return _db.createInviteToken( id,  pencaId);
         }
     }
 }
