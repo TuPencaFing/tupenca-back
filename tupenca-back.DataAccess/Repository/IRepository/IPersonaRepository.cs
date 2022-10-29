@@ -9,7 +9,7 @@ namespace tupenca_back.DataAccess.Repository.IRepository
 {
     public interface IPersonaRepository : IRepository<Persona>
     {
-        object findPenca(int id, int pencaId);
+        string createInviteToken(int id, int pencaId);
         void Save();
     }
 }
