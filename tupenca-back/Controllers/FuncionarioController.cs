@@ -87,6 +87,10 @@ namespace tupenca_back.Controllers
                 return BadRequest("Username already exists.");
             }
             _funcionarioService.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
+            var str = String.Join(",", passwordHash);
+            var str2 = String.Join(",", passwordSalt);
+
+
             var Empresa = _mapper.Map<Empresa>(request.Empresa);
             var user = new Funcionario { UserName = request.Username, Email = request.Email, HashedPassword = passwordHash, PasswordSalt = passwordSalt, EmpresaId = Empresa.Id };
             _funcionarioService.add(user);
