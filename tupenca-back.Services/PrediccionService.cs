@@ -55,7 +55,7 @@ namespace tupenca_back.Services
             }
         }
 
-        /*
+        
         public void RemovePrediccion(Prediccion prediccion)
         {
             if (prediccion != null)
@@ -64,7 +64,7 @@ namespace tupenca_back.Services
                 _prediccionRepository.Save();
             }
         }
-        */
+        
     }
 }
 

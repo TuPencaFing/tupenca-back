@@ -7,18 +7,21 @@ using System.Security.Claims;
 
 namespace tupenca_back.Controllers
 {
+    [Authorize]
     [ApiController]
     public class EventoController : ControllerBase
     {
         private readonly ILogger<EventoController> _logger;
         private readonly EventoService _eventoService;
         private readonly EquipoService _equipoService;
+        private readonly PrediccionService _prediccionService;
 
-        public EventoController(ILogger<EventoController> logger, EventoService eventoService, EquipoService equipoService)
+        public EventoController(ILogger<EventoController> logger, EventoService eventoService, EquipoService equipoService, PrediccionService prediccionService)
         {
             _logger = logger;
             _eventoService = eventoService;
             _equipoService = equipoService;
+            _prediccionService = prediccionService;
         }
 
         //GET: api/eventos        

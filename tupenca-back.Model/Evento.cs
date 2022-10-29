@@ -23,5 +23,6 @@ namespace tupenca_back.Model
 
         [JsonIgnore]
         public List<Campeonato> Campeonatos { get; set; } = new List<Campeonato>();
+
     }
 }
