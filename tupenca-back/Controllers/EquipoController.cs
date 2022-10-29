@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Authorization;
 namespace tupenca_back.Controllers
 {
     [ApiController]
-    [Authorize]
     public class EquipoController : ControllerBase
     {
         private readonly ILogger<EquipoController> _logger;

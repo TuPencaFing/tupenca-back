@@ -13,7 +13,6 @@ namespace tupenca_back.Controllers
 
     [ApiController]
     [Route("api/pencas-empresas")]
-    [Authorize]
     public class PencaEmpresaController : ControllerBase
     {
         private readonly ILogger<PencaEmpresaController> _logger;

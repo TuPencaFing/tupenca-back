@@ -15,7 +15,6 @@ namespace tupenca_back.Controllers
 {
     [ApiController]
     [Route("api/campeonatos")]
-    [Authorize]
     public class CampeonatoController : ControllerBase
     {
         private readonly ILogger<CampeonatoController> _logger;

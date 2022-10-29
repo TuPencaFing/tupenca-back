@@ -24,6 +24,6 @@ namespace tupenca_back.Model
 
         public List<Usuario> Usuarios { get; set; }
 
-
+        public List<PencaEmpresa> Pencas { get; set; }
     }
 }

@@ -26,6 +26,9 @@ namespace tupenca_back.Model
 
         public List<Prediccion>? Predicciones { get; set; } = new List<Prediccion>();
 
+        public List<UsuarioPenca> UsuariosPencas { get; set; }
+
+
     }
 }
 

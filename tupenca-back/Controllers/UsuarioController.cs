@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using tupenca_back.Model;
 using tupenca_back.Services;
 using tupenca_back.Controllers.Dto;
+using System.Security.Claims;
 
 namespace tupenca_back.Controllers
 {
@@ -122,6 +123,8 @@ namespace tupenca_back.Controllers
             userDto.token = token;
             return Ok(userDto);
         }
+
+
     }
 
 

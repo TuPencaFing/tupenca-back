@@ -28,7 +28,9 @@ namespace tupenca_back.DataAccess
         public DbSet<Premio>? Premios { get; set; }
         public DbSet<Resultado>? Resultados { get; set; }
         public DbSet<Usuario>? Usuarios { get; set; }
-        
+        public DbSet<UsuarioPenca>? UsuariosPencas { get; set; }
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -41,6 +43,28 @@ namespace tupenca_back.DataAccess
                 .WithMany()
                 .HasForeignKey(evento => evento.EquipoVisitanteId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Funcionario>()
+                .HasOne(funcionario => funcionario.Empresa)
+                .WithMany(e => e.Funcionarios)
+                .HasForeignKey(funcionario => funcionario.EmpresaId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UsuarioPenca>(entity =>
+            {
+                entity.HasOne(d => d.Usuario)
+                    .WithMany(p => p.UsuariosPencas)
+                    .HasForeignKey(d => d.UsuarioId)
+                    .OnDelete(DeleteBehavior.ClientSetNull);
+
+
+                entity.HasOne(d => d.Penca)
+                    .WithMany(p => p.UsuariosPencas)
+                    .HasForeignKey(d => d.PencaId);
+
+
+            });
+
 
             #region DeporteSeed
             modelBuilder.Entity<Deporte>().HasData(

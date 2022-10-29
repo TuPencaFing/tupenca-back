@@ -8,6 +8,7 @@ using tupenca_back.Services;
 using tupenca_back.Controllers.Dto;
 using tupenca_back.Utilities.EmailService;
 using System.Security.Claims;
+using AutoMapper;
 
 namespace tupenca_back.Controllers
 {
@@ -20,12 +21,15 @@ namespace tupenca_back.Controllers
         private readonly ILogger<FuncionarioController> _logger;
         private readonly FuncionarioService _funcionarioService;
         private readonly IEmailSender _emailSender;
-        public FuncionarioController(ILogger<FuncionarioController> logger, FuncionarioService funcionarioService, IConfiguration configuration, IEmailSender emailSender)
+        public readonly IMapper _mapper;
+
+        public FuncionarioController(ILogger<FuncionarioController> logger, FuncionarioService funcionarioService, IConfiguration configuration, IMapper mapper, IEmailSender emailSender)
         {
             _logger = logger;
             _funcionarioService = funcionarioService;
             _configuration = configuration;
             _emailSender = emailSender;
+            _mapper = mapper;
         }
 
         //GET: api/user
@@ -68,7 +72,7 @@ namespace tupenca_back.Controllers
         }
 
         [HttpPost("register"), AllowAnonymous]
-        public IActionResult Register(RegisterDTO request)
+        public IActionResult Register(FuncionarioDTO request)
         {
             if (!ModelState.IsValid)
             {
@@ -83,7 +87,8 @@ namespace tupenca_back.Controllers
                 return BadRequest("Username already exists.");
             }
             _funcionarioService.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
-            var user = new Funcionario { UserName = request.Username, Email = request.Email, HashedPassword = passwordHash, PasswordSalt = passwordSalt };
+            var Empresa = _mapper.Map<Empresa>(request.Empresa);
+            var user = new Funcionario { UserName = request.Username, Email = request.Email, HashedPassword = passwordHash, PasswordSalt = passwordSalt, EmpresaId = Empresa.Id };
             _funcionarioService.add(user);
             return Ok(new { message = "User added" });
         }
@@ -108,13 +113,15 @@ namespace tupenca_back.Controllers
             return Ok(userDto);
         }
 
-        [HttpPost("invitar")]
+        [HttpPost("invitar"),AllowAnonymous]
         public  IActionResult Invite(InviteUserDto request)
         {
             //var message = new Message(new string[] { "mati98bor@gmail.com" }, "Test email", "This is the content from our email.");
             //_emailSender.SendEmail(message);
-            var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            _funcionarioService.find(int.Parse(id));
+            //var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            //var penca =_funcionarioService.findPenca(int.Parse(id),request.PencaId);
+            var penca =_funcionarioService.findPenca(14,0);
+
             return Ok();
         }
     }

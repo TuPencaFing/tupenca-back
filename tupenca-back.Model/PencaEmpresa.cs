@@ -12,6 +12,7 @@ namespace tupenca_back.Model
         [Required]
         public Plan? Plan { get; set; }
 
+
     }
 }
 

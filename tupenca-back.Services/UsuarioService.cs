@@ -6,6 +6,8 @@ using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
+using System.Xml.Linq;
+using tupenca_back.DataAccess.Repository;
 using tupenca_back.DataAccess.Repository.IRepository;
 using tupenca_back.Model;
 using static Google.Apis.Auth.GoogleJsonWebSignature;
@@ -41,6 +43,8 @@ namespace tupenca_back.Services
             return null;
 
         }
+
+
 
         private async Task<Usuario> GetOrCreateExternalLoginUser(string provider, string key, string email, string name)
         {

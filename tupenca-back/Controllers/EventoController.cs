@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 namespace tupenca_back.Controllers
 {
     [ApiController]
-    [Authorize]
     public class EventoController : ControllerBase
     {
         private readonly ILogger<EventoController> _logger;

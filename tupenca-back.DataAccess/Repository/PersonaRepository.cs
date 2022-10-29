@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using tupenca_back.DataAccess.Repository.IRepository;
 using tupenca_back.Model;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace tupenca_back.DataAccess.Repository
 {
@@ -21,6 +22,24 @@ namespace tupenca_back.DataAccess.Repository
             _appDbContext.SaveChanges();
         }
 
-        
+        public object findPenca(int id, int pencaId)
+        {
+            //var idQuery =
+            //from func in _appDbContext.Funcionarios
+            //where func.I d == id
+            //select func;
+            Funcionario func = _appDbContext.Funcionarios.FirstOrDefault(f => f.Id == id);
+            Empresa emp = _appDbContext.Empresas.FirstOrDefault(f => f.Id == func.EmpresaId);
+            var je = (from d in func.Empresa.Pencas
+                 where d.Id == id
+                 select d);
+            return je;
+            //Empresa empresa = _appDbContext.Empresas.Select(e => e.Funcionarios.)
+            //var query = _appDbContext.Funcionarios.Where(f => f.Empresa.Pencas.Where(p => p.Id == pencaId))
+        }
+
+
+
+
     }
 }

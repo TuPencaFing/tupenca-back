@@ -22,5 +22,10 @@ namespace tupenca_back.Services
             _db = db;
             _configuration = configuration;
         }
+
+        public object findPenca(int id, int pencaId)
+        {
+            return _db.findPenca( id,  pencaId);
+        }
     }
 }
