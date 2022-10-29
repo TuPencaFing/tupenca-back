@@ -7,6 +7,8 @@ namespace tupenca_back.DataAccess.Repository.IRepository
     {
         IEnumerable<Campeonato> GetCampeonatos();
 
+        Campeonato? FindCampeonatoById(int id);
+
         void Save();
     }
 }

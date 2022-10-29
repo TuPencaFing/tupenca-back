@@ -14,6 +14,15 @@ namespace tupenca_back.DataAccess.Repository.IRepository
             _appDbContext = appDbContext;
         }
 
+        public Campeonato? FindCampeonatoById(int id)
+        {
+            return _appDbContext.Campeonatos
+                    .Include(c => c.Deporte)
+                    .Include(c => c.Eventos)
+                    .Where(c => c.Id == id)
+                    .FirstOrDefault();
+        }
+
         public IEnumerable<Campeonato> GetCampeonatos()
         {
             return _appDbContext.Campeonatos
