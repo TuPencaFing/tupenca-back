@@ -81,59 +81,7 @@ namespace tupenca_back.Controllers
                 return Ok(_prediccionService.isPrediccionCorrect(prediccion, resultado));
             }
         }
-
-        // POST: api/predicciones        
-        [HttpPost]
-        [Route("api/predicciones")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<Prediccion> CreatePrediccion(ResultadoDto prediccionDto)
-        {
-            if (_prediccionService.getPrediccionByEventoId(prediccionDto.EventoId) != null)
-                return BadRequest("Ya existe prediccion ingresada para el evento");
-            try
-            {               
-                Prediccion prediccion = new Prediccion();
-                prediccion.prediccion = prediccionDto.resultado;
-                prediccion.PuntajeEquipoLocal = prediccionDto.PuntajeEquipoLocal;
-                prediccion.PuntajeEquipoVisitante = prediccionDto.PuntajeEquipoVisitante;
-                prediccion.EventoId = prediccionDto.EventoId;
-                prediccion.UsuarioId = prediccionDto.UsuarioId;
-                _prediccionService.CreatePrediccion(prediccion);
-                return CreatedAtAction("GetPrediccionById", new { id = prediccion.Id }, prediccion);
-            }
-            catch (NotFoundException e)
-            {
-                throw new HttpResponseException((int)HttpStatusCode.NotFound, e.Message);
-            }
-        }
-
-        // PUT: api/predicciones/1
-        [HttpPut]
-        [Route("api/predicciones/{id:int}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<Prediccion> UpdatePrediccion(int id, [FromBody] ResultadoUpdateDto prediccionDto)
-        {
-            var prediccion = _prediccionService.getPrediccionById(id);
-
-            if (prediccion == null)
-            {
-                return NotFound();
-            }
-
-            if (!ModelState.IsValid)
-                return BadRequest();
-
-            prediccion.prediccion = prediccionDto.resultado;
-            prediccion.PuntajeEquipoLocal = prediccionDto.PuntajeEquipoLocal;
-            prediccion.PuntajeEquipoVisitante = prediccionDto.PuntajeEquipoVisitante;
-            _prediccionService.UpdatePrediccion(prediccion);
-            return CreatedAtAction("GetPrediccionById", new { id = prediccion.Id }, prediccion);
-        }
-
-        /*
+        
         // DELETE: api/predicciones/1
         [HttpDelete]
         [Route("api/predicciones/{id:int}")]
@@ -152,7 +100,7 @@ namespace tupenca_back.Controllers
 
             return NoContent();
         }
-        */
+        
 
     }
 }

@@ -3,21 +3,25 @@ using tupenca_back.Services;
 using tupenca_back.Model;
 using tupenca_back.Controllers.Dto;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace tupenca_back.Controllers
 {
+    [Authorize]
     [ApiController]
     public class EventoController : ControllerBase
     {
         private readonly ILogger<EventoController> _logger;
         private readonly EventoService _eventoService;
         private readonly EquipoService _equipoService;
+        private readonly PrediccionService _prediccionService;
 
-        public EventoController(ILogger<EventoController> logger, EventoService eventoService, EquipoService equipoService)
+        public EventoController(ILogger<EventoController> logger, EventoService eventoService, EquipoService equipoService, PrediccionService prediccionService)
         {
             _logger = logger;
             _eventoService = eventoService;
             _equipoService = equipoService;
+            _prediccionService = prediccionService;
         }
 
         //GET: api/eventos        
@@ -135,6 +139,46 @@ namespace tupenca_back.Controllers
             }
             _eventoService.RemoveEvento(evento);
             return NoContent();
+        }
+
+        //Prediccion
+        // POST: api/eventos/1/prediccion
+        // 
+        [HttpPost]
+        [Route("api/eventos/{id:int}/prediccion")]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Prediccion> CreatePrediccionEvento(int id, PrediccionDto prediccionDto)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var evento = _eventoService.getEventoById(id);
+            if (evento == null)
+            {
+                return NotFound("No existe el evento");
+            }
+            var prediccionExistente = _prediccionService.getPrediccionByEventoId(id);
+            if (prediccionExistente != null)
+            {
+                prediccionExistente.prediccion = prediccionDto.resultado;
+                prediccionExistente.PuntajeEquipoLocal = prediccionDto.PuntajeEquipoLocal;
+                prediccionExistente.PuntajeEquipoVisitante = prediccionDto.PuntajeEquipoVisitante;
+                _prediccionService.UpdatePrediccion(prediccionExistente);
+                return Ok(prediccionExistente);
+            }
+            else
+            {
+                Prediccion prediccion = new Prediccion();
+                prediccion.prediccion = prediccionDto.resultado;
+                prediccion.PuntajeEquipoLocal = prediccionDto.PuntajeEquipoLocal;
+                prediccion.PuntajeEquipoVisitante = prediccionDto.PuntajeEquipoVisitante;
+                prediccion.EventoId = id;
+                prediccion.UsuarioId = Convert.ToInt32(userId);
+                _prediccionService.CreatePrediccion(prediccion);
+                return CreatedAtAction("GetPrediccionById", "Prediccion", new { id = prediccion.Id }, prediccion);
+            }
+
         }
 
     }
