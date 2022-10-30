@@ -81,6 +81,7 @@ builder.Services.AddScoped<IPlanRepository, PlanRepository>();
 builder.Services.AddScoped<IPrediccionRepository, PrediccionRepository>();
 builder.Services.AddScoped<IPremioRepository, PremioRepository>();
 builder.Services.AddScoped<IResultadoRepository, ResultadoRepository>();
+builder.Services.AddScoped<IUsuarioPencaRepository, UsuarioPencaRepository>();
 
 
 // Service

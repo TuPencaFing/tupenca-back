@@ -60,6 +60,7 @@ namespace tupenca_back.Services
             return _usuariopencaRepository.GetEventosProximosPencasCompartidas(userId);
         }
 
+
         public bool IsEventoCorrect(Evento evento)
         {
             if (evento.EquipoLocalId != evento.EquipoVisitanteId)
