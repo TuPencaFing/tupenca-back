@@ -65,6 +65,7 @@ namespace tupenca_back.DataAccess.Repository
                 .SelectMany(p => p.Campeonato.Eventos)
                 .Where(evento => evento.FechaInicial > today & evento.FechaInicial < today.AddDays(7))
                 .OrderBy(evento => evento.FechaInicial)
+                .Distinct()
                 .ToList();
             /*
             Evento evento = new Evento();
@@ -83,6 +84,7 @@ namespace tupenca_back.DataAccess.Repository
                 .SelectMany(p => p.Campeonato.Eventos)
                 .Where(evento => evento.FechaInicial > today & evento.FechaInicial < today.AddDays(7))
                 .OrderBy(evento => evento.FechaInicial)
+                .Distinct()
                 .ToList();
             /*
             Evento evento = new Evento();

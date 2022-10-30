@@ -49,6 +49,22 @@ namespace tupenca_back.Controllers
             return Ok(eventos);
         }
 
+        //GET: api/eventos/proximos        
+        [HttpGet]
+        [Route("api/eventos/misproximos")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        public ActionResult<IEnumerable<Evento>> GetEventosProximosPencaCompartidaUsuario()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);         
+            var eventos = _eventoService.GetEventosProximosPencaCompartida(Convert.ToInt32(userId));
+            if (eventos == null)
+            {
+                return NoContent();
+            }
+            return Ok(eventos);
+        }
+
         // GET: api/eventos/1        
         [HttpGet]
         [Route("api/eventos/{id:int}")]
