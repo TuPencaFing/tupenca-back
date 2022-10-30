@@ -81,6 +81,7 @@ builder.Services.AddScoped<IPlanRepository, PlanRepository>();
 builder.Services.AddScoped<IPrediccionRepository, PrediccionRepository>();
 builder.Services.AddScoped<IPremioRepository, PremioRepository>();
 builder.Services.AddScoped<IResultadoRepository, ResultadoRepository>();
+builder.Services.AddScoped<IUsuarioPencaRepository, UsuarioPencaRepository>();
 
 
 // Service
@@ -91,6 +92,7 @@ builder.Services.AddScoped<EmpresaService, EmpresaService>();
 builder.Services.AddScoped<EquipoService, EquipoService>();
 builder.Services.AddScoped<EventoService, EventoService>();
 builder.Services.AddScoped<FuncionarioService, FuncionarioService>();
+builder.Services.AddScoped<ImagesService, ImagesService>();
 builder.Services.AddScoped<PencaService, PencaService>();
 builder.Services.AddScoped<PlanService, PlanService>();
 builder.Services.AddScoped<PrediccionService, PrediccionService>();

@@ -138,7 +138,7 @@ namespace tupenca_back.Controllers
             {
                 int id = _userService.getPencaIdFromToken(access_token);
                 var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-                
+                _pencaService.AddUsuarioToPencaEmpresa(userId, id);
                 _userService.RemoveUserToken(access_token);
                 return Ok();
             }

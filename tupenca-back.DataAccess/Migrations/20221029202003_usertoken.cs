@@ -20,11 +20,12 @@ namespace tupenca_back.DataAccess.Migrations
                     table.PrimaryKey("PK_UserInviteTokens", x => x.Token);
                 });
         }
-
+        /*
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "UserInviteTokens");
         }
+        */
     }
 }
