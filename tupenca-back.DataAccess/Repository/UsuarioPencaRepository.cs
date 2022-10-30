@@ -38,7 +38,7 @@ namespace tupenca_back.DataAccess.Repository
         {
             return _appDbContext.PencaCompartidas
                 .Where(pc => !_appDbContext.UsuariosPencas
-                    .Any(p => p.UsuarioId == id)
+                    .Any(up => up.PencaId == pc.Id && up.UsuarioId == id)
                 ).ToList();                           
         }
 
