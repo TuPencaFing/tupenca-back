@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.Logging;
+using tupenca_back.DataAccess.Repository;
 using tupenca_back.DataAccess.Repository.IRepository;
 using tupenca_back.Model;
 using tupenca_back.Services.Exceptions;
@@ -12,26 +13,32 @@ namespace tupenca_back.Services
         private readonly ILogger<PencaService> _logger;
         private readonly IPencaCompartidaRepository _pencaCompartidaRepository;
         private readonly IPencaEmpresaRepository _pencaEmpresaRepository;
+        private readonly IUsuarioPencaRepository _usuariopencaRepository;
         private readonly CampeonatoService _campeonatoService;
         private readonly PremioService _premioService;
         private readonly EmpresaService _empresaService;
         private readonly PlanService _planService;
+        private readonly UsuarioService _usuarioService;
 
         public PencaService(ILogger<PencaService> logger,
                             IPencaCompartidaRepository pencaCompartidaRepository,
                             IPencaEmpresaRepository pencaEmpresaRepository,
+                            IUsuarioPencaRepository usuariopencaRepository,
                             CampeonatoService campeonatoService,
                             PremioService premioService,
                             EmpresaService empresaService,
-                            PlanService planService)
+                            PlanService planService,
+                            UsuarioService usuarioService)
         {
             _logger = logger;
             _pencaCompartidaRepository = pencaCompartidaRepository;
             _pencaEmpresaRepository = pencaEmpresaRepository;
+            _usuariopencaRepository = usuariopencaRepository;
             _campeonatoService = campeonatoService;
             _premioService = premioService;
             _empresaService = empresaService;
             _planService = planService;
+            _usuarioService = usuarioService;
         }
 
 
@@ -186,6 +193,35 @@ namespace tupenca_back.Services
         {
             return findPencaEmpresaById(id) == null;
         }
+
+        public IEnumerable<PencaCompartida> GetPencasCompartidasByUsuario(int userId)
+        {
+            var usuario = _usuarioService.find(userId);
+            if (usuario != null)
+            {
+                return _usuariopencaRepository.GetUsuarioPencasCompartidas(userId);
+            }
+            else throw new NotFoundException("Usuario no exsite");
+
+        }
+
+        public void AddUsuarioToPencaCompartida(int userId, int pencaId)
+        {
+            var usuario = _usuarioService.find(userId);
+            var pencaToUpdate = findPencaCompartidaById(pencaId);
+
+            if (pencaToUpdate == null)
+                throw new NotFoundException("La Penca no existe");
+
+            UsuarioPenca usuariopenca = new UsuarioPenca();
+            usuariopenca.PencaId = pencaId;
+            usuariopenca.UsuarioId = userId;
+            usuariopenca.habilitado = false;
+            usuariopenca.score = 0;
+            _usuariopencaRepository.Add(usuariopenca);
+            _usuariopencaRepository.Save();
+        }
+
     }
 }
 

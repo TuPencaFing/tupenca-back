@@ -10,11 +10,11 @@ namespace tupenca_back.Model
     {
         public int Id { get; set; }
         public int UsuarioId { get; set; }
-        public Usuario Usuario { get; set; }
+        public virtual Usuario? Usuario { get; set; }
         public int PencaId { get; set; }
-        public Penca Penca { get; set; }
+        public virtual Penca? Penca { get; set; }
 
-        public int score { get; set; }
-        public bool habilitado { get; set; }
+        public int score { get; set; } = 0;
+        public bool habilitado { get; set; } = false;
     }
 }

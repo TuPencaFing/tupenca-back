@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Security.Claims;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -144,6 +145,40 @@ namespace tupenca_back.Controllers
                 throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
+
+        //Pencas de cada usuario
+
+        [HttpGet("me")]
+        public ActionResult<IEnumerable<PencaCompartida>> GetPencasCompartidasByUsuario()
+        {
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var pencas = _pencaService.GetPencasCompartidasByUsuario(Convert.ToInt32(userId));
+                return Ok(pencas);
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [HttpPut("{id}/add")]
+        public IActionResult AddUsuarioToPencaCompartida(int id)
+        {
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                _pencaService.AddUsuarioToPencaCompartida(Convert.ToInt32(userId), id);
+                return NoContent();
+
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
 
     }
 }
