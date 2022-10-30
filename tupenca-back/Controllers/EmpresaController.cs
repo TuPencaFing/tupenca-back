@@ -82,7 +82,8 @@ namespace tupenca_back.Controllers
 
             _empresaService.CreateEmpresa(empresa);
 
-            return CreatedAtAction("GetEmpresaById", new { id = empresa.Id }, _mapper.Map<EmpresaDto>(empresa));
+            //return CreatedAtAction("GetEmpresaById", new { id = empresa.Id }, _mapper.Map<EmpresaDto>(empresa));
+            return CreatedAtAction("GetEmpresaById", new { id = empresa.Id }, empresa);
         }
 
 

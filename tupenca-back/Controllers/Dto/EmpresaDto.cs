@@ -14,5 +14,6 @@ namespace tupenca_back.Controllers.Dto
         [MaxLength(12)]
         [MinLength(12)]
         public string? RUT { get; set; }
+
     }
 }
