@@ -18,7 +18,7 @@ namespace tupenca_back.DataAccess.Repository
         public IEnumerable<UsuarioPenca> GetUsuarioPencas(int id)
         {
             return _appDbContext.UsuariosPencas
-                .Where(p => p.UsuarioId == id)
+                .Where(p => p.UsuarioId == id && p.habilitado == true)
                 .Include(penca => penca.Penca)
                 .Include(usuario => usuario.Usuario)
                 .ToList();
@@ -32,7 +32,7 @@ namespace tupenca_back.DataAccess.Repository
             return pencas.Append(penca);
             */
             return _appDbContext.UsuariosPencas
-                .Where(p => p.UsuarioId == id)
+                .Where(p => p.UsuarioId == id && p.habilitado == true)
                 .Select(p => p.Penca)
                 .Join(_appDbContext.PencaCompartidas, penca => penca.Id, p => p.Id, (penca,p) => p)
                 .ToList();
@@ -47,7 +47,7 @@ namespace tupenca_back.DataAccess.Repository
             return pencas.Append(penca);
             */
             return _appDbContext.UsuariosPencas
-                .Where(p => p.UsuarioId == id)
+                .Where(p => p.UsuarioId == id && p.habilitado == true)
                 .Select(p => p.Penca)
                 .Join(_appDbContext.PencaEmpresas, penca => penca.Id, p => p.Id, (penca, p) => p)
                 .ToList();
@@ -59,7 +59,7 @@ namespace tupenca_back.DataAccess.Repository
             
             var today = DateTime.Now;
             return _appDbContext.UsuariosPencas
-                .Where(p => p.UsuarioId == id)
+                .Where(p => p.UsuarioId == id && p.habilitado == true)
                 .Select(p => p.Penca)
                 .Join(_appDbContext.PencaCompartidas, penca => penca.Id, p => p.Id, (penca, p) => p)
                 .SelectMany(p => p.Campeonato.Eventos)
@@ -79,7 +79,7 @@ namespace tupenca_back.DataAccess.Repository
         {
             var today = DateTime.Now;
             return _appDbContext.UsuariosPencas
-                .Where(p => p.UsuarioId == id)
+                .Where(p => p.UsuarioId == id && p.habilitado == true)
                 .Select(p => p.Penca)
                 .SelectMany(p => p.Campeonato.Eventos)
                 .Where(evento => evento.FechaInicial > today & evento.FechaInicial < today.AddDays(7))
