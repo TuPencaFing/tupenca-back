@@ -36,12 +36,10 @@ namespace tupenca_back.DataAccess.Repository
 
         public IEnumerable<PencaCompartida> GetUsuarioPencasCompartidasNoJoined(int id)
         {
-            return _appDbContext.UsuariosPencas
-                .Where(p => p.UsuarioId != id)
-                .Select(p => p.Penca)
-                .Join(_appDbContext.PencaCompartidas, penca => penca.Id, p => p.Id, (penca, p) => p)
-                .ToList();
-
+            return _appDbContext.PencaCompartidas
+                .Where(pc => !_appDbContext.UsuariosPencas
+                    .Any(p => p.Id == pc.Id)
+                ).ToList();                           
         }
 
         public IEnumerable<PencaEmpresa> GetUsuarioPencasEmpresa(int id)
