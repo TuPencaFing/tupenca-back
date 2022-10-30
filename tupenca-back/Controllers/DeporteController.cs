@@ -218,6 +218,24 @@ namespace tupenca_back.Controllers
             return imageFile.FileName;
         }
 
+
+
+        // POST: api/deportes/Image        
+        [HttpPatch]
+        [Route("api/deportes/{id}/image")]
+        public ActionResult UploadImage(int id, [FromForm] ImagenDto imagenDto)
+        {
+            try
+            {
+                _deporteService.SaveImagen(id, imagenDto.file);
+
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
     }
 }
 

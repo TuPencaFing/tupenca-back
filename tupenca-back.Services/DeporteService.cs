@@ -1,4 +1,5 @@
-﻿using tupenca_back.DataAccess.Repository;
+﻿using Microsoft.AspNetCore.Http;
+using tupenca_back.DataAccess.Repository;
 using tupenca_back.DataAccess.Repository.IRepository;
 using tupenca_back.Model;
 
@@ -7,10 +8,12 @@ namespace tupenca_back.Services
     public class DeporteService
     {
         private readonly IDeporteRepository _deporteRepository;
+        private readonly ImagesService _imagesService;
 
-        public DeporteService(IDeporteRepository deporteRepository)
+        public DeporteService(IDeporteRepository deporteRepository, ImagesService imagesService)
         {
             _deporteRepository = deporteRepository;
+            _imagesService = imagesService;
         }
 
         public IEnumerable<Deporte> getDeportes() => _deporteRepository.GetAll();
@@ -52,6 +55,17 @@ namespace tupenca_back.Services
             else return true;
         }
 
+
+        public void SaveImagen(int id, IFormFile file)
+        {
+            var deporte = getDeporteById(id);
+
+            string image = _imagesService.uploadImage(file.FileName, file.OpenReadStream());
+
+            deporte.ImagenName = image;
+
+            UpdateDeporte(deporte);
+        }
     }
 }
 

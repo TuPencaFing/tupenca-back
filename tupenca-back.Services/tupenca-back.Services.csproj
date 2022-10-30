@@ -9,14 +9,17 @@
 
   <ItemGroup>
     <PackageReference Include="Google.Apis.Auth" Version="1.57.0" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.14.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\tupenca-back.DataAccess\tupenca-back.DataAccess.csproj" />
+    <ProjectReference Include="..\tupenca-back.Utilities\tupenca-back.Utilities.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Exceptions\" />
+    <None Remove="Azure.Storage.Blobs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Exceptions\" />
