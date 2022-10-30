@@ -12,7 +12,7 @@ using tupenca_back.DataAccess;
 namespace tupenca_back.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221030035817_fixUsuarioPenca")]
+    [Migration("20221030130355_fixUsuarioPenca")]
     partial class fixUsuarioPenca
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
