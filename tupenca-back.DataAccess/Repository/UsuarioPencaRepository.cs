@@ -26,11 +26,6 @@ namespace tupenca_back.DataAccess.Repository
 
         public IEnumerable<PencaCompartida> GetUsuarioPencasCompartidas(int id)
         {
-            /*
-            PencaCompartida penca = new PencaCompartida();
-            IEnumerable<PencaCompartida> pencas = new PencaCompartida[] { penca };
-            return pencas.Append(penca);
-            */
             return _appDbContext.UsuariosPencas
                 .Where(p => p.UsuarioId == id && p.habilitado == true)
                 .Select(p => p.Penca)
@@ -39,13 +34,18 @@ namespace tupenca_back.DataAccess.Repository
 
         }
 
+        public IEnumerable<PencaCompartida> GetUsuarioPencasCompartidasNoJoined(int id)
+        {
+            return _appDbContext.UsuariosPencas
+                .Where(p => p.UsuarioId != id)
+                .Select(p => p.Penca)
+                .Join(_appDbContext.PencaCompartidas, penca => penca.Id, p => p.Id, (penca, p) => p)
+                .ToList();
+
+        }
+
         public IEnumerable<PencaEmpresa> GetUsuarioPencasEmpresa(int id)
         {
-            /*
-            var penca = new PencaEmpresa();
-            IEnumerable<PencaEmpresa> pencas = new PencaEmpresa[] { penca };
-            return pencas.Append(penca);
-            */
             return _appDbContext.UsuariosPencas
                 .Where(p => p.UsuarioId == id && p.habilitado == true)
                 .Select(p => p.Penca)
@@ -66,12 +66,9 @@ namespace tupenca_back.DataAccess.Repository
                 .Where(evento => evento.FechaInicial > today & evento.FechaInicial < today.AddDays(7))
                 .OrderBy(evento => evento.FechaInicial)
                 .Distinct()
+                .Include(evento => evento.EquipoLocal)
+                .Include(evento => evento.EquipoVisitante)
                 .ToList();
-            /*
-            Evento evento = new Evento();
-            IEnumerable<Evento> eventos = new Evento[] { evento };
-            return eventos.Append(evento);
-            */
         }
 
 
@@ -85,12 +82,9 @@ namespace tupenca_back.DataAccess.Repository
                 .Where(evento => evento.FechaInicial > today & evento.FechaInicial < today.AddDays(7))
                 .OrderBy(evento => evento.FechaInicial)
                 .Distinct()
+                .Include(evento => evento.EquipoLocal)
+                .Include(evento => evento.EquipoVisitante)
                 .ToList();
-            /*
-            Evento evento = new Evento();
-            IEnumerable<Evento> eventos = new Evento[] { evento };
-            return eventos.Append(evento);
-            */
         }
 
 

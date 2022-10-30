@@ -205,9 +205,23 @@ namespace tupenca_back.Services
 
         }
 
+        public IEnumerable<PencaCompartida> GetPencasCompartidasNoJoinedByUsuario(int userId)
+        {
+            var usuario = _usuarioService.find(userId);
+            if (usuario != null)
+            {
+                return _usuariopencaRepository.GetUsuarioPencasCompartidasNoJoined(userId);
+            }
+            else throw new NotFoundException("Usuario no exsite");
+
+        }
+
         public void AddUsuarioToPencaCompartida(int userId, int pencaId)
         {
             var usuario = _usuarioService.find(userId);
+            if (usuario == null)
+                throw new NotFoundException("El usuario no existe");
+
             var pencaToUpdate = findPencaCompartidaById(pencaId);
 
             if (pencaToUpdate == null)
@@ -220,6 +234,12 @@ namespace tupenca_back.Services
             usuariopenca.score = 0;
             _usuariopencaRepository.Add(usuariopenca);
             _usuariopencaRepository.Save();
+
+            var costo = pencaToUpdate.CostEntry;
+            var pozoactual = pencaToUpdate.Pozo;
+            pencaToUpdate.Pozo = pozoactual + costo;
+            _pencaCompartidaRepository.Update(pencaToUpdate);
+            _pencaCompartidaRepository.Save();
         }
 
         public void AddUsuarioToPencaEmpresa(int userId, int pencaId)
