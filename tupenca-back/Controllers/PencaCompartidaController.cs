@@ -166,8 +166,15 @@ namespace tupenca_back.Controllers
             }
             else
             {
-                var pencas = _pencaService.GetPencasCompartidasNoJoinedByUsuario(Convert.ToInt32(userId));
-                return Ok(null);
+                try
+                {
+                    var pencas = _pencaService.GetPencasCompartidasNoJoinedByUsuario(Convert.ToInt32(userId));
+                    return Ok(pencas);
+                }
+                catch (Exception e)
+                {
+                    throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+                }
             }
 
         }
