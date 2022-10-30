@@ -82,6 +82,7 @@ builder.Services.AddScoped<IPrediccionRepository, PrediccionRepository>();
 builder.Services.AddScoped<IPremioRepository, PremioRepository>();
 builder.Services.AddScoped<IResultadoRepository, ResultadoRepository>();
 builder.Services.AddScoped<IUsuarioPencaRepository, UsuarioPencaRepository>();
+builder.Services.AddScoped<IPuntajeRepository, PuntajeRepository>();
 
 
 // Service
@@ -99,6 +100,7 @@ builder.Services.AddScoped<PrediccionService, PrediccionService>();
 builder.Services.AddScoped<PremioService, PremioService>();
 builder.Services.AddScoped<ResultadoService, ResultadoService>();
 builder.Services.AddScoped<UsuarioService, UsuarioService>();
+builder.Services.AddScoped<PuntajeService, PuntajeService>();
 
 
 // Mapper
