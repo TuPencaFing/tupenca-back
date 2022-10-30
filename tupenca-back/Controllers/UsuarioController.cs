@@ -7,6 +7,10 @@ using tupenca_back.Model;
 using tupenca_back.Services;
 using tupenca_back.Controllers.Dto;
 using System.Security.Claims;
+using System.Net;
+using tupenca_back.Services.Exceptions;
+using tupenca_back.DataAccess.Repository.IRepository;
+using tupenca_back.DataAccess.Repository;
 
 namespace tupenca_back.Controllers
 {
@@ -18,11 +22,14 @@ namespace tupenca_back.Controllers
         private readonly IConfiguration _configuration;
         private readonly ILogger<UsuarioController> _logger;
         private readonly UsuarioService _userService;
-        public UsuarioController(ILogger<UsuarioController> logger, UsuarioService userService, IConfiguration configuration)
+        private readonly PencaService _pencaService;
+
+        public UsuarioController(ILogger<UsuarioController> logger, UsuarioService userService, PencaService pencaService, IConfiguration configuration)
         {
             _logger = logger;
             _userService = userService;
             _configuration = configuration;
+            _pencaService = pencaService;
         }
 
         //GET: api/user
@@ -113,7 +120,7 @@ namespace tupenca_back.Controllers
         // GoogleAuthenticate
         [AllowAnonymous]
         [HttpPost("googleLogin")]
-        public async Task<ActionResult<string>> GoogleAuthenticate( string access_token)
+        public async Task<ActionResult<string>> GoogleAuthenticate(string access_token)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState.Values.SelectMany(it => it.Errors).Select(it => it.ErrorMessage));
@@ -122,6 +129,46 @@ namespace tupenca_back.Controllers
             UserDto userDto = new UserDto();
             userDto.token = token;
             return Ok(userDto);
+        }
+
+        [HttpPost("aceptarInvitacion")]
+        public IActionResult AceptarInvitacion(string access_token)
+        {
+            try
+            {
+                int id = _userService.getPencaIdFromToken(access_token);
+                var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                
+                _userService.RemoveUserToken(access_token);
+                return Ok();
+            }
+            catch (NotFoundException e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.NotFound, e.Message);
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+        [HttpPost("rechazarInvitacion")]
+        public IActionResult RechazarInvitacion(string access_token)
+        {
+            try
+            {
+                int id = _userService.getPencaIdFromToken(access_token);
+                _userService.RemoveUserToken(access_token);
+                return Ok();
+            }
+            catch (NotFoundException e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.NotFound, e.Message);
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+            }
         }
 
 

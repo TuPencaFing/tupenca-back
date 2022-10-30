@@ -186,6 +186,8 @@ namespace tupenca_back.Services
         {
             return findPencaEmpresaById(id) == null;
         }
+
+
     }
 }
 
