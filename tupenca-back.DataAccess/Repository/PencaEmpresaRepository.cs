@@ -24,6 +24,17 @@ namespace tupenca_back.DataAccess.Repository
                  .ToList();
         }
 
+        public IEnumerable<PencaEmpresa> GetPencaEmpresasByEmpresa(int id)
+        {
+            return _appDbContext.PencaEmpresas
+                 .Where(p => p.Empresa.Id == id)
+                 .Include(p => p.Campeonato)
+                 .Include(p => p.Premios)
+                 .Include(p => p.Empresa)
+                 .Include(p => p.Plan)
+                 .ToList();
+        }
+
         public void Save()
         {
             _appDbContext.SaveChanges();
