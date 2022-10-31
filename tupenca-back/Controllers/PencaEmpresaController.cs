@@ -51,7 +51,7 @@ namespace tupenca_back.Controllers
         }
                
         //GET: api/pencas-empresas
-        [HttpGet("/miempresa")]
+        [HttpGet("miempresa")]
         public ActionResult<IEnumerable<PencaEmpresaDto>> GetPencasEmpresabyEmpresa()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);            
