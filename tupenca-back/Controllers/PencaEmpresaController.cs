@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Security.Claims;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +11,7 @@ using tupenca_back.Services.Exceptions;
 
 namespace tupenca_back.Controllers
 {
-
+    [Authorize]
     [ApiController]
     [Route("api/pencas-empresas")]
     public class PencaEmpresaController : ControllerBase
@@ -18,14 +19,17 @@ namespace tupenca_back.Controllers
         private readonly ILogger<PencaEmpresaController> _logger;
         public readonly IMapper _mapper;
         private readonly PencaService _pencaService;
+        private readonly FuncionarioService _funcionarioService;
 
         public PencaEmpresaController(ILogger<PencaEmpresaController> logger,
                                IMapper mapper,
-                               PencaService pencaService)
+                               PencaService pencaService,
+                               FuncionarioService funcionarioService)
         {
             _logger = logger;
             _mapper = mapper;
             _pencaService = pencaService;
+            _funcionarioService = funcionarioService;
         }
 
         //GET: api/pencas-empresas
@@ -34,9 +38,9 @@ namespace tupenca_back.Controllers
         {
             try
             {
-                var pencas = _pencaService.GetPencaCompartidas();
+                var pencas = _pencaService.GetPencaEmpresas();
 
-                var pencasDto = _mapper.Map<List<PencaCompartidaDto>>(pencas);
+                var pencasDto = _mapper.Map<List<PencaEmpresaDto>>(pencas);
 
                 return Ok(pencasDto);
             }
@@ -45,7 +49,29 @@ namespace tupenca_back.Controllers
                 throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
+               
+        //GET: api/pencas-empresas
+        [HttpGet("miempresa")]
+        public ActionResult<IEnumerable<PencaEmpresaDto>> GetPencasEmpresabyEmpresa()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);            
+            var funcionario = _funcionarioService.find(Convert.ToInt32(userId));
+            if (funcionario == null)
+                return NotFound();
 
+            try
+            {
+                var pencas = _pencaService.GetPencaCompartidasByEmpresa(funcionario.EmpresaId);
+
+                var pencasDto = _mapper.Map<List<PencaEmpresaDto>>(pencas);
+
+                return Ok(pencasDto);
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
 
         //GET: api/pencas-empresas/1
         [HttpGet("{id}")]

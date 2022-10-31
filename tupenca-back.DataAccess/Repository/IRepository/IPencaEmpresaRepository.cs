@@ -8,6 +8,8 @@ namespace tupenca_back.DataAccess.Repository.IRepository
 
         IEnumerable<PencaEmpresa> GetPencaEmpresas();
 
+        IEnumerable<PencaEmpresa> GetPencaEmpresasByEmpresa(int id);        
+
         void Save();
 
     }

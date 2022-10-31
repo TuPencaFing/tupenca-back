@@ -149,28 +149,44 @@ namespace tupenca_back.Controllers
         //Pencas de cada usuario
 
         [HttpGet("me")]
-        public ActionResult<IEnumerable<PencaCompartida>> GetPencasCompartidasByUsuario()
+        public ActionResult<IEnumerable<PencaCompartida>> GetPencasCompartidasByUsuario([FromQuery] bool joined)
         {
-            try
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (joined == true)
             {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var pencas = _pencaService.GetPencasCompartidasByUsuario(Convert.ToInt32(userId));
-                return Ok(pencas);
+                try
+                {
+                    var pencas = _pencaService.GetPencasCompartidasByUsuario(Convert.ToInt32(userId));
+                    return Ok(pencas);
+                }
+                catch (Exception e)
+                {
+                    throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+                }
             }
-            catch (Exception e)
+            else
             {
-                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+                try
+                {
+                    var pencas = _pencaService.GetPencasCompartidasNoJoinedByUsuario(Convert.ToInt32(userId));
+                    return Ok(pencas);
+                }
+                catch (Exception e)
+                {
+                    throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+                }
             }
+
         }
 
-        [HttpPut("{id}/add")]
+        [HttpPost("{id}/add")]
         public IActionResult AddUsuarioToPencaCompartida(int id)
         {
             try
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 _pencaService.AddUsuarioToPencaCompartida(Convert.ToInt32(userId), id);
-                return NoContent();
+                return Ok();
 
             }
             catch (Exception e)

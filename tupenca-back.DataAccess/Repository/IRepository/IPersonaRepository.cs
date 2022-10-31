@@ -10,6 +10,8 @@ namespace tupenca_back.DataAccess.Repository.IRepository
     public interface IPersonaRepository : IRepository<Persona>
     {
         string createInviteToken(int id, int pencaId);
+        UserInviteToken getUserInviteToken(string access_token);
+        void RemoveUserToken(UserInviteToken usertoken);
         void Save();
     }
 }

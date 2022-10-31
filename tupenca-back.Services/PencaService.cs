@@ -46,6 +46,8 @@ namespace tupenca_back.Services
 
         public IEnumerable<PencaEmpresa> GetPencaEmpresas() => _pencaEmpresaRepository.GetPencaEmpresas();
 
+        public IEnumerable<PencaEmpresa> GetPencaCompartidasByEmpresa(int empresaId) => _pencaEmpresaRepository.GetPencaEmpresasByEmpresa(empresaId);       
+
         public PencaCompartida? findPencaCompartidaById(int? id) => _pencaCompartidaRepository.GetFirstOrDefault(p => p.Id == id);
 
         public PencaEmpresa? findPencaEmpresaById(int? id) => _pencaEmpresaRepository.GetFirstOrDefault(p => p.Id == id);
@@ -205,10 +207,47 @@ namespace tupenca_back.Services
 
         }
 
+        public IEnumerable<PencaCompartida> GetPencasCompartidasNoJoinedByUsuario(int userId)
+        {
+            var usuario = _usuarioService.find(userId);
+            if (usuario != null)
+            {
+                return _usuariopencaRepository.GetUsuarioPencasCompartidasNoJoined(userId);
+            }
+            else throw new NotFoundException("Usuario no exsite");
+
+        }
+
         public void AddUsuarioToPencaCompartida(int userId, int pencaId)
         {
             var usuario = _usuarioService.find(userId);
+            if (usuario == null)
+                throw new NotFoundException("El usuario no existe");
+
             var pencaToUpdate = findPencaCompartidaById(pencaId);
+
+            if (pencaToUpdate == null)
+                throw new NotFoundException("La Penca no existe");
+
+            UsuarioPenca usuariopenca = new UsuarioPenca();
+            usuariopenca.PencaId = pencaId;
+            usuariopenca.UsuarioId = userId;
+            usuariopenca.habilitado = false;
+            usuariopenca.score = 0;
+            _usuariopencaRepository.Add(usuariopenca);
+            _usuariopencaRepository.Save();
+
+            var costo = pencaToUpdate.CostEntry;
+            var pozoactual = pencaToUpdate.Pozo;
+            pencaToUpdate.Pozo = pozoactual + costo;
+            _pencaCompartidaRepository.Update(pencaToUpdate);
+            _pencaCompartidaRepository.Save();
+        }
+
+        public void AddUsuarioToPencaEmpresa(int userId, int pencaId)
+        {
+            var usuario = _usuarioService.find(userId);
+            var pencaToUpdate = findPencaEmpresaById(pencaId);
 
             if (pencaToUpdate == null)
                 throw new NotFoundException("La Penca no existe");

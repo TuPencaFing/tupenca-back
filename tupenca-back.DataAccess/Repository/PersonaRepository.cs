@@ -1,13 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using tupenca_back.DataAccess.Repository.IRepository;
+﻿using tupenca_back.DataAccess.Repository.IRepository;
 using tupenca_back.Model;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+
 
 namespace tupenca_back.DataAccess.Repository
 {
@@ -44,8 +37,14 @@ namespace tupenca_back.DataAccess.Repository
                 Token = token,
                 PencaId = pencaId,
             };
-
-            _appDbContext.UserInviteTokens.Add(userToken);
+            if (_appDbContext.UserInviteTokens.Any(x => x.Token == token))
+            {
+                _appDbContext.UserInviteTokens.Update(userToken);
+            }
+            else
+            {
+                _appDbContext.UserInviteTokens.Add(userToken);
+            }
             _appDbContext.SaveChanges();
 
 
@@ -58,8 +57,14 @@ namespace tupenca_back.DataAccess.Repository
             //var query = _appDbContext.Funcionarios.Where(f => f.Empresa.Pencas.Where(p => p.Id == pencaId))
         }
 
+        public UserInviteToken getUserInviteToken(string access_token)
+        {
+            return _appDbContext.UserInviteTokens.Find(access_token);
+        }
 
-
-
+        public void RemoveUserToken(UserInviteToken usertoken)
+        {
+            _appDbContext.UserInviteTokens.Remove(usertoken);
+        }
     }
 }

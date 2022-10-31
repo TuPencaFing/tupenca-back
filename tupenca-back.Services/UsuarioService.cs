@@ -10,6 +10,7 @@ using System.Xml.Linq;
 using tupenca_back.DataAccess.Repository;
 using tupenca_back.DataAccess.Repository.IRepository;
 using tupenca_back.Model;
+using tupenca_back.Services.Exceptions;
 using static Google.Apis.Auth.GoogleJsonWebSignature;
 
 namespace tupenca_back.Services
@@ -44,7 +45,30 @@ namespace tupenca_back.Services
 
         }
 
+        public int getPencaIdFromToken(string access_token)
+        {
+            var inviteToken = _db.getUserInviteToken(access_token);
+            if (inviteToken == null)
+            {
+                throw new NotFoundException("El Token no existe");
+            }
+            else
+            {
+                return inviteToken.PencaId;
 
+            }
+        }
+
+        public void RemoveUserToken(string access_token)
+        {
+            var usertoken = _db.getUserInviteToken(access_token);
+
+            if (usertoken == null)
+                throw new NotFoundException("El token no existe");
+
+            _db.RemoveUserToken(usertoken);
+            _db.Save();
+        }
 
         private async Task<Usuario> GetOrCreateExternalLoginUser(string provider, string key, string email, string name)
         {
