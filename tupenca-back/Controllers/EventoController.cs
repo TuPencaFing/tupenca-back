@@ -54,7 +54,7 @@ namespace tupenca_back.Controllers
         [Route("api/eventos/misproximos")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public ActionResult<IEnumerable<Evento>> GetEventosProximosPencaCompartidaUsuario()
+        public ActionResult<IEnumerable<EventoPrediccionDto>> GetEventosProximosPencaCompartidaUsuario()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);         
             var eventos = _eventoService.GetEventosProximosPencaCompartida(Convert.ToInt32(userId));
@@ -62,7 +62,20 @@ namespace tupenca_back.Controllers
             {
                 return NoContent();
             }
-            return Ok(eventos);
+
+            List<EventoPrediccionDto> eventosRet = new List<EventoPrediccionDto>();            
+
+            foreach (var evento in eventos)
+            {
+                var prediccion = _prediccionService.GetPrediccionByUsuarioEvento(Convert.ToInt32(userId), evento.Id);
+                var equipolocal = _equipoService.getEquipoById(evento.EquipoLocalId);
+                var equipovisitante = _equipoService.getEquipoById(evento.EquipoVisitanteId);
+                EventoPrediccionDto eventoret = new EventoPrediccionDto { Id = evento.Id, EquipoLocal = equipolocal,
+                                                                         EquipoVisitante = equipovisitante, FechaInicial = evento.FechaInicial,
+                                                                         Prediccion = prediccion};
+                eventosRet.Add(eventoret);
+            }
+            return Ok(eventosRet);
         }
 
         // GET: api/eventos/1        
