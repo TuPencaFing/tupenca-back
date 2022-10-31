@@ -64,6 +64,12 @@ namespace tupenca_back.Services
                 _prediccionRepository.Save();
             }
         }
+
+        public Prediccion GetPrediccionByUsuarioEvento(int usuario, int evento)
+        {
+            return _prediccionRepository.GetPrediccionByUsuarioEvento(usuario, evento);
+        }
+        
         
     }
 }

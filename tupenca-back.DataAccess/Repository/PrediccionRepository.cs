@@ -11,6 +11,15 @@ namespace tupenca_back.DataAccess.Repository
             _appDbContext = db;
         }
 
+
+        public Prediccion GetPrediccionByUsuarioEvento(int usuarioId, int eventoId)
+        {
+            return _appDbContext.Predicciones
+                .Where(pred => pred.EventoId == eventoId && pred.UsuarioId == usuarioId)
+                .FirstOrDefault();
+        }
+
+
         public void Save()
         {
             _appDbContext.SaveChanges();

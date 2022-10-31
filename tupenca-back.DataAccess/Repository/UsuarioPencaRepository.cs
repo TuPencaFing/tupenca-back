@@ -54,7 +54,6 @@ namespace tupenca_back.DataAccess.Repository
 
         public IEnumerable<Evento> GetEventosProximosPencasCompartidas(int id)
         {
-            
             var today = DateTime.Now;
             return _appDbContext.UsuariosPencas
                 .Where(p => p.UsuarioId == id && p.habilitado == true)
@@ -64,8 +63,6 @@ namespace tupenca_back.DataAccess.Repository
                 .Where(evento => evento.FechaInicial > today & evento.FechaInicial < today.AddDays(7))
                 .OrderBy(evento => evento.FechaInicial)
                 .Distinct()
-                .Include(evento => evento.EquipoLocal)
-                .Include(evento => evento.EquipoVisitante)
                 .ToList();
         }
 

@@ -124,7 +124,7 @@ namespace tupenca_back.Controllers
             var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
             //var penca =_funcionarioService.findPenca(int.Parse(id),request.PencaId);
             string token = _funcionarioService.createInviteToken(int.Parse(id), request.PencaId);
-            var message = new Message(new string[] { request.Email }, "Invitation to join penca", "Join penca in http://localhost:3000/invitar/" + token);
+            var message = new Message(new string[] { request.Email }, "Invitation to join penca", "Join penca in https://yellow-forest-0c32e6110.2.azurestaticapps.net/invitacion/" + token);
             _emailSender.SendEmail(message);
             return Ok();
         }
