@@ -9,8 +9,8 @@ namespace tupenca_back.Profiles
     {
         public DeporteProfile()
         {
-            CreateMap<DeporteDto, Deporte>();
             CreateMap<Deporte, DeporteDto>();
+            CreateMap<DeporteDto, Deporte>();
         }
     }
 }

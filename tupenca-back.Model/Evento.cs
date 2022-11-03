@@ -9,6 +9,8 @@ namespace tupenca_back.Model
         [Key]
         public int Id { get; set; }
 
+        public string? Image { get; set; }
+
         [Required]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime FechaInicial { get; set; }

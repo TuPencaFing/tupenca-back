@@ -62,10 +62,11 @@ namespace tupenca_back.Services
 
             string image = _imagesService.uploadImage(file.FileName, file.OpenReadStream());
 
-            deporte.ImagenName = image;
+            deporte.Image = image;
 
             UpdateDeporte(deporte);
         }
+
     }
 }
 

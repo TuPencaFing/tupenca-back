@@ -6,6 +6,8 @@ namespace tupenca_back.Model
     {
         public int Id { get; set; }
 
+        public string? Image { get; set; }
+
         [Required]
         [Display(Name = "Razon Social")]
         public string Razonsocial { get; set; }

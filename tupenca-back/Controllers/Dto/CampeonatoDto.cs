@@ -11,6 +11,8 @@ namespace tupenca_back.Controllers.Dto
 
         public string? Name { get; set; }
 
+        public string? Image { get; set; }
+
         public DateTime StartDate { get; set; }
 
         public DateTime FinishDate { get; set; }

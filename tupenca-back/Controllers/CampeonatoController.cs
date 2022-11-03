@@ -174,6 +174,22 @@ namespace tupenca_back.Controllers
         }
 
 
+        // PATCH: api/deportes/1/image        
+        [HttpPatch("{id}/image")]
+        public ActionResult UploadImage(int id, [FromForm] ImagenDto imagenDto)
+        {
+            try
+            {
+                _campeonatoService.SaveImagen(id, imagenDto.file);
+
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
 
     }
 }

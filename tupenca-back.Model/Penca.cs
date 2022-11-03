@@ -15,7 +15,6 @@ namespace tupenca_back.Model
         [Required]
         public string? Description { get; set; }
 
-        [Required]
         public string? Image { get; set; }
 
         [Required]
@@ -27,7 +26,6 @@ namespace tupenca_back.Model
         public List<Prediccion>? Predicciones { get; set; } = new List<Prediccion>();
 
         public List<UsuarioPenca> UsuariosPencas { get; set; }
-
 
     }
 }

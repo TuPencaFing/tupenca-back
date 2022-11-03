@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using tupenca_back.DataAccess.Repository.IRepository;
 using tupenca_back.Model;
@@ -11,14 +12,18 @@ namespace tupenca_back.Services
         private readonly ICampeonatoRepository _campeonatoRepository;
         private readonly DeporteService _deporteService;
         private readonly EventoService _eventoService;
+        private readonly ImagesService _imagesService;
 
 
         public CampeonatoService(ICampeonatoRepository campeonatoRepository,
-            DeporteService deporteService, EventoService eventoService )
+                                 DeporteService deporteService,
+                                 EventoService eventoService,
+                                 ImagesService imagesService)
         {
             _campeonatoRepository = campeonatoRepository;
             _deporteService = deporteService;
             _eventoService = eventoService;
+            _imagesService = imagesService;
         }
 
         public IEnumerable<Campeonato> getCampeonatos() => _campeonatoRepository.GetCampeonatos();
@@ -72,6 +77,7 @@ namespace tupenca_back.Services
                 }
 
                 campeonatoToUpdate.Name = campeonato.Name;
+                campeonatoToUpdate.Image = campeonato.Image;
                 campeonatoToUpdate.StartDate = campeonato.StartDate;
                 campeonatoToUpdate.FinishDate = campeonato.FinishDate;
 
@@ -123,8 +129,20 @@ namespace tupenca_back.Services
             _campeonatoRepository.Save();
 
             return campeonato;
-
         }
+
+
+        public void SaveImagen(int id, IFormFile file)
+        {
+            var campeonato = findCampeonatoById(id);
+
+            string image = _imagesService.uploadImage(file.FileName, file.OpenReadStream());
+
+            campeonato.Image = image;
+
+            UpdateCampeonato(id, campeonato);
+        }
+
 
     }
 }
