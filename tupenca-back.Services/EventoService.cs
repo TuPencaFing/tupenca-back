@@ -1,4 +1,5 @@
-﻿using tupenca_back.DataAccess.Repository;
+﻿using Microsoft.AspNetCore.Http;
+using tupenca_back.DataAccess.Repository;
 using tupenca_back.DataAccess.Repository.IRepository;
 using tupenca_back.Model;
 
@@ -7,14 +8,20 @@ namespace tupenca_back.Services
     public class EventoService
     {
         private readonly IEventoRepository _eventoRepository;
-        private readonly UsuarioService _usuarioService;
         private readonly IUsuarioPencaRepository _usuariopencaRepository;
+        private readonly UsuarioService _usuarioService;
+        private readonly ImagesService _imagesService;
 
-        public EventoService(IEventoRepository eventoRepository, UsuarioService usuarioService, IUsuarioPencaRepository usuariopencaRepository)
+
+        public EventoService(IEventoRepository eventoRepository,
+                             UsuarioService usuarioService,
+                             IUsuarioPencaRepository usuariopencaRepository,
+                             ImagesService imagesService)
         {
             _eventoRepository = eventoRepository;
-            _usuarioService = usuarioService;
             _usuariopencaRepository = usuariopencaRepository;
+            _usuarioService = usuarioService;
+            _imagesService = imagesService;
         }
 
         public IEnumerable<Evento> getEventos() => _eventoRepository.GetEventos();
@@ -59,6 +66,18 @@ namespace tupenca_back.Services
             var usuario = _usuarioService.find(userId);
             return _usuariopencaRepository.GetEventosProximosPencasCompartidas(userId);
         }
+
+        public void SaveImagen(int id, IFormFile file)
+        {
+            var evento = getEventoById(id);
+
+            string image = _imagesService.uploadImage(file.FileName, file.OpenReadStream());
+
+            evento.Image = image;
+
+            UpdateEvento(evento);
+        }
+
 
 
         public bool IsEventoCorrect(Evento evento)

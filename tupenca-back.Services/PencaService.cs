@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using tupenca_back.DataAccess.Repository;
 using tupenca_back.DataAccess.Repository.IRepository;
@@ -19,6 +20,7 @@ namespace tupenca_back.Services
         private readonly EmpresaService _empresaService;
         private readonly PlanService _planService;
         private readonly UsuarioService _usuarioService;
+        private readonly ImagesService _imagesService;
 
         public PencaService(ILogger<PencaService> logger,
                             IPencaCompartidaRepository pencaCompartidaRepository,
@@ -28,7 +30,8 @@ namespace tupenca_back.Services
                             PremioService premioService,
                             EmpresaService empresaService,
                             PlanService planService,
-                            UsuarioService usuarioService)
+                            UsuarioService usuarioService,
+                            ImagesService imagesService)
         {
             _logger = logger;
             _pencaCompartidaRepository = pencaCompartidaRepository;
@@ -39,6 +42,7 @@ namespace tupenca_back.Services
             _empresaService = empresaService;
             _planService = planService;
             _usuarioService = usuarioService;
+            _imagesService = imagesService;
         }
 
 
@@ -259,6 +263,31 @@ namespace tupenca_back.Services
             usuariopenca.score = 0;
             _usuariopencaRepository.Add(usuariopenca);
             _usuariopencaRepository.Save();
+        }
+
+
+        public void SaveImagen(int id, IFormFile file, bool esPencaCompartida)
+        {
+            if (esPencaCompartida)
+            {
+                var penca = findPencaCompartidaById(id);
+
+                string image = _imagesService.uploadImage(file.FileName, file.OpenReadStream());
+
+                penca.Image = image;
+
+                UpdatePencaCompartida(id, penca);
+            } else
+            {
+                var penca = findPencaEmpresaById(id);
+
+                string image = _imagesService.uploadImage(file.FileName, file.OpenReadStream());
+
+                penca.Image = image;
+
+                UpdatePencaEmpresa(id, penca);
+            }
+           
         }
 
     }

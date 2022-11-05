@@ -4,11 +4,14 @@ using tupenca_back.Model;
 using tupenca_back.Controllers.Dto;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using System.Net;
+using tupenca_back.Services.Exceptions;
 
 namespace tupenca_back.Controllers
 {
     [Authorize]
     [ApiController]
+    [Route("api/eventos")]
     public class EventoController : ControllerBase
     {
         private readonly ILogger<EventoController> _logger;
@@ -26,7 +29,6 @@ namespace tupenca_back.Controllers
 
         //GET: api/eventos        
         [HttpGet]
-        [Route("api/eventos")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<Evento>> GetEventos()
         {
@@ -35,8 +37,7 @@ namespace tupenca_back.Controllers
         }
 
         //GET: api/eventos/proximos        
-        [HttpGet]
-        [Route("api/eventos/proximos")]
+        [HttpGet("proximos")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public ActionResult<IEnumerable<Evento>> GetEventosProximos()
@@ -50,8 +51,7 @@ namespace tupenca_back.Controllers
         }
 
         //GET: api/eventos/proximos        
-        [HttpGet]
-        [Route("api/eventos/misproximos")]
+        [HttpGet("misproximos")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public ActionResult<IEnumerable<EventoPrediccionDto>> GetEventosProximosPencaCompartidaUsuario()
@@ -79,8 +79,7 @@ namespace tupenca_back.Controllers
         }
 
         // GET: api/eventos/1        
-        [HttpGet]
-        [Route("api/eventos/{id:int}")]
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Evento> GetEventoById(int id)
@@ -100,7 +99,6 @@ namespace tupenca_back.Controllers
 
         // POST: api/eventos       
         [HttpPost]
-        [Route("api/eventos")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<Evento> CreateEvento(EventoDto eventoDto)
@@ -131,8 +129,7 @@ namespace tupenca_back.Controllers
 
 
         // PUT: api/eventos/1
-        [HttpPut]
-        [Route("api/eventos/{id:int}")]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]        
@@ -154,8 +151,7 @@ namespace tupenca_back.Controllers
 
 
         // DELETE: api/eventos/1
-        [HttpDelete]
-        [Route("api/eventos/{id:int}")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult DeleteEvento(int id)
@@ -173,8 +169,7 @@ namespace tupenca_back.Controllers
         //Prediccion
         // POST: api/eventos/1/prediccion
         // 
-        [HttpPost]
-        [Route("api/eventos/{id:int}/prediccion")]
+        [HttpPost("{id}/prediccion")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -208,6 +203,22 @@ namespace tupenca_back.Controllers
                 return CreatedAtAction("GetPrediccionById", "Prediccion", new { id = prediccion.Id }, prediccion);
             }
 
+        }
+
+        // PATCH: api/deportes/1/image        
+        [HttpPatch("{id}/image")]
+        public ActionResult UploadImage(int id, [FromForm] ImagenDto imagenDto)
+        {
+            try
+            {
+                _eventoService.SaveImagen(id, imagenDto.file);
+
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+            }
         }
 
     }

@@ -3,10 +3,13 @@ using tupenca_back.Services;
 using tupenca_back.Model;
 using tupenca_back.Controllers.Dto;
 using AutoMapper;
+using System.Net;
+using tupenca_back.Services.Exceptions;
 
 namespace tupenca_back.Controllers
 {
-    [ApiController]    
+    [ApiController]
+    [Route("api/empresas")]
     public class EmpresaController : ControllerBase
     {
         private readonly ILogger<EmpresaController> _logger;
@@ -18,13 +21,12 @@ namespace tupenca_back.Controllers
                                  EmpresaService empresaService)
         {
             _logger = logger;
+            _mapper = mapper;
             _empresaService = empresaService;
         }
 
         //GET: api/empresas        
         [HttpGet]
-        [Route("api/empresas")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<Empresa>> GetEmpresas()
         {
             var empresas = _empresaService.getEmpresas();
@@ -32,8 +34,7 @@ namespace tupenca_back.Controllers
         }
 
         //GET: api/empresas/nuevas        
-        [HttpGet]
-        [Route("api/empresas/nuevas")]
+        [HttpGet("nuevas")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         public ActionResult<int> GetEmpresasNuevas()
@@ -43,8 +44,7 @@ namespace tupenca_back.Controllers
         }
 
         // GET: api/empresas/1        
-        [HttpGet]
-        [Route("api/empresas/{id:int}")]
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Empresa> GetEmpresaById(int id)
@@ -64,7 +64,6 @@ namespace tupenca_back.Controllers
 
         // POST: api/empresas       
         [HttpPost]
-        [Route("api/empresas")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<Empresa> CreateEmpresa(EmpresaDto empresaDto)
@@ -88,8 +87,7 @@ namespace tupenca_back.Controllers
 
 
         // DELETE: api/empresas/1
-        [HttpDelete]
-        [Route("api/empresas/{id:int}")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult DeleteEmpresas(int id)
@@ -102,6 +100,23 @@ namespace tupenca_back.Controllers
             }
             _empresaService.RemoveEmpresa(empresa);
             return NoContent();
+        }
+
+
+        // PATCH: api/deportes/1/image        
+        [HttpPatch("{id}/image")]
+        public ActionResult UploadImage(int id, [FromForm] ImagenDto imagenDto)
+        {
+            try
+            {
+                _empresaService.SaveImagen(id, imagenDto.file);
+
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+            }
         }
 
     }
