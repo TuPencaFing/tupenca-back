@@ -24,6 +24,7 @@ namespace tupenca_back.DataAccess.Repository
         public void UpdateScore(int eventoId, Resultado resultado)
         {
             var predicciones = _appDbContext.Predicciones.Where(pred => pred.EventoId == eventoId).ToList();
+            var evento = _appDbContext.Eventos.Where(e => e.Id == eventoId).First();
             foreach (var pred in predicciones)
             {
                 var penca = _appDbContext.Pencas.Where(p => p.Id == pred.PencaId).First();
@@ -31,9 +32,12 @@ namespace tupenca_back.DataAccess.Repository
 
                 if (resultado.resultado == pred.prediccion)
                 {
-                    if (resultado.PuntajeEquipoLocal == pred.PuntajeEquipoLocal
-                        && resultado.PuntajeEquipoVisitante == pred.PuntajeEquipoVisitante)
-                        pred.Score = puntaje.ResultadoExacto;
+                    if (evento.IsPuntajeEquipoValid)
+                    {
+                        if (resultado.PuntajeEquipoLocal == pred.PuntajeEquipoLocal
+                            && resultado.PuntajeEquipoVisitante == pred.PuntajeEquipoVisitante)
+                            pred.Score = puntaje.ResultadoExacto;                       
+                    }
                     else pred.Score = puntaje.Resultado;
 
                 }

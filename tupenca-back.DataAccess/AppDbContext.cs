@@ -70,7 +70,8 @@ namespace tupenca_back.DataAccess
 
             #region DeporteSeed
             modelBuilder.Entity<Deporte>().HasData(
-                new Deporte { Id = 1, Nombre = "Futbol" });
+                new Deporte { Id = 1, Nombre = "Futbol" },
+                new Deporte { Id = 2, Nombre = "Tennis" });
             #endregion
 
             #region EquipoSeed
@@ -143,6 +144,10 @@ namespace tupenca_back.DataAccess
             DateTime date39 = new DateTime(2022, 12, 02, 12, 00, 00);
             DateTime date40 = new DateTime(2022, 12, 02, 16, 00, 00);
 
+            //DateForTennis
+            DateTime date1T = new DateTime(2023, 01, 02, 07, 00, 00);
+            DateTime date2T = new DateTime(2023, 01, 02, 08, 00, 00);
+
             #region EventoSeed
             modelBuilder.Entity<Evento>().HasData(
                 new Evento { Id = 1, EquipoLocalId = 1, EquipoVisitanteId = 2, FechaInicial = date1 },
@@ -156,7 +161,9 @@ namespace tupenca_back.DataAccess
                 new Evento { Id = 9, EquipoLocalId = 2, EquipoVisitanteId = 3, FechaInicial = date33 },
                 new Evento { Id = 10, EquipoLocalId = 4, EquipoVisitanteId = 1, FechaInicial = date33 },
                 new Evento { Id = 11, EquipoLocalId = 6, EquipoVisitanteId = 7, FechaInicial = date39 },
-                new Evento { Id = 12, EquipoLocalId = 8, EquipoVisitanteId = 5, FechaInicial = date39 });
+                new Evento { Id = 12, EquipoLocalId = 8, EquipoVisitanteId = 5, FechaInicial = date39 },
+                new Evento { Id = 13, EquipoLocalId = 2, EquipoVisitanteId = 7, FechaInicial = date1T, IsEmpateValid = false, IsPuntajeEquipoValid = false },
+                new Evento { Id = 14, EquipoLocalId = 7, EquipoVisitanteId = 2, FechaInicial = date2T, IsEmpateValid = false, IsPuntajeEquipoValid = false });
             #endregion
 
             #region PlanSeed
