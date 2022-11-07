@@ -19,5 +19,9 @@ namespace tupenca_back.Controllers.Dto
 
         public Resultado? Resultado { get; set; }
 
+        public bool IsEmpateValid { get; set; } = true;
+
+        public bool IsPuntajeEquipoValid { get; set; } = true;
+
     }
 }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using tupenca_back.DataAccess;
 
@@ -11,9 +12,10 @@ using tupenca_back.DataAccess;
 namespace tupenca_back.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221107031021_EmpateBool")]
+    partial class EmpateBool
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -107,11 +109,6 @@ namespace tupenca_back.DataAccess.Migrations
                         {
                             Id = 1,
                             Nombre = "Futbol"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Nombre = "Tennis"
                         });
                 });
 
@@ -386,24 +383,6 @@ namespace tupenca_back.DataAccess.Migrations
                             FechaInicial = new DateTime(2022, 12, 2, 12, 0, 0, 0, DateTimeKind.Unspecified),
                             IsEmpateValid = true,
                             IsPuntajeEquipoValid = true
-                        },
-                        new
-                        {
-                            Id = 13,
-                            EquipoLocalId = 2,
-                            EquipoVisitanteId = 7,
-                            FechaInicial = new DateTime(2023, 1, 2, 7, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = false,
-                            IsPuntajeEquipoValid = false
-                        },
-                        new
-                        {
-                            Id = 14,
-                            EquipoLocalId = 7,
-                            EquipoVisitanteId = 2,
-                            FechaInicial = new DateTime(2023, 1, 2, 8, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = false,
-                            IsPuntajeEquipoValid = false
                         });
                 });
 

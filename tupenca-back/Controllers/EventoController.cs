@@ -72,7 +72,8 @@ namespace tupenca_back.Controllers
                 var equipovisitante = _equipoService.getEquipoById(evento.EquipoVisitanteId);
                 EventoPrediccionDto eventoret = new EventoPrediccionDto { Id = evento.Id, EquipoLocal = equipolocal,
                                                                          EquipoVisitante = equipovisitante, FechaInicial = evento.FechaInicial,
-                                                                         Prediccion = prediccion};
+                                                                         Prediccion = prediccion, IsEmpateValid = evento.IsEmpateValid,
+                                                                         IsPuntajeEquipoValid = evento.IsPuntajeEquipoValid};
                 eventosRet.Add(eventoret);
             }
             return Ok(eventosRet);
