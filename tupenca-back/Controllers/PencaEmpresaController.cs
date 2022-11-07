@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Numerics;
 using System.Security.Claims;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -20,16 +21,19 @@ namespace tupenca_back.Controllers
         public readonly IMapper _mapper;
         private readonly PencaService _pencaService;
         private readonly FuncionarioService _funcionarioService;
+        private readonly PlanService _planService;
 
         public PencaEmpresaController(ILogger<PencaEmpresaController> logger,
                                IMapper mapper,
                                PencaService pencaService,
-                               FuncionarioService funcionarioService)
+                               FuncionarioService funcionarioService,
+                               PlanService planService)
         {
             _logger = logger;
             _mapper = mapper;
             _pencaService = pencaService;
             _funcionarioService = funcionarioService;
+            _planService = planService;
         }
 
         //GET: api/pencas-empresas
@@ -111,11 +115,24 @@ namespace tupenca_back.Controllers
 
             try
             {
-                var pencaEmpresa = _mapper.Map<PencaEmpresa>(pencaEmpresaDto);
+                var plan = _planService.FindPlanById(pencaEmpresaDto.Empresa.PlanId);
+                if (plan == null)
+                    throw new NotFoundException("El Plan no existe");
+                
+                var cantpencas = _pencaService.GetCantPencaEmpresas(pencaEmpresaDto.Empresa.Id);
+                if (cantpencas < plan.CantPencas)
+                {
+                    var pencaEmpresa = _mapper.Map<PencaEmpresa>(pencaEmpresaDto);
 
-                _pencaService.AddPencaEmpresa(pencaEmpresa);
+                    _pencaService.AddPencaEmpresa(pencaEmpresa);
 
-                return CreatedAtAction("GetPencaEmpresa", new { id = pencaEmpresa.Id }, _mapper.Map<PencaEmpresaDto>(pencaEmpresa));
+                    return CreatedAtAction("GetPencaEmpresa", new { id = pencaEmpresa.Id }, _mapper.Map<PencaEmpresaDto>(pencaEmpresa));
+                }
+                else
+                {
+                    throw new NotFoundException("Has llegado al limite de Pencas");
+                }           
+
             }
             catch (NotFoundException e)
             {

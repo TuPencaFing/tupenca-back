@@ -24,8 +24,6 @@ namespace tupenca_back.Controllers.Dto
 
         public EmpresaDto? Empresa { get; set; }
 
-        public PlanDto? Plan { get; set; }
-
     }
 }
 

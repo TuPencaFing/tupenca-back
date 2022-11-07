@@ -13,6 +13,8 @@ namespace tupenca_back.Model
         [Required]
         public int CantUser { get; set; }
 
+        public int CantPencas { get; set; }
+
         [Required]
         [Precision(18, 2)]
         public decimal PercentageCost { get; set; }

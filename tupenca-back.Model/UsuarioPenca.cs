@@ -13,8 +13,6 @@ namespace tupenca_back.Model
         public virtual Usuario? Usuario { get; set; }
         public int PencaId { get; set; }
         public virtual Penca? Penca { get; set; }
-
-        public int score { get; set; } = 0;
         public bool habilitado { get; set; } = false;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.Extensions.Logging;
 using tupenca_back.DataAccess.Repository;
 using tupenca_back.DataAccess.Repository.IRepository;
@@ -17,8 +18,8 @@ namespace tupenca_back.Services
         private readonly CampeonatoService _campeonatoService;
         private readonly PremioService _premioService;
         private readonly EmpresaService _empresaService;
-        private readonly PlanService _planService;
         private readonly UsuarioService _usuarioService;
+        private readonly PrediccionService _prediccionService;
 
         public PencaService(ILogger<PencaService> logger,
                             IPencaCompartidaRepository pencaCompartidaRepository,
@@ -27,8 +28,8 @@ namespace tupenca_back.Services
                             CampeonatoService campeonatoService,
                             PremioService premioService,
                             EmpresaService empresaService,
-                            PlanService planService,
-                            UsuarioService usuarioService)
+                            UsuarioService usuarioService,
+                            PrediccionService prediccionService)
         {
             _logger = logger;
             _pencaCompartidaRepository = pencaCompartidaRepository;
@@ -37,8 +38,8 @@ namespace tupenca_back.Services
             _campeonatoService = campeonatoService;
             _premioService = premioService;
             _empresaService = empresaService;
-            _planService = planService;
             _usuarioService = usuarioService;
+            _prediccionService = prediccionService;
         }
 
 
@@ -48,7 +49,7 @@ namespace tupenca_back.Services
 
         public IEnumerable<PencaEmpresa> GetPencaCompartidasByEmpresa(int empresaId) => _pencaEmpresaRepository.GetPencaEmpresasByEmpresa(empresaId);       
 
-        public PencaCompartida? findPencaCompartidaById(int? id) => _pencaCompartidaRepository.GetFirstOrDefault(p => p.Id == id);
+        public PencaCompartida? findPencaCompartidaById(int? id) => _pencaCompartidaRepository.GetFirst(p => p.Id == id);
 
         public PencaEmpresa? findPencaEmpresaById(int? id) => _pencaEmpresaRepository.GetFirstOrDefault(p => p.Id == id);
 
@@ -118,14 +119,6 @@ namespace tupenca_back.Services
                 throw new NotFoundException("La Empresa no existe");
 
             pencaEmpresa.Empresa = empresa;
-
-
-            var plan = _planService.FindPlanById(pencaEmpresa.Plan.Id);
-
-            if (plan == null)
-                throw new NotFoundException("El Plan no existe");
-
-            pencaEmpresa.Plan = plan;
 
 
             _pencaEmpresaRepository.Add(pencaEmpresa);
@@ -233,7 +226,6 @@ namespace tupenca_back.Services
             usuariopenca.PencaId = pencaId;
             usuariopenca.UsuarioId = userId;
             usuariopenca.habilitado = false;
-            usuariopenca.score = 0;
             _usuariopencaRepository.Add(usuariopenca);
             _usuariopencaRepository.Save();
 
@@ -256,9 +248,14 @@ namespace tupenca_back.Services
             usuariopenca.PencaId = pencaId;
             usuariopenca.UsuarioId = userId;
             usuariopenca.habilitado = false;
-            usuariopenca.score = 0;
             _usuariopencaRepository.Add(usuariopenca);
             _usuariopencaRepository.Save();
+        }
+
+
+        public int GetCantPencaEmpresas(int id)
+        {
+            return _pencaEmpresaRepository.GetCantPencaEmpresas(id);
         }
 
     }

@@ -36,6 +36,7 @@ namespace tupenca_back.Services
             planToUpdate.CantUser = plan.CantUser;
             planToUpdate.PercentageCost = plan.PercentageCost;
             planToUpdate.LookAndFeel = plan.LookAndFeel;
+            planToUpdate.CantPencas = plan.CantPencas;
 
             _planRepository.Update(planToUpdate);
             _planRepository.Save();

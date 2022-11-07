@@ -5,6 +5,7 @@ using tupenca_back.Controllers.Dto;
 using System.Net;
 using tupenca_back.Services.Exceptions;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace tupenca_back.Controllers
 {
@@ -46,9 +47,10 @@ namespace tupenca_back.Controllers
         [Route("api/predicciones/evento/{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<Prediccion> GetPrediccionByEventoId(int id)
+        public ActionResult<Prediccion> GetPrediccionByEventoPencaId(int eventoid, int pencaid)
         {
-            var prediccion = _prediccionService.getPrediccionByEventoId(id);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var prediccion = _prediccionService.getPrediccionByEventoId(eventoid, pencaid, Convert.ToInt32(userId));
             if (prediccion == null)
             {
                 return NotFound();
@@ -59,29 +61,7 @@ namespace tupenca_back.Controllers
             }
         }
 
-        // GET: api/predicciones/evento/1/puntaje        
-        [HttpGet]
-        [Route("api/predicciones/evento/{id:int}/puntaje")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<bool> GetPuntajePrediccion(int id)
-        {
-            var prediccion = _prediccionService.getPrediccionByEventoId(id);
-            if (prediccion == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                var resultado = _resultadoService.getResultadoByEventoId(id);
-                if (resultado == null)
-                {
-                    return BadRequest("No existe resultado del evento");
-                }                
-                return Ok(_prediccionService.isPrediccionCorrect(prediccion, resultado));
-            }
-        }
-        
+       
         // DELETE: api/predicciones/1
         [HttpDelete]
         [Route("api/predicciones/{id:int}")]

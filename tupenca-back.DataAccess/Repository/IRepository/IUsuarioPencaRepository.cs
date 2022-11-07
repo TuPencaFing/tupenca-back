@@ -18,9 +18,12 @@ namespace tupenca_back.DataAccess.Repository.IRepository
         IEnumerable<PencaEmpresa> GetUsuarioPencasEmpresa(int id);
 
 
-        IEnumerable<Evento> GetEventosProximosPencasCompartidas(int id);
+        IEnumerable<Evento> GetEventosProximosPencaCompartida(int id, int pencaid);
 
         IEnumerable<Evento> GetEventosProximosPencas(int id);
+
+        int GetCantUsuariosPenca(int id);
+
 
         void Save();
     }

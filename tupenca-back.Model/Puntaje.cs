@@ -11,9 +11,6 @@ namespace tupenca_back.Model
         public int Id { get; set; }
 
         [Required]
-        public int PencaId { get; set; }
-
-        [Required]
         public int Resultado { get; set; }
         
         [Required]

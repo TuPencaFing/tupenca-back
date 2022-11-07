@@ -54,10 +54,10 @@ namespace tupenca_back.Services
         }
 
 
-        public IEnumerable<Evento> GetEventosProximosPencaCompartida(int userId)
+        public IEnumerable<Evento> GetEventosProximosPencaCompartida(int userId, int pencaid)
         {
             var usuario = _usuarioService.find(userId);
-            return _usuariopencaRepository.GetEventosProximosPencasCompartidas(userId);
+            return _usuariopencaRepository.GetEventosProximosPencaCompartida(userId, pencaid);
         }
 
 

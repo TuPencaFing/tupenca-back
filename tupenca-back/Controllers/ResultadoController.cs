@@ -14,11 +14,13 @@ namespace tupenca_back.Controllers
     {
         private readonly ILogger<ResultadoController> _logger;
         private readonly ResultadoService _resultadoService;
+        private readonly PrediccionService _prediccionService;
 
-        public ResultadoController(ILogger<ResultadoController> logger, ResultadoService resultadoService)
+        public ResultadoController(ILogger<ResultadoController> logger, ResultadoService resultadoService, PrediccionService prediccionService)
         {
             _logger = logger;
             _resultadoService = resultadoService;
+            _prediccionService = prediccionService;
         }
 
         // GET: api/resultados/1        
@@ -64,8 +66,10 @@ namespace tupenca_back.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<Resultado> CreateResultado(ResultadoDto resultadoDto)
         {
+            
             if (_resultadoService.getResultadoByEventoId(resultadoDto.EventoId) != null)
                 return BadRequest("Ya existe resultado ingresado para el evento");
+            
             try
             {               
                 Resultado resultado = new Resultado();
@@ -74,6 +78,11 @@ namespace tupenca_back.Controllers
                 resultado.PuntajeEquipoVisitante = resultadoDto.PuntajeEquipoVisitante;
                 resultado.EventoId = resultadoDto.EventoId;
                 _resultadoService.CreateResultado(resultado);
+
+                //actualizar score
+                _prediccionService.UpdateScore(resultadoDto.EventoId, resultado);
+
+
                 return CreatedAtAction("GetResultadoById", new { id = resultado.Id }, resultado);
             }
             catch (NotFoundException e)
@@ -104,6 +113,9 @@ namespace tupenca_back.Controllers
             resultado.PuntajeEquipoLocal = resultadoDto.PuntajeEquipoLocal;
             resultado.PuntajeEquipoVisitante = resultadoDto.PuntajeEquipoVisitante;
             _resultadoService.UpdateResultado(resultado);
+            //actualizar score
+            _prediccionService.UpdateScore(resultado.EventoId, resultado);
+
             return CreatedAtAction("GetResultadoById", new { id = resultado.Id }, resultado);
         }
 

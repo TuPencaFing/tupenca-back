@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using tupenca_back.Model;
 
 namespace tupenca_back.DataAccess.Repository.IRepository
@@ -7,6 +8,8 @@ namespace tupenca_back.DataAccess.Repository.IRepository
     {
 
         IEnumerable<PencaCompartida> GetPencaCompartidas();
+       
+        PencaCompartida GetFirst(Expression<Func<PencaCompartida, bool>> filter);
      
         void Save();
 

@@ -17,5 +17,7 @@ namespace tupenca_back.Controllers.Dto
 
         public Prediccion? Prediccion { get; set; }
 
+        public Resultado? Resultado { get; set; }
+
     }
 }

@@ -87,11 +87,11 @@ namespace tupenca_back.Controllers
 
             try
             {
-                //var puntaje = _mapper.Map<Premio>(puntajeDto);
+                //var puntaje = _mapper.Map<Puntaje>(puntajeDto);
 
                 _puntajeService.CreatePuntaje(puntaje);
 
-                //return CreatedAtAction("GetPuntaje", new { id = puntaje.Id }, _mapper.Map<PremioDto>(premio));
+                //return CreatedAtAction("GetPuntaje", new { id = puntaje.Id }, _mapper.Map<PuntajeDto>(puntaje));
                 return CreatedAtAction("GetPuntaje", new { id = puntaje.Id }, puntaje);
             }
             catch (NotFoundException e)
@@ -107,7 +107,7 @@ namespace tupenca_back.Controllers
 
         // DELETE: api/puntaje/1
         [HttpDelete("{id}")]
-        public IActionResult DeletPuntajee(int id)
+        public IActionResult DeletPuntaje(int id)
         {
             try
             {

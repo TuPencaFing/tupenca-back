@@ -16,8 +16,14 @@ namespace tupenca_back.Model
 
         [Required]
         public int EventoId { get; set; }
+
+        [Required]
+        public int PencaId { get; set; }
+
         [Required]
         public int UsuarioId { get; set; }
+
+        public int? Score { get; set; }
 
     }
 }

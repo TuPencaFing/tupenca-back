@@ -9,6 +9,7 @@ using tupenca_back.Controllers.Dto;
 using tupenca_back.Utilities.EmailService;
 using System.Security.Claims;
 using AutoMapper;
+using tupenca_back.DataAccess.Repository.IRepository;
 
 namespace tupenca_back.Controllers
 {
@@ -22,14 +23,21 @@ namespace tupenca_back.Controllers
         private readonly FuncionarioService _funcionarioService;
         private readonly IEmailSender _emailSender;
         public readonly IMapper _mapper;
+        public readonly IUsuarioPencaRepository _usuariopenca;
+        public readonly EmpresaService _empresaService;
+        public readonly PlanService _planService;
 
-        public FuncionarioController(ILogger<FuncionarioController> logger, FuncionarioService funcionarioService, IConfiguration configuration, IMapper mapper, IEmailSender emailSender)
+        public FuncionarioController(ILogger<FuncionarioController> logger, FuncionarioService funcionarioService, IConfiguration configuration, IMapper mapper, IEmailSender emailSender, 
+                IUsuarioPencaRepository usuariopenca, EmpresaService empresaService, PlanService planService)
         {
             _logger = logger;
             _funcionarioService = funcionarioService;
             _configuration = configuration;
             _emailSender = emailSender;
             _mapper = mapper;
+            _usuariopenca = usuariopenca;
+            _empresaService = empresaService;
+            _planService = planService;
         }
 
         //GET: api/user
@@ -120,13 +128,24 @@ namespace tupenca_back.Controllers
         [HttpPost("invitar")]
         public  IActionResult Invite(InviteUserDto request)
         {
-            
-            var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            //var penca =_funcionarioService.findPenca(int.Parse(id),request.PencaId);
-            string token = _funcionarioService.createInviteToken(int.Parse(id), request.PencaId);
-            var message = new Message(new string[] { request.Email }, "Invitation to join penca", "Join penca in https://yellow-forest-0c32e6110.2.azurestaticapps.net/invitacion/" + token);
-            _emailSender.SendEmail(message);
-            return Ok();
+            var funcionarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var funcionario = _funcionarioService.find(Convert.ToInt32(funcionarioId));
+            var cantusuarios = _usuariopenca.GetCantUsuariosPenca(request.PencaId);
+            var empresa = _empresaService.getEmpresaById(funcionario.EmpresaId);
+            var plan = _planService.FindPlanById(empresa.PlanId);
+
+            if (cantusuarios < plan.CantUser)
+            {
+                var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                //var penca =_funcionarioService.findPenca(int.Parse(id),request.PencaId);
+                string token = _funcionarioService.createInviteToken(int.Parse(id), request.PencaId);
+                var message = new Message(new string[] { request.Email }, "Invitation to join penca", "Join penca in https://yellow-forest-0c32e6110.2.azurestaticapps.net/invitacion/" + token);
+                _emailSender.SendEmail(message);                
+                return Ok();
+            }
+            else return BadRequest("Has llegado a la cantidad maxima de usuarios");
+
+
         }
     }
 

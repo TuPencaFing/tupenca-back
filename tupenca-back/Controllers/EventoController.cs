@@ -54,10 +54,10 @@ namespace tupenca_back.Controllers
         [Route("api/eventos/misproximos")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
-        public ActionResult<IEnumerable<EventoPrediccionDto>> GetEventosProximosPencaCompartidaUsuario()
+        public ActionResult<IEnumerable<EventoPrediccionDto>> GetEventosProximosPencaCompartidaUsuario([FromQuery] int penca)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);         
-            var eventos = _eventoService.GetEventosProximosPencaCompartida(Convert.ToInt32(userId));
+            var eventos = _eventoService.GetEventosProximosPencaCompartida(Convert.ToInt32(userId), penca);
             if (eventos == null)
             {
                 return NoContent();
@@ -67,7 +67,7 @@ namespace tupenca_back.Controllers
 
             foreach (var evento in eventos)
             {
-                var prediccion = _prediccionService.GetPrediccionByUsuarioEvento(Convert.ToInt32(userId), evento.Id);
+                var prediccion = _prediccionService.GetPrediccionByUsuarioEvento(Convert.ToInt32(userId), evento.Id, penca);
                 var equipolocal = _equipoService.getEquipoById(evento.EquipoLocalId);
                 var equipovisitante = _equipoService.getEquipoById(evento.EquipoVisitanteId);
                 EventoPrediccionDto eventoret = new EventoPrediccionDto { Id = evento.Id, EquipoLocal = equipolocal,
@@ -179,7 +179,7 @@ namespace tupenca_back.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public ActionResult<Prediccion> CreatePrediccionEvento(int id, PrediccionDto prediccionDto)
+        public ActionResult<Prediccion> CreatePrediccionEvento(int id, PrediccionDto prediccionDto, [FromQuery] int pencaId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var evento = _eventoService.getEventoById(id);
@@ -187,7 +187,7 @@ namespace tupenca_back.Controllers
             {
                 return NotFound("No existe el evento");
             }
-            var prediccionExistente = _prediccionService.getPrediccionByEventoId(id);
+            var prediccionExistente = _prediccionService.getPrediccionByEventoId(id, pencaId, Convert.ToInt32(userId));
             if (prediccionExistente != null)
             {
                 prediccionExistente.prediccion = prediccionDto.resultado;
@@ -204,6 +204,7 @@ namespace tupenca_back.Controllers
                 prediccion.PuntajeEquipoVisitante = prediccionDto.PuntajeEquipoVisitante;
                 prediccion.EventoId = id;
                 prediccion.UsuarioId = Convert.ToInt32(userId);
+                prediccion.PencaId = pencaId;
                 _prediccionService.CreatePrediccion(prediccion);
                 return CreatedAtAction("GetPrediccionById", "Prediccion", new { id = prediccion.Id }, prediccion);
             }

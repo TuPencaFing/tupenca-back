@@ -9,10 +9,6 @@ namespace tupenca_back.Model
         [Required]
         public Empresa? Empresa { get; set; }
 
-        [Required]
-        public Plan? Plan { get; set; }
-
-
     }
 }
 
