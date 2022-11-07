@@ -8,6 +8,12 @@ using tupenca_back.Controllers.Dto;
 using tupenca_back.Model;
 using tupenca_back.Services;
 using tupenca_back.Services.Exceptions;
+using MercadoPago.Client.Common;
+using MercadoPago.Client.Payment;
+using MercadoPago.Config;
+using MercadoPago.Resource.Payment;
+using MercadoPago.Resource.PaymentMethod;
+using Newtonsoft.Json.Linq;
 
 namespace tupenca_back.Controllers
 {
@@ -195,12 +201,37 @@ namespace tupenca_back.Controllers
         }
 
         [HttpPost("{id}/add")]
-        public IActionResult AddUsuarioToPencaCompartida(int id)
+        public async Task<IActionResult> AddUsuarioToPencaCompartidaAsync(int id, [FromQuery] string token)
         {
             try
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                _pencaService.AddUsuarioToPencaCompartida(Convert.ToInt32(userId), id);
+                //_pencaService.AddUsuarioToPencaCompartida(Convert.ToInt32(userId), id);
+                
+                //pago
+                MercadoPagoConfig.AccessToken = "TEST-5851703831154168-110322-406893c0b92140fa4195a7cf1c9fbc9c-1228301365";
+                
+                var paymentRequest = new PaymentCreateRequest
+                {
+                    TransactionAmount = 10,
+                    Token = token,
+                    Description = "Payment description",
+                    Installments = 1,
+                    PaymentMethodId = "visa",
+                    Payer = new PaymentPayerRequest
+                    {
+                        Email = "test.payer@email.com",
+                    }
+                };
+
+                Console.WriteLine("obtengo datos pago:");
+                Console.WriteLine(paymentRequest.Payer.Email);
+
+                var client = new PaymentClient();
+                Payment payment = await client.CreateAsync(paymentRequest);
+
+                Console.WriteLine(payment.Status);
+
                 return Ok();
 
             }
