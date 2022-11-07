@@ -15,7 +15,6 @@ namespace tupenca_back.Model
         [Required]
         public string? Description { get; set; }
 
-        [Required]
         public string? Image { get; set; }
 
         [Required]
@@ -29,9 +28,6 @@ namespace tupenca_back.Model
         public virtual Puntaje? Puntaje { get; set; }
 
         public List<UsuarioPenca> UsuariosPencas { get; set; }
-
-        
-
 
     }
 }

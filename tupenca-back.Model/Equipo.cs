@@ -11,5 +11,6 @@ namespace tupenca_back.Model
         [Required]
         public string Nombre { get; set; }
 
+        public string? Image { get; set; }
     }
 }

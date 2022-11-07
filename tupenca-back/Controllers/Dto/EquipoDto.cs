@@ -7,8 +7,9 @@ namespace tupenca_back.Controllers.Dto
 
         public int Id { get; set; }
 
-        [Required]
         public string Nombre { get; set; }
+
+        public string? Image { get; set; }
 
     }
 }

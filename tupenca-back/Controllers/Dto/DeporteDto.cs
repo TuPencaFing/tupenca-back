@@ -9,6 +9,6 @@ namespace tupenca_back.Controllers.Dto
 
         public string? Nombre { get; set; }
 
-        public string? ImagenName { get; set; }
+        public string? Image { get; set; }
     }
 }

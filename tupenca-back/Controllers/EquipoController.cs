@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 namespace tupenca_back.Controllers
 {
     [ApiController]
+    [Route("api/equipos")]
     public class EquipoController : ControllerBase
     {
         private readonly ILogger<EquipoController> _logger;
@@ -22,7 +23,6 @@ namespace tupenca_back.Controllers
 
         //GET: api/equipos        
         [HttpGet]
-        [Route("api/equipos")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<IEnumerable<Equipo>> GetEquipos()
         {
@@ -30,9 +30,9 @@ namespace tupenca_back.Controllers
             return Ok(equipos);
         }
 
+
         // GET: api/equipos/1        
-        [HttpGet]
-        [Route("api/equipos/{id:int}")]
+        [HttpGet("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Equipo> GetEquipoById(int id)
@@ -48,9 +48,9 @@ namespace tupenca_back.Controllers
             }
         }
 
+
         // GET: api/equipos/nombre        
-        [HttpGet]
-        [Route("api/equipos/{nombre}")]
+        [HttpGet("{nombre}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Equipo> GetEquipoByNombre(string nombre)
@@ -66,9 +66,9 @@ namespace tupenca_back.Controllers
             }
         }
 
+
         // POST: api/equipos        
         [HttpPost]
-        [Route("api/equipos")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<Equipo> CreateEquipo(EquipoDto equipoDto)
@@ -83,9 +83,9 @@ namespace tupenca_back.Controllers
             return CreatedAtAction("GetEquipoById", new { id = equipo.Id }, equipo);
         }
 
+
         // PUT: api/equipos/1
-        [HttpPut]
-        [Route("api/equipos/{id:int}")]
+        [HttpPut("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]        
@@ -105,8 +105,7 @@ namespace tupenca_back.Controllers
         }
 
         // DELETE: api/equipo/1
-        [HttpDelete]
-        [Route("api/equipos/{id:int}")]
+        [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult DeleteEquipo(int id)
@@ -119,6 +118,23 @@ namespace tupenca_back.Controllers
             }
             _equipoService.RemoveEquipo(equipo);
             return NoContent();
+        }
+
+
+        // PATCH: api/equipos/1/image        
+        [HttpPatch("{id}/image")]
+        public ActionResult UploadImage(int id, [FromForm] ImagenDto imagenDto)
+        {
+            try
+            {
+                _equipoService.SaveImagen(id, imagenDto.file);
+
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+            }
         }
 
     }

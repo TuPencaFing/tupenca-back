@@ -226,6 +226,21 @@ namespace tupenca_back.Controllers
 
         }
 
+        // PATCH: api/deportes/1/image        
+        [HttpPatch("{id}/image")]
+        public ActionResult UploadImage(int id, [FromForm] ImagenDto imagenDto)
+        {
+            try
+            {
+                _pencaService.SaveImagen(id, imagenDto.file, true);
+
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
 
 
         [HttpGet("{id}/info")]
@@ -252,7 +267,7 @@ namespace tupenca_back.Controllers
                 DeporteDto deportedto = new DeporteDto();
                 deportedto.Id = campeonato.Deporte.Id;
                 deportedto.Nombre = campeonato.Deporte.Nombre;
-                deportedto.ImagenName = campeonato.Deporte.ImagenName;
+                deportedto.Image = campeonato.Deporte.Image;
                 pencainfo.Deporte = deportedto;                
                 List<EventoPrediccionDto> eventos = new List<EventoPrediccionDto>();
                 var puntaje = _puntajeService.getPuntajeById(penca.PuntajeId);

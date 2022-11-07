@@ -12,6 +12,8 @@ namespace tupenca_back.Model
         [Required]
         public string? Name { get; set; }
 
+        public string? Image { get; set; }
+
         [Required]
         public DateTime StartDate { get; set; }
 

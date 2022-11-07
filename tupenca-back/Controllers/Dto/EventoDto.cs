@@ -7,6 +7,8 @@ namespace tupenca_back.Controllers.Dto
 
         public int Id { get; set; }
 
+        public string? Image { get; set; }
+
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime FechaInicial { get; set; }
 

@@ -8,6 +8,8 @@ namespace tupenca_back.Controllers.Dto
 
         public int Id { get; set; }
 
+        public string? Image { get; set; }
+
         public int Position { get; set; }
 
         public decimal Percentage { get; set; }

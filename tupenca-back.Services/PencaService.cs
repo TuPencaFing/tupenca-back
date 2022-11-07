@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using tupenca_back.DataAccess.Repository;
 using tupenca_back.DataAccess.Repository.IRepository;
@@ -20,6 +21,8 @@ namespace tupenca_back.Services
         private readonly EmpresaService _empresaService;
         private readonly UsuarioService _usuarioService;
         private readonly PrediccionService _prediccionService;
+        private readonly ImagesService _imagesService;
+
 
         public PencaService(ILogger<PencaService> logger,
                             IPencaCompartidaRepository pencaCompartidaRepository,
@@ -29,7 +32,8 @@ namespace tupenca_back.Services
                             PremioService premioService,
                             EmpresaService empresaService,
                             UsuarioService usuarioService,
-                            PrediccionService prediccionService)
+                            PrediccionService prediccionService,
+                            ImagesService imagesService)
         {
             _logger = logger;
             _pencaCompartidaRepository = pencaCompartidaRepository;
@@ -40,6 +44,7 @@ namespace tupenca_back.Services
             _empresaService = empresaService;
             _usuarioService = usuarioService;
             _prediccionService = prediccionService;
+            _imagesService = imagesService;
         }
 
 
@@ -47,7 +52,7 @@ namespace tupenca_back.Services
 
         public IEnumerable<PencaEmpresa> GetPencaEmpresas() => _pencaEmpresaRepository.GetPencaEmpresas();
 
-        public IEnumerable<PencaEmpresa> GetPencaCompartidasByEmpresa(int empresaId) => _pencaEmpresaRepository.GetPencaEmpresasByEmpresa(empresaId);       
+        public IEnumerable<PencaEmpresa> GetPencaCompartidasByEmpresa(int empresaId) => _pencaEmpresaRepository.GetPencaEmpresasByEmpresa(empresaId);
 
         public PencaCompartida? findPencaCompartidaById(int? id) => _pencaCompartidaRepository.GetFirst(p => p.Id == id);
 
@@ -152,7 +157,7 @@ namespace tupenca_back.Services
             pencaToUpdate.Title = pencaEmpresa.Title;
             pencaToUpdate.Description = pencaEmpresa.Description;
             pencaToUpdate.Image = pencaEmpresa.Image;
-  
+
             _pencaEmpresaRepository.Update(pencaToUpdate);
             _pencaEmpresaRepository.Save();
         }
@@ -252,12 +257,37 @@ namespace tupenca_back.Services
             _usuariopencaRepository.Save();
         }
 
-
         public int GetCantPencaEmpresas(int id)
         {
             return _pencaEmpresaRepository.GetCantPencaEmpresas(id);
+
         }
 
+
+        public void SaveImagen(int id, IFormFile file, bool esPencaCompartida)
+        {
+            if (esPencaCompartida)
+            {
+                var penca = findPencaCompartidaById(id);
+
+                string image = _imagesService.uploadImage(file.FileName, file.OpenReadStream());
+
+                penca.Image = image;
+
+                UpdatePencaCompartida(id, penca);
+            }
+            else
+            {
+                var penca = findPencaEmpresaById(id);
+
+                string image = _imagesService.uploadImage(file.FileName, file.OpenReadStream());
+
+                penca.Image = image;
+
+                UpdatePencaEmpresa(id, penca);
+            }
+
+        }
     }
 }
 
