@@ -30,7 +30,7 @@ namespace tupenca_back.DataAccess
         public DbSet<Usuario>? Usuarios { get; set; }
         public DbSet<UsuarioPenca>? UsuariosPencas { get; set; }
         public DbSet<UserInviteToken>? UserInviteTokens { get; set; }
-
+        public DbSet<Puntaje>? Puntajes { get; set; }
 
 
 
@@ -159,13 +159,19 @@ namespace tupenca_back.DataAccess
                 new Evento { Id = 12, EquipoLocalId = 8, EquipoVisitanteId = 5, FechaInicial = date39 });
             #endregion
 
+            #region PlanSeed
+            modelBuilder.Entity<Plan>().HasData(
+                new Plan { Id = 1, CantPencas = 1, CantUser = 50, LookAndFeel = 1, PercentageCost = 10 },
+                new Plan { Id = 2, CantPencas = 5, CantUser = 100, LookAndFeel = 2, PercentageCost = 10 },
+                new Plan { Id = 3, CantPencas = 10, CantUser = 500, LookAndFeel = 2, PercentageCost = 10 });
+            #endregion
 
             #region EmpresaSeed
             modelBuilder.Entity<Empresa>().HasData(
-                new Empresa { Id = 1, Razonsocial = "McDonald's S.A.", RUT = "214873040018",FechaCreacion = date1  },
-                new Empresa { Id = 2, Razonsocial = "BMW Ibérica S.A.", RUT = "304001821487", FechaCreacion = date2 },
-                new Empresa { Id = 3, Razonsocial = "Air Europa Líneas Aéreas S.A.", RUT = "821473040018", FechaCreacion = date3 },
-                new Empresa { Id = 4, Razonsocial = "Punto FA S.L.", RUT = "040001821487", FechaCreacion = date4 });
+                new Empresa { Id = 1, Razonsocial = "McDonald's S.A.", RUT = "214873040018",FechaCreacion = date1 , PlanId=1},
+                new Empresa { Id = 2, Razonsocial = "BMW Ibérica S.A.", RUT = "304001821487", FechaCreacion = date2 , PlanId=2},
+                new Empresa { Id = 3, Razonsocial = "Air Europa Líneas Aéreas S.A.", RUT = "821473040018", FechaCreacion = date3, PlanId=1},
+                new Empresa { Id = 4, Razonsocial = "Punto FA S.L.", RUT = "040001821487", FechaCreacion = date4 , PlanId = 3 });
             #endregion
             //password is: string
             var passwordHash = new byte[] { 153, 148, 216, 121, 132, 166, 219, 84, 199, 74, 223, 21, 206, 104, 41, 80, 159, 33, 184, 203, 104, 1, 107, 181, 246, 180, 162, 144, 178, 220, 202, 145, 188, 224, 218, 142, 17, 160, 124, 210, 223, 123, 193, 132, 59, 118, 174, 129, 190, 74, 110, 243, 237, 235, 225, 237, 67, 22, 126, 213, 210, 13, 213, 92};

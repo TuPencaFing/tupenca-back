@@ -52,17 +52,16 @@ namespace tupenca_back.DataAccess.Repository
         }
 
 
-        public IEnumerable<Evento> GetEventosProximosPencasCompartidas(int id)
+        public IEnumerable<Evento> GetEventosProximosPencaCompartida(int id, int pencaid)
         {
             var today = DateTime.Now;
             return _appDbContext.UsuariosPencas
-                .Where(p => p.UsuarioId == id && p.habilitado == true)
+                .Where(p => p.UsuarioId == id && p.habilitado == true && p.PencaId == pencaid)
                 .Select(p => p.Penca)
                 .Join(_appDbContext.PencaCompartidas, penca => penca.Id, p => p.Id, (penca, p) => p)
                 .SelectMany(p => p.Campeonato.Eventos)
                 .Where(evento => evento.FechaInicial > today & evento.FechaInicial < today.AddDays(7))
                 .OrderBy(evento => evento.FechaInicial)
-                .Distinct()
                 .ToList();
         }
 
@@ -82,7 +81,14 @@ namespace tupenca_back.DataAccess.Repository
                 .ToList();
         }
 
+        public int GetCantUsuariosPenca(int id)
+        {
+            return _appDbContext.UsuariosPencas
+                .Where(p => p.PencaId == id)
+                .Count();
+        }
 
+       
         public void Save()
         {
             _appDbContext.SaveChanges();

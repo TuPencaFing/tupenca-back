@@ -23,7 +23,9 @@ namespace tupenca_back.Model
         [Required]
         public List<Premio>? Premios { get; set; } = new List<Premio>();
 
-        public List<Prediccion>? Predicciones { get; set; } = new List<Prediccion>();
+        [Required]
+        public int PuntajeId { get; set; }
+        public virtual Puntaje? Puntaje { get; set; }
 
         public List<UsuarioPenca> UsuariosPencas { get; set; }
 

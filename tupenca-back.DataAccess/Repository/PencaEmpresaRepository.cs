@@ -20,9 +20,19 @@ namespace tupenca_back.DataAccess.Repository
                  .Include(p => p.Campeonato)
                  .Include(p => p.Premios)
                  .Include(p => p.Empresa)
-                 .Include(p => p.Plan)
                  .ToList();
         }
+
+        public int GetCantPencaEmpresas(int id)
+        {
+            return _appDbContext.PencaEmpresas
+                 .Where(p => p.Empresa.Id == id)
+                 .Include(p => p.Campeonato)
+                 .Include(p => p.Premios)
+                 .Include(p => p.Empresa)
+                 .Count();
+        }
+
 
         public IEnumerable<PencaEmpresa> GetPencaEmpresasByEmpresa(int id)
         {
@@ -31,7 +41,6 @@ namespace tupenca_back.DataAccess.Repository
                  .Include(p => p.Campeonato)
                  .Include(p => p.Premios)
                  .Include(p => p.Empresa)
-                 .Include(p => p.Plan)
                  .ToList();
         }
 

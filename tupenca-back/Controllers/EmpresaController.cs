@@ -3,6 +3,7 @@ using tupenca_back.Services;
 using tupenca_back.Model;
 using tupenca_back.Controllers.Dto;
 using AutoMapper;
+using tupenca_back.DataAccess.Migrations;
 using System.Net;
 using tupenca_back.Services.Exceptions;
 
@@ -15,14 +16,17 @@ namespace tupenca_back.Controllers
         private readonly ILogger<EmpresaController> _logger;
         public readonly IMapper _mapper;
         private readonly EmpresaService _empresaService;
+        private readonly PlanService _planService;
 
         public EmpresaController(ILogger<EmpresaController> logger,
                                  IMapper mapper,
-                                 EmpresaService empresaService)
+                                 EmpresaService empresaService,
+                                 PlanService planService)
         {
             _logger = logger;
             _mapper = mapper;
             _empresaService = empresaService;
+            _planService = planService;
         }
 
         //GET: api/empresas        
@@ -72,6 +76,12 @@ namespace tupenca_back.Controllers
             empresa.RUT = empresaDto.RUT;
             empresa.Razonsocial = empresaDto.Razonsocial;
             empresa.FechaCreacion = DateTime.Now;
+
+
+            var plan = _planService.FindPlanById(empresaDto.PlanId);
+            if (plan == null)
+                throw new NotFoundException("El Plan no existe");
+            empresa.Plan = plan;            
 
             var emp = _empresaService.getEmpresaByRUT(empresa.RUT);
             if (emp != null)

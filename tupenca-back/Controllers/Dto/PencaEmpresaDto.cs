@@ -19,9 +19,10 @@ namespace tupenca_back.Controllers.Dto
 
         public List<PremioDto>? Premios { get; set; } = new List<PremioDto>();
 
-        public EmpresaDto? Empresa { get; set; }
+        public int PuntajeId { get; set; }
+        public virtual Puntaje? Puntaje { get; set; }
 
-        public PlanDto? Plan { get; set; }
+        public EmpresaDto? Empresa { get; set; }
 
     }
 }

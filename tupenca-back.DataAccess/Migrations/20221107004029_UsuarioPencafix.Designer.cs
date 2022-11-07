@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using tupenca_back.DataAccess;
 
@@ -11,9 +12,10 @@ using tupenca_back.DataAccess;
 namespace tupenca_back.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221107004029_UsuarioPencafix")]
+    partial class UsuarioPencafix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,9 +68,6 @@ namespace tupenca_back.DataAccess.Migrations
                     b.Property<DateTime>("FinishDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -91,7 +90,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Image")
+                    b.Property<string>("ImagenName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nombre")
@@ -123,9 +122,6 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.Property<int>("PlanId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("RUT")
                         .IsRequired()
@@ -184,9 +180,6 @@ namespace tupenca_back.DataAccess.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -255,9 +248,6 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.Property<DateTime>("FechaInicial")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -374,6 +364,7 @@ namespace tupenca_back.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Image")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PuntajeId")
@@ -413,9 +404,6 @@ namespace tupenca_back.DataAccess.Migrations
                     b.Property<byte[]>("HashedPassword")
                         .HasMaxLength(64)
                         .HasColumnType("varbinary(64)");
-
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("PasswordSalt")
                         .HasMaxLength(128)
@@ -525,9 +513,6 @@ namespace tupenca_back.DataAccess.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("PencaId")
                         .HasColumnType("int");

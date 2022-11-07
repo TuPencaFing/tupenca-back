@@ -21,14 +21,29 @@ namespace tupenca_back.Controllers
         private readonly ILogger<PencaCompartidaController> _logger;
         public readonly IMapper _mapper;
         private readonly PencaService _pencaService;
+        private readonly PrediccionService _prediccionService;
+        private readonly CampeonatoService _campeonatoService;
+        private readonly EquipoService _equipoService;
+        private readonly ResultadoService _resultadoService;
+        private readonly PuntajeService _puntajeService;
 
         public PencaCompartidaController(ILogger<PencaCompartidaController> logger,
                                IMapper mapper,
-                               PencaService pencaService)
+                               PencaService pencaService,
+                               PrediccionService prediccionService,
+                               CampeonatoService campeonatoService,
+                               EquipoService equipoService,
+                               ResultadoService resultadoService,
+                               PuntajeService puntajeService)
         {
             _logger = logger;
             _mapper = mapper;
             _pencaService = pencaService;
+            _prediccionService = prediccionService;
+            _campeonatoService = campeonatoService;
+            _equipoService = equipoService;
+            _resultadoService = resultadoService;
+            _puntajeService = puntajeService;
         }
 
         //GET: api/pencas-compartidas
@@ -195,6 +210,22 @@ namespace tupenca_back.Controllers
             }
         }
 
+        [HttpGet("{id}/usuarios")]
+        public ActionResult<IEnumerable<UsuarioScore>> GetUsuariosPencaCompartida(int id)
+        {
+            try
+            {
+                var usuarios = _prediccionService.GetUsuariosByPenca(id);
+                return Ok(usuarios);
+
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+
+        }
+
         // PATCH: api/deportes/1/image        
         [HttpPatch("{id}/image")]
         public ActionResult UploadImage(int id, [FromForm] ImagenDto imagenDto)
@@ -211,6 +242,72 @@ namespace tupenca_back.Controllers
             }
         }
 
+
+        [HttpGet("{id}/info")]
+        public ActionResult<PencaInfoDto> GetInfoPenca(int id)
+        {
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var penca = _pencaService.findPencaCompartidaById(id);
+                if (penca == null)
+                {
+                    return NotFound();
+                }
+                PencaInfoDto pencainfo = new PencaInfoDto();                
+                pencainfo.Id = penca.Id;
+                pencainfo.PencaTitle = penca.Title;
+                pencainfo.PencaDescription = penca.Description;
+                pencainfo.Image = penca.Image;
+                pencainfo.Pozo = penca.Pozo;
+                var campeonato = _campeonatoService.findCampeonatoById(penca.Campeonato.Id);
+                pencainfo.CampeonatoName = campeonato.Name;
+                pencainfo.StartDate = campeonato.StartDate;
+                pencainfo.FinishDate = campeonato.FinishDate;
+                DeporteDto deportedto = new DeporteDto();
+                deportedto.Id = campeonato.Deporte.Id;
+                deportedto.Nombre = campeonato.Deporte.Nombre;
+                deportedto.Image = campeonato.Deporte.Image;
+                pencainfo.Deporte = deportedto;                
+                List<EventoPrediccionDto> eventos = new List<EventoPrediccionDto>();
+                var puntaje = _puntajeService.getPuntajeById(penca.PuntajeId);
+                int? puntajeTotal = 0;
+                foreach (var evento in penca.Campeonato.Eventos)
+                {
+                    var prediccion = _prediccionService.GetPrediccionByUsuarioEvento(Convert.ToInt32(userId), evento.Id, penca.Id);
+                    var resultado = _resultadoService.getResultadoByEventoId(evento.Id);
+                    var equipolocal = _equipoService.getEquipoById(evento.EquipoLocalId);
+                    var equipovisitante = _equipoService.getEquipoById(evento.EquipoVisitanteId);
+                    
+                    EventoPrediccionDto eventoinfo = new EventoPrediccionDto
+                    {
+                        Id = evento.Id,
+                        EquipoLocal = equipolocal,
+                        EquipoVisitante = equipovisitante,
+                        FechaInicial = evento.FechaInicial,
+                        Resultado = resultado,
+                        Prediccion = prediccion
+                    };
+                    eventos.Add(eventoinfo);
+                    if (prediccion != null)
+                    {
+                        if (prediccion.Score != null)
+                        {
+                            puntajeTotal += prediccion.Score;
+                        }
+                    }
+                }
+                pencainfo.Eventos = eventos;
+                pencainfo.PuntajeTotal = puntajeTotal;                
+
+                return Ok(pencainfo);
+                
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+        }       
     }
 }
 
