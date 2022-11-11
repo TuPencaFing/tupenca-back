@@ -12,6 +12,8 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using tupenca_back.Utilities.EmailService;
+using Quartz;
+using tupenca_back.Services.Scheduler;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
@@ -68,6 +70,22 @@ builder.Services.AddSingleton(emailConfig);
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 
+builder.Services.AddQuartz(q =>
+{
+    q.UseMicrosoftDependencyInjectionScopedJobFactory();
+
+    var jobKey = new JobKey("ResultadoJob");
+
+    q.AddJob<ResultadoJob>(opts => opts.WithIdentity(jobKey));
+
+    q.AddTrigger(opts => opts
+        .ForJob(jobKey)
+        .WithIdentity("ResultadoJob-trigger")
+        .WithCronSchedule("0 * * * * ?"));
+
+});
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
+
 // Repository
 builder.Services.AddScoped<ICampeonatoRepository, CampeonatoRepository>();
 builder.Services.AddScoped<IDeporteRepository, DeporteRepository>();
@@ -109,12 +127,6 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();
 
 
-//Image create directory
-var commonpath = Path.Combine(app.Environment.ContentRootPath, "Images");
-if (!System.IO.Directory.Exists(commonpath))
-{
-    System.IO.Directory.CreateDirectory(commonpath);
-}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
