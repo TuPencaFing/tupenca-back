@@ -201,26 +201,32 @@ namespace tupenca_back.Controllers
         }
 
         [HttpPost("{id}/add")]
-        public async Task<IActionResult> AddUsuarioToPencaCompartidaAsync(int id, [FromQuery] string token)
+        public async Task<IActionResult> AddUsuarioToPencaCompartidaAsync(int id, [FromBody] PagosTarjetaDto pago)
         {
             try
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                //_pencaService.AddUsuarioToPencaCompartida(Convert.ToInt32(userId), id);
-                
+                var penca = _pencaService.findPencaCompartidaById(id);
+                if (penca == null) return BadRequest();
+                if (penca.CostEntry != pago.transaction_amount) return BadRequest();
                 //pago
-                MercadoPagoConfig.AccessToken = "TEST-5851703831154168-110322-406893c0b92140fa4195a7cf1c9fbc9c-1228301365";
-                
+                MercadoPagoConfig.AccessToken = "TEST-5999360588657313-111213-86de986d139e8b73944ea408b6e3478f-1228301365";
+
+
                 var paymentRequest = new PaymentCreateRequest
                 {
-                    TransactionAmount = 10,
-                    Token = token,
-                    Description = "Payment description",
-                    Installments = 1,
-                    PaymentMethodId = "visa",
+                    TransactionAmount = pago.transaction_amount,
+                    Token = pago.token,
+                    Installments = pago.installments,
+                    PaymentMethodId = pago.payment_method_id,
                     Payer = new PaymentPayerRequest
                     {
-                        Email = "test.payer@email.com",
+                        Email = pago.payer.email,
+                        Identification = new IdentificationRequest
+                        {
+                            Type = pago.payer.identification.type,
+                            Number = pago.payer.identification.number,
+                        }
                     }
                 };
 
@@ -229,10 +235,19 @@ namespace tupenca_back.Controllers
 
                 var client = new PaymentClient();
                 Payment payment = await client.CreateAsync(paymentRequest);
-
                 Console.WriteLine(payment.Status);
-
-                return Ok();
+                if (payment.Status == "approved")
+                {
+                    _pencaService.AddUsuarioToPencaCompartida(Convert.ToInt32(userId), id);
+                    //habilitar usuario
+                    _pencaService.HabilitarUsuario(id, Convert.ToInt32(userId));
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }             
+                              
 
             }
             catch (Exception e)

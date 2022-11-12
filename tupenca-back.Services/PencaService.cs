@@ -288,6 +288,13 @@ namespace tupenca_back.Services
             }
 
         }
+
+
+        public void HabilitarUsuario (int pencaId, int usuarioId)
+        {
+            _usuariopencaRepository.HabilitarUsuario(pencaId, usuarioId);
+        }
+
     }
 }
 

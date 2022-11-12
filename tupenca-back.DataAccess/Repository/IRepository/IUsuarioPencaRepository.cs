@@ -24,7 +24,9 @@ namespace tupenca_back.DataAccess.Repository.IRepository
 
         int GetCantUsuariosPenca(int id);
 
-
         void Save();
+
+        public void HabilitarUsuario(int pencaId, int usuarioId);
+
     }
 }

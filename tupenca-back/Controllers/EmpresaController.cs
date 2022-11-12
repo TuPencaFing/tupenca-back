@@ -6,6 +6,11 @@ using AutoMapper;
 using tupenca_back.DataAccess.Migrations;
 using System.Net;
 using tupenca_back.Services.Exceptions;
+using MercadoPago.Client.Common;
+using MercadoPago.Client.Payment;
+using MercadoPago.Config;
+using MercadoPago.Resource.Payment;
+using MercadoPago.Resource.User;
 
 namespace tupenca_back.Controllers
 {
@@ -70,7 +75,7 @@ namespace tupenca_back.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<Empresa> CreateEmpresa(EmpresaDto empresaDto)
+        public async Task<ActionResult<Empresa>> CreateEmpresaAsync(EmpresaDto empresaDto, PagosTarjetaDto pago)
         {
             Empresa empresa = new Empresa();
             empresa.RUT = empresaDto.RUT;
@@ -89,10 +94,44 @@ namespace tupenca_back.Controllers
                 return BadRequest("La empresa ingresada ya existe");
             }
 
-            _empresaService.CreateEmpresa(empresa);
+            if (plan.Cost != pago.transaction_amount) return BadRequest();
 
-            //return CreatedAtAction("GetEmpresaById", new { id = empresa.Id }, _mapper.Map<EmpresaDto>(empresa));
-            return CreatedAtAction("GetEmpresaById", new { id = empresa.Id }, empresa);
+            //pago
+            MercadoPagoConfig.AccessToken = "TEST-5999360588657313-111213-86de986d139e8b73944ea408b6e3478f-1228301365";
+
+            var paymentRequest = new PaymentCreateRequest
+            {
+                TransactionAmount = pago.transaction_amount,
+                Token = pago.token,
+                Installments = pago.installments,
+                PaymentMethodId = pago.payment_method_id,
+                Payer = new PaymentPayerRequest
+                {
+                    Email = pago.payer.email,
+                    Identification = new IdentificationRequest
+                    {
+                        Type = pago.payer.identification.type,
+                        Number = pago.payer.identification.number,
+                    }
+                }
+            };
+
+            Console.WriteLine("obtengo datos pago:");
+            Console.WriteLine(paymentRequest.Payer.Email);
+
+            var client = new PaymentClient();
+            Payment payment = await client.CreateAsync(paymentRequest);
+            Console.WriteLine(payment.Status);
+            if (payment.Status == "approved")
+            {
+                _empresaService.CreateEmpresa(empresa);
+                //return CreatedAtAction("GetEmpresaById", new { id = empresa.Id }, _mapper.Map<EmpresaDto>(empresa));
+                return CreatedAtAction("GetEmpresaById", new { id = empresa.Id }, empresa);
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
 

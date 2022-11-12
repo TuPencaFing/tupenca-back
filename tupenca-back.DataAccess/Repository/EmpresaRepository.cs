@@ -27,6 +27,7 @@ namespace tupenca_back.DataAccess.Repository
         {
             return _appDbContext.Empresas.Where(filter)
                 .Include(empresa => empresa.Plan)
+                .Include(empresa => empresa.Funcionarios)
                 .FirstOrDefault();
         }
         public IEnumerable<Empresa> GetEmpresas()
