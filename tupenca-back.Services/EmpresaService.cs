@@ -66,6 +66,11 @@ namespace tupenca_back.Services
             UpdateEmpresa(empresa);
         }
 
+        public int CantEmpresas()
+        {
+            return _empresaRepository.GetCantEmpresas();
+        }
+
     }
 }
 

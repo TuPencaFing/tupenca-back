@@ -31,7 +31,7 @@ namespace tupenca_back.DataAccess
         public DbSet<UsuarioPenca>? UsuariosPencas { get; set; }
         public DbSet<UserInviteToken>? UserInviteTokens { get; set; }
         public DbSet<Puntaje>? Puntajes { get; set; }
-
+        public DbSet<Foro>? Foros { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -168,9 +168,9 @@ namespace tupenca_back.DataAccess
 
             #region PlanSeed
             modelBuilder.Entity<Plan>().HasData(
-                new Plan { Id = 1, CantPencas = 1, CantUser = 50, LookAndFeel = 1, PercentageCost = 10 },
-                new Plan { Id = 2, CantPencas = 5, CantUser = 100, LookAndFeel = 2, PercentageCost = 10 },
-                new Plan { Id = 3, CantPencas = 10, CantUser = 500, LookAndFeel = 2, PercentageCost = 10 });
+                new Plan { Id = 1, CantPencas = 1, CantUser = 50, LookAndFeel = 1, PercentageCost = 10 , Cost = 100 },
+                new Plan { Id = 2, CantPencas = 5, CantUser = 100, LookAndFeel = 2, PercentageCost = 10, Cost = 200 },
+                new Plan { Id = 3, CantPencas = 10, CantUser = 500, LookAndFeel = 2, PercentageCost = 10, Cost = 500 });
             #endregion
 
             #region EmpresaSeed

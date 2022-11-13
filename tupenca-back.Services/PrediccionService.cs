@@ -85,6 +85,10 @@ namespace tupenca_back.Services
             _prediccionRepository.UpdateScore(eventoId, resultado);
         }
 
+        public IEnumerable<Prediccion> getPrediccionesByEvento(int eventoId, int pencaId)
+        {
+            return _prediccionRepository.getPrediccionesByEvento(eventoId, pencaId);
+        }
 
     }
 }

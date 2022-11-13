@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using tupenca_back.DataAccess;
 
@@ -11,9 +12,10 @@ using tupenca_back.DataAccess;
 namespace tupenca_back.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221112223749_FuncionarioFix")]
+    partial class FuncionarioFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -405,31 +407,6 @@ namespace tupenca_back.DataAccess.Migrations
                             IsEmpateValid = false,
                             IsPuntajeEquipoValid = false
                         });
-                });
-
-            modelBuilder.Entity("tupenca_back.Model.Foro", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PencaId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UsuarioId");
-
-                    b.ToTable("Foros");
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Penca", b =>
@@ -895,17 +872,6 @@ namespace tupenca_back.DataAccess.Migrations
                     b.Navigation("EquipoLocal");
 
                     b.Navigation("EquipoVisitante");
-                });
-
-            modelBuilder.Entity("tupenca_back.Model.Foro", b =>
-                {
-                    b.HasOne("tupenca_back.Model.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Penca", b =>

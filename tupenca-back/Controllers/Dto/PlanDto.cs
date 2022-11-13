@@ -15,6 +15,10 @@ namespace tupenca_back.Controllers.Dto
 
         public int LookAndFeel { get; set; }
 
+        public int CantPencas { get; set; }
+
+        public int Cost { get; set; }
+
     }
 }
 

@@ -22,30 +22,52 @@ namespace tupenca_back.Controllers
         private readonly PencaService _pencaService;
         private readonly FuncionarioService _funcionarioService;
         private readonly PlanService _planService;
+        private readonly CampeonatoService _campeonatoService;
+        private readonly PuntajeService _puntajeService;
+        private readonly PrediccionService _prediccionService;
+        private readonly ResultadoService _resultadoService;
+        private readonly EquipoService _equipoService;
 
         public PencaEmpresaController(ILogger<PencaEmpresaController> logger,
                                IMapper mapper,
                                PencaService pencaService,
                                FuncionarioService funcionarioService,
-                               PlanService planService)
+                               PlanService planService,
+                               CampeonatoService campeonatoService,
+                               PuntajeService puntajeService,
+                               PrediccionService prediccionService,
+                               ResultadoService resultadoService,
+                               EquipoService equipoService)
         {
             _logger = logger;
             _mapper = mapper;
             _pencaService = pencaService;
             _funcionarioService = funcionarioService;
             _planService = planService;
+            _campeonatoService = campeonatoService;
+            _puntajeService = puntajeService;
+            _prediccionService = prediccionService;
+            _resultadoService = resultadoService;
+            _equipoService = equipoService;
         }
 
         //GET: api/pencas-empresas
         [HttpGet]
-        public ActionResult<IEnumerable<PencaEmpresaDto>> GetPencasEmpresa()
+        public ActionResult<IEnumerable<PencaEmpresaDto>> GetPencasEmpresa([FromQuery] int id)
         {
             try
             {
+                if (id != null)
+                {
+                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    var pencasEmpresa = _pencaService.GetPencasFromEmpresaByUsuario(id, Convert.ToInt32(userId));
+                    var pencasEmpresaDto = _mapper.Map<List<PencaEmpresaDto>>(pencasEmpresa);
+                    return Ok(pencasEmpresa);
+
+                }
+
                 var pencas = _pencaService.GetPencaEmpresas();
-
                 var pencasDto = _mapper.Map<List<PencaEmpresaDto>>(pencas);
-
                 return Ok(pencasDto);
             }
             catch (Exception e)
@@ -200,6 +222,89 @@ namespace tupenca_back.Controllers
             {
                 throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
             }
+        }
+
+
+        [HttpGet("{id}/info")]
+        public ActionResult<PencaInfoDto> GetInfoPenca(int id)
+        {
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var penca = _pencaService.findPencaEmpresaById(id);
+                if (penca == null)
+                {
+                    return NotFound();
+                }
+                PencaInfoDto pencainfo = new PencaInfoDto();
+                pencainfo.Id = penca.Id;
+                pencainfo.PencaTitle = penca.Title;
+                pencainfo.PencaDescription = penca.Description;
+                pencainfo.Image = penca.Image;               
+                var campeonato = _campeonatoService.findCampeonatoById(penca.Campeonato.Id);
+                pencainfo.CampeonatoName = campeonato.Name;
+                pencainfo.StartDate = campeonato.StartDate;
+                pencainfo.FinishDate = campeonato.FinishDate;
+                DeporteDto deportedto = new DeporteDto();
+                deportedto.Id = campeonato.Deporte.Id;
+                deportedto.Nombre = campeonato.Deporte.Nombre;
+                deportedto.Image = campeonato.Deporte.Image;
+                pencainfo.Deporte = deportedto;
+                List<EventoPrediccionDto> eventos = new List<EventoPrediccionDto>();
+                var puntaje = _puntajeService.getPuntajeById(penca.PuntajeId);
+                int? puntajeTotal = 0;
+                foreach (var evento in penca.Campeonato.Eventos)
+                {
+                    var prediccion = _prediccionService.GetPrediccionByUsuarioEvento(Convert.ToInt32(userId), evento.Id, penca.Id);
+                    var resultado = _resultadoService.getResultadoByEventoId(evento.Id);
+                    var equipolocal = _equipoService.getEquipoById(evento.EquipoLocalId);
+                    var equipovisitante = _equipoService.getEquipoById(evento.EquipoVisitanteId);
+
+                    EventoPrediccionDto eventoinfo = new EventoPrediccionDto
+                    {
+                        Id = evento.Id,
+                        EquipoLocal = equipolocal,
+                        EquipoVisitante = equipovisitante,
+                        FechaInicial = evento.FechaInicial,
+                        Resultado = resultado,
+                        Prediccion = prediccion
+                    };
+                    eventos.Add(eventoinfo);
+                    if (prediccion != null)
+                    {
+                        if (prediccion.Score != null)
+                        {
+                            puntajeTotal += prediccion.Score;
+                        }
+                    }
+                }
+                pencainfo.Eventos = eventos;
+                pencainfo.PuntajeTotal = puntajeTotal;
+
+                return Ok(pencainfo);
+
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+
+        [HttpGet("{id}/usuarios")]
+        public ActionResult<IEnumerable<UsuarioScore>> GetUsuariosPencaCompartida(int id)
+        {
+            try
+            {
+                var usuarios = _prediccionService.GetUsuariosByPenca(id);
+                return Ok(usuarios);
+
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+
         }
 
     }
