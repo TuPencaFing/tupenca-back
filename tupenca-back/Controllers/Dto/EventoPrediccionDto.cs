@@ -23,5 +23,11 @@ namespace tupenca_back.Controllers.Dto
 
         public bool IsPuntajeEquipoValid { get; set; } = true;
 
+        public decimal? PorcentajeEmpate { get; set; }
+
+        public decimal? PorcentajeLocal { get; set; }
+
+        public decimal? PorcentajeVisitante { get; set; }
+
     }
 }

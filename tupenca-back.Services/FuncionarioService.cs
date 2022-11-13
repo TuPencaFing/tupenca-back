@@ -27,5 +27,11 @@ namespace tupenca_back.Services
         {
             return _db.createInviteToken( id,  pencaId);
         }
+
+        public IEnumerable<Funcionario> getFuncionariosByEmpresa(int empresaId)
+        {
+            return _db.getFuncionariosByEmpresa(empresaId);
+        }
+
     }
 }

@@ -42,12 +42,13 @@ namespace tupenca_back.DataAccess.Repository
                 ).ToList();
         }
 
-        public IEnumerable<PencaEmpresa> GetUsuarioPencasEmpresa(int id)
+        public IEnumerable<PencaEmpresa> GetUsuarioPencasEmpresa(int empresaid, int id)
         {
             return _appDbContext.UsuariosPencas
                 .Where(p => p.UsuarioId == id && p.habilitado == true)
                 .Select(p => p.Penca)
                 .Join(_appDbContext.PencaEmpresas, penca => penca.Id, p => p.Id, (penca, p) => p)
+                .Where(pe => pe.Empresa.Id == empresaid)
                 .ToList();
         }
 
@@ -102,5 +103,6 @@ namespace tupenca_back.DataAccess.Repository
             _appDbContext.UsuariosPencas.Update(userpenca);
             _appDbContext.SaveChanges();
         }
+
     }
 }

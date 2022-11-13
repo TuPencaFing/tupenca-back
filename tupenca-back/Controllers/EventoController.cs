@@ -63,19 +63,42 @@ namespace tupenca_back.Controllers
                 return NoContent();
             }
 
-            List<EventoPrediccionDto> eventosRet = new List<EventoPrediccionDto>();            
+            List<EventoPrediccionDto> eventosRet = new List<EventoPrediccionDto>();
 
             foreach (var evento in eventos)
             {
                 var prediccion = _prediccionService.GetPrediccionByUsuarioEvento(Convert.ToInt32(userId), evento.Id, penca);
                 var equipolocal = _equipoService.getEquipoById(evento.EquipoLocalId);
                 var equipovisitante = _equipoService.getEquipoById(evento.EquipoVisitanteId);
+
                 EventoPrediccionDto eventoret = new EventoPrediccionDto { Id = evento.Id, EquipoLocal = equipolocal,
                                                                          EquipoVisitante = equipovisitante, FechaInicial = evento.FechaInicial,
                                                                          Prediccion = prediccion, IsEmpateValid = evento.IsEmpateValid,
                                                                          IsPuntajeEquipoValid = evento.IsPuntajeEquipoValid};
+
+
+
+                var cantEmpate = 0;
+                var cantVictoriaLocal = 0;
+                var cantVictoriaVisitante = 0;
+                var predicciones = _prediccionService.getPrediccionesByEvento(evento.Id, penca);
+                foreach (var elem in predicciones)
+                {
+                    if (elem != null)
+                    {
+                        if (elem.prediccion == 0) cantEmpate++;
+                        if (elem.prediccion == TipoResultado.VictoriaEquipoLocal) cantVictoriaLocal++;
+                        if (elem.prediccion == TipoResultado.VictoriaEquipoVisitante) cantVictoriaVisitante++;
+                    }
+                    var totalpred = cantEmpate + cantVictoriaLocal + cantVictoriaVisitante;
+                    eventoret.PorcentajeEmpate = ((cantEmpate * 100) / totalpred);
+                    eventoret.PorcentajeLocal = ((cantVictoriaLocal * 100) / totalpred);
+                    eventoret.PorcentajeVisitante = ((cantVictoriaVisitante * 100) / totalpred);
+                }
+
                 eventosRet.Add(eventoret);
             }
+
             return Ok(eventosRet);
         }
 

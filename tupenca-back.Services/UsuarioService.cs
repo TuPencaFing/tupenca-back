@@ -92,6 +92,12 @@ namespace tupenca_back.Services
             return user;
 
         }
+
+
+        public int GetCantUsuarios()
+        {
+            return _db.getCantUsuarios();
+        }
     }
 
     

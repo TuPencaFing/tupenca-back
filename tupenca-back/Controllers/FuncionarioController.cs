@@ -147,6 +147,15 @@ namespace tupenca_back.Controllers
 
 
         }
+
+        //GET: api/user
+        [HttpGet("empresa/{id}"), AllowAnonymous]
+        public ActionResult<IEnumerable<Funcionario>> GetFuncionariosByEmpresa(int id)
+        {
+            return Ok(_funcionarioService.getFuncionariosByEmpresa(id));
+        }
+
+
     }
 
 

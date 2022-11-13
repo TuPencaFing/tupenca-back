@@ -3,14 +3,12 @@ using tupenca_back.Services;
 using tupenca_back.Model;
 using tupenca_back.Controllers.Dto;
 using AutoMapper;
-using tupenca_back.DataAccess.Migrations;
 using System.Net;
 using tupenca_back.Services.Exceptions;
 using MercadoPago.Client.Common;
 using MercadoPago.Client.Payment;
 using MercadoPago.Config;
 using MercadoPago.Resource.Payment;
-using MercadoPago.Resource.User;
 
 namespace tupenca_back.Controllers
 {
@@ -36,10 +34,13 @@ namespace tupenca_back.Controllers
 
         //GET: api/empresas        
         [HttpGet]
-        public ActionResult<IEnumerable<Empresa>> GetEmpresas()
+        public ActionResult<IEnumerable<EmpresaCountDto>> GetEmpresas()
         {
             var empresas = _empresaService.getEmpresas();
-            return Ok(empresas);
+            EmpresaCountDto empresasCount = new EmpresaCountDto();
+            empresasCount.Empresas = empresas;
+            empresasCount.CantEmpresas = _empresaService.CantEmpresas();
+            return Ok(empresasCount);
         }
 
         //GET: api/empresas/nuevas        
@@ -75,7 +76,7 @@ namespace tupenca_back.Controllers
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Empresa>> CreateEmpresaAsync(EmpresaDto empresaDto, PagosTarjetaDto pago)
+        public async Task<ActionResult<Empresa>> CreateEmpresaAsync(EmpresaPaymentDto empresaDto)
         {
             Empresa empresa = new Empresa();
             empresa.RUT = empresaDto.RUT;
@@ -94,24 +95,26 @@ namespace tupenca_back.Controllers
                 return BadRequest("La empresa ingresada ya existe");
             }
 
-            if (plan.Cost != pago.transaction_amount) return BadRequest();
+            
+            
+            if (plan.Cost != empresaDto.Pago.transaction_amount) return BadRequest();
 
             //pago
             MercadoPagoConfig.AccessToken = "TEST-5999360588657313-111213-86de986d139e8b73944ea408b6e3478f-1228301365";
 
             var paymentRequest = new PaymentCreateRequest
             {
-                TransactionAmount = pago.transaction_amount,
-                Token = pago.token,
-                Installments = pago.installments,
-                PaymentMethodId = pago.payment_method_id,
+                TransactionAmount = empresaDto.Pago.transaction_amount,
+                Token = empresaDto.Pago.token,
+                Installments = empresaDto.Pago.installments,
+                PaymentMethodId = empresaDto.Pago.payment_method_id,
                 Payer = new PaymentPayerRequest
                 {
-                    Email = pago.payer.email,
+                    Email = empresaDto.Pago.payer.email,
                     Identification = new IdentificationRequest
                     {
-                        Type = pago.payer.identification.type,
-                        Number = pago.payer.identification.number,
+                        Type = empresaDto.Pago.payer.identification.type,
+                        Number = empresaDto.Pago.payer.identification.number,
                     }
                 }
             };
@@ -132,6 +135,13 @@ namespace tupenca_back.Controllers
             {
                 return BadRequest();
             }
+            
+            /*
+            _empresaService.CreateEmpresa(empresa);
+
+            //return CreatedAtAction("GetEmpresaById", new { id = empresa.Id }, _mapper.Map<EmpresaDto>(empresa));
+            return CreatedAtAction("GetEmpresaById", new { id = empresa.Id }, empresa);
+            */
         }
 
 

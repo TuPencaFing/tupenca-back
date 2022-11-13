@@ -12,8 +12,6 @@ using MercadoPago.Client.Common;
 using MercadoPago.Client.Payment;
 using MercadoPago.Config;
 using MercadoPago.Resource.Payment;
-using MercadoPago.Resource.PaymentMethod;
-using Newtonsoft.Json.Linq;
 
 namespace tupenca_back.Controllers
 {
