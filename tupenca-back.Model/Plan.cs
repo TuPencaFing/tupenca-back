@@ -13,7 +13,11 @@ namespace tupenca_back.Model
         [Required]
         public int CantUser { get; set; }
 
+        [Required]
         public int CantPencas { get; set; }
+
+        [Required]
+        public int Cost {get; set; }
 
         [Required]
         [Precision(18, 2)]

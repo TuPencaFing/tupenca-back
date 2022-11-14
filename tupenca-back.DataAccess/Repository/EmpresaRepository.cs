@@ -23,6 +23,13 @@ namespace tupenca_back.DataAccess.Repository
                 .Count();
         }
 
+        public int GetCantEmpresas()
+        {
+            return _appDbContext.Empresas
+                   .Count();
+        }
+
+
         public Empresa GetFirst(Expression<Func<Empresa, bool>> filter)
         {
             return _appDbContext.Empresas.Where(filter)

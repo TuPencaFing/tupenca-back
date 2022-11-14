@@ -13,5 +13,8 @@ namespace tupenca_back.DataAccess.Repository.IRepository
         UserInviteToken getUserInviteToken(string access_token);
         void RemoveUserToken(UserInviteToken usertoken);
         void Save();
+        IEnumerable<Funcionario> getFuncionariosByEmpresa(int empresaId1);
+
+        int getCantUsuarios();
     }
 }

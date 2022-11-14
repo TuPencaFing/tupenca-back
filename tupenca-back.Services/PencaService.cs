@@ -288,6 +288,25 @@ namespace tupenca_back.Services
             }
 
         }
+
+
+        public void HabilitarUsuario (int pencaId, int usuarioId)
+        {
+            _usuariopencaRepository.HabilitarUsuario(pencaId, usuarioId);
+        }
+
+
+        public IEnumerable<PencaEmpresa> GetPencasFromEmpresaByUsuario(int empresaId, int usuarioId)
+        {
+            var usuario = _usuarioService.find(usuarioId);
+            if (usuario != null)
+            {
+                return _usuariopencaRepository.GetUsuarioPencasEmpresa(empresaId, usuarioId);
+            }
+            else throw new NotFoundException("Usuario no exsite");
+        }
+
+
     }
 }
 
