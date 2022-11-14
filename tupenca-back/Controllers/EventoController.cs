@@ -68,7 +68,7 @@ ILogger<EventoController> logger, EventoService eventoService, EquipoService equ
                 return NoContent();
             }
 
-            List<EventoPrediccionDto> eventosRet = new List<EventoPrediccionDto>();            
+            List<EventoPrediccionDto> eventosRet = new List<EventoPrediccionDto>();
 
             foreach (var evento in eventos)
             {
@@ -82,6 +82,27 @@ ILogger<EventoController> logger, EventoService eventoService, EquipoService equ
                                                                          EquipoVisitante = equipoVisitanteDto, FechaInicial = evento.FechaInicial,
                                                                          Prediccion = prediccionDto
                 };
+
+
+
+                var cantEmpate = 0;
+                var cantVictoriaLocal = 0;
+                var cantVictoriaVisitante = 0;
+                var predicciones = _prediccionService.getPrediccionesByEvento(evento.Id, penca);
+                foreach (var elem in predicciones)
+                {
+                    if (elem != null)
+                    {
+                        if (elem.prediccion == 0) cantEmpate++;
+                        if (elem.prediccion == TipoResultado.VictoriaEquipoLocal) cantVictoriaLocal++;
+                        if (elem.prediccion == TipoResultado.VictoriaEquipoVisitante) cantVictoriaVisitante++;
+                    }
+                    var totalpred = cantEmpate + cantVictoriaLocal + cantVictoriaVisitante;
+                    eventoret.PorcentajeEmpate = ((cantEmpate * 100) / totalpred);
+                    eventoret.PorcentajeLocal = ((cantVictoriaLocal * 100) / totalpred);
+                    eventoret.PorcentajeVisitante = ((cantVictoriaVisitante * 100) / totalpred);
+                }
+
                 eventosRet.Add(eventoret);
             }
             return Ok(eventosRet);
@@ -116,7 +137,6 @@ ILogger<EventoController> logger, EventoService eventoService, EquipoService equ
             evento.EquipoLocalId = eventoDto.EquipoLocalId;
             evento.EquipoVisitanteId = eventoDto.EquipoVisitanteId;
             evento.FechaInicial = eventoDto.FechaInicial;
-
 
             if (!_eventoService.IsEventoCorrect(evento))
                 return BadRequest("No puede tener los mismos equipos enfrentados");

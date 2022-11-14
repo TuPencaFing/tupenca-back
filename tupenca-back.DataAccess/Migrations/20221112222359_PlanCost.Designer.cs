@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using tupenca_back.DataAccess;
 
@@ -11,9 +12,10 @@ using tupenca_back.DataAccess;
 namespace tupenca_back.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221112222359_PlanCost")]
+    partial class PlanCost
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,8 +62,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("DeporteId")
-                        .IsRequired()
+                    b.Property<int>("DeporteId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("FinishDate")
@@ -82,16 +83,6 @@ namespace tupenca_back.DataAccess.Migrations
                     b.HasIndex("DeporteId");
 
                     b.ToTable("Campeonatos");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 10,
-                            DeporteId = 1,
-                            FinishDate = new DateTime(2022, 11, 28, 10, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Torneo Clausura",
-                            StartDate = new DateTime(2022, 11, 20, 13, 0, 0, 0, DateTimeKind.Unspecified)
-                        });
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Deporte", b =>
@@ -122,7 +113,7 @@ namespace tupenca_back.DataAccess.Migrations
                         new
                         {
                             Id = 2,
-                            Nombre = "Futbol"
+                            Nombre = "Tennis"
                         });
                 });
 
@@ -418,45 +409,6 @@ namespace tupenca_back.DataAccess.Migrations
                         });
                 });
 
-            modelBuilder.Entity("tupenca_back.Model.Foro", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PencaId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UsuarioId");
-
-                    b.ToTable("Foros");
-                });
-
-            modelBuilder.Entity("tupenca_back.Model.NotificationUserDeviceId", b =>
-                {
-                    b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<string>("deviceId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("NotificationUserDeviceIds");
-                });
-
             modelBuilder.Entity("tupenca_back.Model.Penca", b =>
                 {
                     b.Property<int>("Id")
@@ -569,7 +521,7 @@ namespace tupenca_back.DataAccess.Migrations
                             Id = 1,
                             CantPencas = 1,
                             CantUser = 50,
-                            Cost = 100,
+                            Cost = 0,
                             LookAndFeel = 1,
                             PercentageCost = 10m
                         },
@@ -578,7 +530,7 @@ namespace tupenca_back.DataAccess.Migrations
                             Id = 2,
                             CantPencas = 5,
                             CantUser = 100,
-                            Cost = 200,
+                            Cost = 0,
                             LookAndFeel = 2,
                             PercentageCost = 10m
                         },
@@ -587,7 +539,7 @@ namespace tupenca_back.DataAccess.Migrations
                             Id = 3,
                             CantPencas = 10,
                             CantUser = 500,
-                            Cost = 500,
+                            Cost = 0,
                             LookAndFeel = 2,
                             PercentageCost = 10m
                         });
@@ -653,14 +605,6 @@ namespace tupenca_back.DataAccess.Migrations
                     b.HasIndex("PencaId");
 
                     b.ToTable("Premios");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 10,
-                            Percentage = 100m,
-                            Position = 1
-                        });
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Puntaje", b =>
@@ -680,14 +624,6 @@ namespace tupenca_back.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Puntajes");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 10,
-                            Resultado = 1,
-                            ResultadoExacto = 3
-                        });
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Resultado", b =>
@@ -828,19 +764,6 @@ namespace tupenca_back.DataAccess.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasDiscriminator().HasValue("PencaCompartida");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 12,
-                            CampeonatoId = 10,
-                            Description = "Gana muchos premios",
-                            PuntajeId = 10,
-                            Title = "Penca Movistar",
-                            Commission = 0m,
-                            CostEntry = 0m,
-                            Pozo = 0m
-                        });
                 });
 
             modelBuilder.Entity("tupenca_back.Model.PencaEmpresa", b =>
@@ -949,17 +872,6 @@ namespace tupenca_back.DataAccess.Migrations
                     b.Navigation("EquipoLocal");
 
                     b.Navigation("EquipoVisitante");
-                });
-
-            modelBuilder.Entity("tupenca_back.Model.Foro", b =>
-                {
-                    b.HasOne("tupenca_back.Model.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Penca", b =>

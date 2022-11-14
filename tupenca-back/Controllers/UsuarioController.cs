@@ -34,9 +34,12 @@ namespace tupenca_back.Controllers
 
         //GET: api/user
         [HttpGet, AllowAnonymous]
-        public ActionResult<IEnumerable<Usuario>> GetUsuarios()
+        public ActionResult<UsuarioCountDto> GetUsuarios()
         {
-            return Ok(_userService.get());
+            UsuarioCountDto usuarios = new UsuarioCountDto();
+            usuarios.Usuarios = _userService.get();
+            usuarios.CantUsuarios = _userService.GetCantUsuarios();
+            return Ok(usuarios);
         }
         //GET: api/user/1
         [HttpGet("{id}"), AllowAnonymous]

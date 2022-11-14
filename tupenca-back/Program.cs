@@ -20,7 +20,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       builder =>
                       {
-                          builder.WithOrigins("http://localhost:3000", "https://gentle-pond-0db98a110.2.azurestaticapps.net", "https://yellow-forest-0c32e6110.2.azurestaticapps.net").AllowAnyMethod().AllowAnyHeader();
+                          builder.WithOrigins("http://localhost:3000", " https://admin-tupenca-tsi.azurewebsites.net", "https://tupenca-user-front.azurewebsites.net").AllowAnyMethod().AllowAnyHeader();
                       });
 });
 // Add services to the container.
@@ -83,6 +83,7 @@ builder.Services.AddScoped<IPremioRepository, PremioRepository>();
 builder.Services.AddScoped<IResultadoRepository, ResultadoRepository>();
 builder.Services.AddScoped<IUsuarioPencaRepository, UsuarioPencaRepository>();
 builder.Services.AddScoped<IPuntajeRepository, PuntajeRepository>();
+builder.Services.AddScoped<IForoRepository, ForoRepository>();
 
 
 // Service
@@ -101,6 +102,7 @@ builder.Services.AddScoped<PremioService, PremioService>();
 builder.Services.AddScoped<ResultadoService, ResultadoService>();
 builder.Services.AddScoped<UsuarioService, UsuarioService>();
 builder.Services.AddScoped<PuntajeService, PuntajeService>();
+builder.Services.AddScoped<ForoService, ForoService>();
 
 builder.Services.AddTransient<INotificationService, NotificationService>();
 builder.Services.AddHttpClient<FcmSender>();

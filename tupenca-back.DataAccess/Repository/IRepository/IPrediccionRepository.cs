@@ -1,4 +1,5 @@
-﻿using tupenca_back.Model;
+﻿using Microsoft.Extensions.Logging;
+using tupenca_back.Model;
 
 namespace tupenca_back.DataAccess.Repository.IRepository
 {
@@ -10,6 +11,8 @@ namespace tupenca_back.DataAccess.Repository.IRepository
         public void UpdateScore(int eventoId, Resultado resultado);
 
         public IEnumerable<UsuarioScore> GetUsuariosByPenca(int id);
+
+        public IEnumerable<Prediccion> getPrediccionesByEvento(int eventoId, int pencaId);
 
         void Save();
     }

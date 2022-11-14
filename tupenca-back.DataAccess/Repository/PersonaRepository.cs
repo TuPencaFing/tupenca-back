@@ -67,6 +67,15 @@ namespace tupenca_back.DataAccess.Repository
         {
             _appDbContext.UserInviteTokens.Remove(usertoken);
         }
+	public IEnumerable<Funcionario> getFuncionariosByEmpresa(int empresaId)
+        {
+            return _appDbContext.Funcionarios.Where(f => f.EmpresaId == empresaId).ToList();
+        }
+
+        public int getCantUsuarios()
+        {
+            return _appDbContext.Usuarios.Count();
+        }
 
         public List<int> getUsersWithPredictionOfEvento(int eventoId)
         {

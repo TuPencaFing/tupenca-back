@@ -26,5 +26,9 @@ namespace tupenca_back.Model
         [JsonIgnore]
         public List<Campeonato> Campeonatos { get; set; } = new List<Campeonato>();
 
+        public bool IsEmpateValid { get; set; } = true;
+
+        public bool IsPuntajeEquipoValid { get; set; } = true;
+
     }
 }

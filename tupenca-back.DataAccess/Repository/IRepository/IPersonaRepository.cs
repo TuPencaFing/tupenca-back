@@ -16,5 +16,8 @@ namespace tupenca_back.DataAccess.Repository.IRepository
         List<int> getUsersWithPredictionOfEvento(int eventoId);
         void RemoveUserToken(UserInviteToken usertoken);
         void Save();
+        IEnumerable<Funcionario> getFuncionariosByEmpresa(int empresaId1);
+
+        int getCantUsuarios();
     }
 }
