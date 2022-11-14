@@ -164,7 +164,7 @@ namespace tupenca_back.Controllers
         //Pencas de cada usuario
 
         [HttpGet("me")]
-        public ActionResult<IEnumerable<PencaCompartida>> GetPencasCompartidasByUsuario([FromQuery] bool joined)
+        public ActionResult<IEnumerable<PencaCompartida>> GetPencasCompartidasByUsuario([FromQuery] bool joined =true )
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (joined == true)

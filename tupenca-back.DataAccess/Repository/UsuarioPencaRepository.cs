@@ -60,7 +60,7 @@ namespace tupenca_back.DataAccess.Repository
                 .Select(p => p.Penca)
                 .Join(_appDbContext.PencaCompartidas, penca => penca.Id, p => p.Id, (penca, p) => p)
                 .SelectMany(p => p.Campeonato.Eventos)
-                .Where(evento => evento.FechaInicial > today & evento.FechaInicial < today.AddDays(7))
+                .Where(evento => evento.FechaInicial > today )
                 .OrderBy(evento => evento.FechaInicial)
                 .ToList();
         }
@@ -73,7 +73,7 @@ namespace tupenca_back.DataAccess.Repository
                 .Where(p => p.UsuarioId == id && p.habilitado == true)
                 .Select(p => p.Penca)
                 .SelectMany(p => p.Campeonato.Eventos)
-                .Where(evento => evento.FechaInicial > today & evento.FechaInicial < today.AddDays(7))
+                .Where(evento => evento.FechaInicial > today )
                 .OrderBy(evento => evento.FechaInicial)
                 .Distinct()
                 .Include(evento => evento.EquipoLocal)
