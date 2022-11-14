@@ -1,4 +1,5 @@
-﻿using tupenca_back.DataAccess.Repository.IRepository;
+﻿using Newtonsoft.Json.Linq;
+using tupenca_back.DataAccess.Repository.IRepository;
 using tupenca_back.Model;
 
 
@@ -65,6 +66,37 @@ namespace tupenca_back.DataAccess.Repository
         public void RemoveUserToken(UserInviteToken usertoken)
         {
             _appDbContext.UserInviteTokens.Remove(usertoken);
+        }
+
+        public List<int> getUsersWithPredictionOfEvento(int eventoId)
+        {
+            return _appDbContext.Predicciones
+             .Where(p => p.EventoId == eventoId).Select(p => p.UsuarioId).ToList();
+
+        }
+
+        public List<string> getUsersNotificationTokens(List<int> usrersId)
+        {
+            return _appDbContext.NotificationUserDeviceIds
+                               .Where(t => usrersId.Contains(t.Id)).Select(n => n.deviceId).ToList();
+        }
+
+        public void createNotificationDeviceId(int userId, string deviceId)
+        {
+            var userDeviceId = new NotificationUserDeviceId
+            {
+                Id = userId,
+                deviceId = deviceId,
+            };
+            if (_appDbContext.NotificationUserDeviceIds.Any(x => x.Id == userId))
+            {
+                _appDbContext.NotificationUserDeviceIds.Update(userDeviceId);
+            }
+            else
+            {
+                _appDbContext.NotificationUserDeviceIds.Add(userDeviceId);
+            }
+            _appDbContext.SaveChanges();
         }
     }
 }

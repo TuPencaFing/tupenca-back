@@ -31,7 +31,9 @@ namespace tupenca_back.DataAccess
         public DbSet<UsuarioPenca>? UsuariosPencas { get; set; }
         public DbSet<UserInviteToken>? UserInviteTokens { get; set; }
         public DbSet<Puntaje>? Puntajes { get; set; }
+        public DbSet<NotificationUserDeviceId>? NotificationUserDeviceIds { get; set; }
 
+        
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -67,10 +69,10 @@ namespace tupenca_back.DataAccess
 
             });
 
-
+            Deporte deporte1 = new Deporte() { Id=1,Nombre="Futbol"};
             #region DeporteSeed
             modelBuilder.Entity<Deporte>().HasData(
-                new Deporte { Id = 1, Nombre = "Futbol" });
+                deporte1);
             #endregion
 
             #region EquipoSeed
@@ -143,10 +145,14 @@ namespace tupenca_back.DataAccess
             DateTime date39 = new DateTime(2022, 12, 02, 12, 00, 00);
             DateTime date40 = new DateTime(2022, 12, 02, 16, 00, 00);
 
+
+            Evento evento1 = new Evento { Id = 1, EquipoLocalId = 1, EquipoVisitanteId = 2, FechaInicial = date1 };
+            Evento evento2 = new Evento { Id = 2, EquipoLocalId = 3, EquipoVisitanteId = 4, FechaInicial = date2 };
+
             #region EventoSeed
             modelBuilder.Entity<Evento>().HasData(
-                new Evento { Id = 1, EquipoLocalId = 1, EquipoVisitanteId = 2, FechaInicial = date1 },
-                new Evento { Id = 2, EquipoLocalId = 3, EquipoVisitanteId = 4, FechaInicial = date2 },
+               evento1,
+                evento2,
                 new Evento { Id = 3, EquipoLocalId = 7, EquipoVisitanteId = 8, FechaInicial = date14 },
                 new Evento { Id = 4, EquipoLocalId = 5, EquipoVisitanteId = 6, FechaInicial = date15 },
                 new Evento { Id = 5, EquipoLocalId = 1, EquipoVisitanteId = 3, FechaInicial = date18 },
@@ -158,6 +164,41 @@ namespace tupenca_back.DataAccess
                 new Evento { Id = 11, EquipoLocalId = 6, EquipoVisitanteId = 7, FechaInicial = date39 },
                 new Evento { Id = 12, EquipoLocalId = 8, EquipoVisitanteId = 5, FechaInicial = date39 });
             #endregion
+
+            Campeonato campeonato1 = new Campeonato
+            {
+                Id = 10,
+                Name = "Torneo Clausura",
+                StartDate = date1,
+                FinishDate = date30,
+                DeporteId = 1,
+                //Eventos = new List<Evento> { evento1, evento2 }
+            };
+            #region CampeonatoSeed
+            modelBuilder.Entity<Campeonato>().HasData(
+                campeonato1);
+            #endregion
+            Premio premios1 = new Premio { Id = 10, Position = 1, Percentage = 100};
+
+            #region PremioSeed
+            modelBuilder.Entity<Premio>().HasData(
+                premios1);
+            #endregion
+
+            Puntaje puntaje1 = new Puntaje { Id = 10, Resultado = 1, ResultadoExacto = 3};
+
+            #region PuntajeSeed
+            modelBuilder.Entity<Puntaje>().HasData(
+                puntaje1);
+            #endregion
+
+            #region PencaCompartidaSeed
+            modelBuilder.Entity<PencaCompartida>().HasData(
+                new PencaCompartida { Id = 12, Title = "Penca Movistar", CampeonatoId = campeonato1.Id, PuntajeId = puntaje1.Id,
+                   // Premios = new List<Premio> { premios1 }, 
+                    Description = "Gana muchos premios", Pozo = 0, Commission = 0, CostEntry = 0 });
+            #endregion
+
 
             #region PlanSeed
             modelBuilder.Entity<Plan>().HasData(
@@ -173,6 +214,7 @@ namespace tupenca_back.DataAccess
                 new Empresa { Id = 3, Razonsocial = "Air Europa Líneas Aéreas S.A.", RUT = "821473040018", FechaCreacion = date3, PlanId=1},
                 new Empresa { Id = 4, Razonsocial = "Punto FA S.L.", RUT = "040001821487", FechaCreacion = date4 , PlanId = 3 });
             #endregion
+
             //password is: string
             var passwordHash = new byte[] { 153, 148, 216, 121, 132, 166, 219, 84, 199, 74, 223, 21, 206, 104, 41, 80, 159, 33, 184, 203, 104, 1, 107, 181, 246, 180, 162, 144, 178, 220, 202, 145, 188, 224, 218, 142, 17, 160, 124, 210, 223, 123, 193, 132, 59, 118, 174, 129, 190, 74, 110, 243, 237, 235, 225, 237, 67, 22, 126, 213, 210, 13, 213, 92};
             var passwordSalt = new byte[] { 226, 213, 193, 138, 196, 8, 96, 194, 171, 33, 34, 161, 114, 134, 224, 87, 210, 54, 215, 215, 180, 143, 244, 68, 68, 7, 132, 220, 118, 30, 182, 96, 127, 135, 107, 29, 176, 100, 109, 67, 237, 72, 200, 254, 125, 115, 21, 155, 69, 148, 49, 60, 45, 142, 47, 78, 186, 3, 151, 191, 22, 250, 187, 174, 220, 84, 250, 240, 126, 220, 35, 83, 240, 91, 108, 2, 84, 50, 37, 33, 200, 186, 79, 248, 130, 166, 52, 98, 65, 30, 48, 48, 161, 159, 240, 95, 79, 17, 82, 156, 75, 163, 225, 235, 147, 203, 10, 229, 132, 225, 114, 15, 15, 38, 252, 103, 191, 30, 128, 26, 226, 67, 145, 199, 151, 3, 136, 22 };

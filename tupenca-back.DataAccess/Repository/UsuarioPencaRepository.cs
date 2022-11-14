@@ -27,7 +27,7 @@ namespace tupenca_back.DataAccess.Repository
         public IEnumerable<PencaCompartida> GetUsuarioPencasCompartidas(int id)
         {
             return _appDbContext.UsuariosPencas
-                .Where(p => p.UsuarioId == id && p.habilitado == true)
+                .Where(p => p.UsuarioId == id )
                 .Select(p => p.Penca)
                 .Join(_appDbContext.PencaCompartidas, penca => penca.Id, p => p.Id, (penca,p) => p)
                 .ToList();
@@ -60,7 +60,7 @@ namespace tupenca_back.DataAccess.Repository
                 .Select(p => p.Penca)
                 .Join(_appDbContext.PencaCompartidas, penca => penca.Id, p => p.Id, (penca, p) => p)
                 .SelectMany(p => p.Campeonato.Eventos)
-                .Where(evento => evento.FechaInicial > today & evento.FechaInicial < today.AddDays(7))
+                .Where(evento => evento.FechaInicial > today)
                 .OrderBy(evento => evento.FechaInicial)
                 .ToList();
         }

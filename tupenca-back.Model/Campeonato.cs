@@ -22,6 +22,7 @@ namespace tupenca_back.Model
 
         [Required]
         public Deporte? Deporte { get; set; }
+        public int ? DeporteId { get; set; } 
 
         public List<Evento> Eventos { get; set; } = new List<Evento>();
 

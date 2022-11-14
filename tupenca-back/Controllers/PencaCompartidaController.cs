@@ -164,7 +164,7 @@ namespace tupenca_back.Controllers
         //Pencas de cada usuario
 
         [HttpGet("me")]
-        public ActionResult<IEnumerable<PencaCompartida>> GetPencasCompartidasByUsuario([FromQuery] bool joined)
+        public ActionResult<IEnumerable<PencaCompartida>> GetPencasCompartidasByUsuario([FromQuery] bool joined = true)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (joined == true)
@@ -278,15 +278,19 @@ namespace tupenca_back.Controllers
                     var resultado = _resultadoService.getResultadoByEventoId(evento.Id);
                     var equipolocal = _equipoService.getEquipoById(evento.EquipoLocalId);
                     var equipovisitante = _equipoService.getEquipoById(evento.EquipoVisitanteId);
-                    
+                    var equipoLocalDto = _mapper.Map<EquipoDto>(equipolocal);
+                    var equipoVisitanteDto = _mapper.Map<EquipoDto>(equipovisitante);
+                    var prediccionDto = _mapper.Map<PrediccionDto>(prediccion);
+                    var resultadoDto = _mapper.Map<ResultadoDto>(resultado);
+
                     EventoPrediccionDto eventoinfo = new EventoPrediccionDto
                     {
                         Id = evento.Id,
-                        EquipoLocal = equipolocal,
-                        EquipoVisitante = equipovisitante,
+                        EquipoLocal = equipoLocalDto,
+                        EquipoVisitante = equipoVisitanteDto,
                         FechaInicial = evento.FechaInicial,
-                        Resultado = resultado,
-                        Prediccion = prediccion
+                        Resultado = resultadoDto,
+                        Prediccion = prediccionDto
                     };
                     eventos.Add(eventoinfo);
                     if (prediccion != null)

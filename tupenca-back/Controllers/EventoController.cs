@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using System.Net;
 using tupenca_back.Services.Exceptions;
+using AutoMapper;
 
 namespace tupenca_back.Controllers
 {
@@ -15,16 +16,20 @@ namespace tupenca_back.Controllers
     public class EventoController : ControllerBase
     {
         private readonly ILogger<EventoController> _logger;
+        public readonly IMapper _mapper;
+
         private readonly EventoService _eventoService;
         private readonly EquipoService _equipoService;
         private readonly PrediccionService _prediccionService;
 
-        public EventoController(ILogger<EventoController> logger, EventoService eventoService, EquipoService equipoService, PrediccionService prediccionService)
+        public EventoController(IMapper mapper,
+ILogger<EventoController> logger, EventoService eventoService, EquipoService equipoService, PrediccionService prediccionService)
         {
             _logger = logger;
             _eventoService = eventoService;
             _equipoService = equipoService;
             _prediccionService = prediccionService;
+            _mapper = mapper;
         }
 
         //GET: api/eventos        
@@ -70,9 +75,13 @@ namespace tupenca_back.Controllers
                 var prediccion = _prediccionService.GetPrediccionByUsuarioEvento(Convert.ToInt32(userId), evento.Id, penca);
                 var equipolocal = _equipoService.getEquipoById(evento.EquipoLocalId);
                 var equipovisitante = _equipoService.getEquipoById(evento.EquipoVisitanteId);
-                EventoPrediccionDto eventoret = new EventoPrediccionDto { Id = evento.Id, EquipoLocal = equipolocal,
-                                                                         EquipoVisitante = equipovisitante, FechaInicial = evento.FechaInicial,
-                                                                         Prediccion = prediccion};
+                var equipoLocalDto = _mapper.Map<EquipoDto>(equipolocal);
+                var equipoVisitanteDto = _mapper.Map<EquipoDto>(equipovisitante);
+                var prediccionDto = _mapper.Map<PrediccionDto>(prediccion);
+                EventoPrediccionDto eventoret = new EventoPrediccionDto { Id = evento.Id, EquipoLocal = equipoLocalDto,
+                                                                         EquipoVisitante = equipoVisitanteDto, FechaInicial = evento.FechaInicial,
+                                                                         Prediccion = prediccionDto
+                };
                 eventosRet.Add(eventoret);
             }
             return Ok(eventosRet);
@@ -107,6 +116,7 @@ namespace tupenca_back.Controllers
             evento.EquipoLocalId = eventoDto.EquipoLocalId;
             evento.EquipoVisitanteId = eventoDto.EquipoVisitanteId;
             evento.FechaInicial = eventoDto.FechaInicial;
+
 
             if (!_eventoService.IsEventoCorrect(evento))
                 return BadRequest("No puede tener los mismos equipos enfrentados");

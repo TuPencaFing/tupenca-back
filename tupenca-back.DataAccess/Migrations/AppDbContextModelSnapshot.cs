@@ -60,7 +60,8 @@ namespace tupenca_back.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("DeporteId")
+                    b.Property<int?>("DeporteId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<DateTime>("FinishDate")
@@ -81,6 +82,16 @@ namespace tupenca_back.DataAccess.Migrations
                     b.HasIndex("DeporteId");
 
                     b.ToTable("Campeonatos");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 10,
+                            DeporteId = 1,
+                            FinishDate = new DateTime(2022, 11, 28, 10, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Torneo Clausura",
+                            StartDate = new DateTime(2022, 11, 20, 13, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Deporte", b =>
@@ -121,11 +132,11 @@ namespace tupenca_back.DataAccess.Migrations
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("PlanId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PlanId")
+                        .HasColumnType("int");
 
                     b.Property<string>("RUT")
                         .IsRequired()
@@ -354,6 +365,20 @@ namespace tupenca_back.DataAccess.Migrations
                         });
                 });
 
+            modelBuilder.Entity("tupenca_back.Model.NotificationUserDeviceId", b =>
+                {
+                    b.Property<int>("Id")
+                        .HasColumnType("int");
+
+                    b.Property<string>("deviceId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NotificationUserDeviceIds");
+                });
+
             modelBuilder.Entity("tupenca_back.Model.Penca", b =>
                 {
                     b.Property<int>("Id")
@@ -544,6 +569,14 @@ namespace tupenca_back.DataAccess.Migrations
                     b.HasIndex("PencaId");
 
                     b.ToTable("Premios");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 10,
+                            Percentage = 100m,
+                            Position = 1
+                        });
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Puntaje", b =>
@@ -563,6 +596,14 @@ namespace tupenca_back.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Puntajes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 10,
+                            Resultado = 1,
+                            ResultadoExacto = 3
+                        });
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Resultado", b =>
@@ -703,6 +744,19 @@ namespace tupenca_back.DataAccess.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.HasDiscriminator().HasValue("PencaCompartida");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 12,
+                            CampeonatoId = 10,
+                            Description = "Gana muchos premios",
+                            PuntajeId = 10,
+                            Title = "Penca Movistar",
+                            Commission = 0m,
+                            CostEntry = 0m,
+                            Pozo = 0m
+                        });
                 });
 
             modelBuilder.Entity("tupenca_back.Model.PencaEmpresa", b =>

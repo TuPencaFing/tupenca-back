@@ -20,7 +20,7 @@ namespace tupenca_back.Controllers.Dto
         public List<PremioDto>? Premios { get; set; } = new List<PremioDto>();
 
         public int PuntajeId { get; set; }
-        public virtual Puntaje? Puntaje { get; set; }
+        public virtual PuntajeDto? Puntaje { get; set; }
 
         public decimal CostEntry { get; set; }
 
