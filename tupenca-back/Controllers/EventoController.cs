@@ -81,7 +81,7 @@ namespace tupenca_back.Controllers
                 var cantEmpate = 0;
                 var cantVictoriaLocal = 0;
                 var cantVictoriaVisitante = 0;
-                var predicciones = _prediccionService.getPrediccionesByEvento(evento.Id, penca);
+                var predicciones = _prediccionService.getPrediccionesByEventoAndPenca(evento.Id, penca);
                 foreach (var elem in predicciones)
                 {
                     if (elem != null)
@@ -206,7 +206,7 @@ namespace tupenca_back.Controllers
             {
                 return NotFound("No existe el evento");
             }
-            var prediccionExistente = _prediccionService.getPrediccionByEventoId(id, pencaId, Convert.ToInt32(userId));
+            var prediccionExistente = _prediccionService.getPrediccionByEventoAndPencaAndUsuario(id, pencaId, Convert.ToInt32(userId));
             if (prediccionExistente != null)
             {
                 prediccionExistente.prediccion = prediccionDto.resultado;

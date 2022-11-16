@@ -18,7 +18,8 @@ namespace tupenca_back.Services
 
         public Prediccion? getPrediccionById(int id) => _prediccionRepository.GetFirstOrDefault(e => e.Id == id);
 
-        public Prediccion? getPrediccionByEventoId(int eventoid, int pencaid, int usuarioid) => _prediccionRepository.GetFirstOrDefault(e => e.EventoId == eventoid && e.PencaId == pencaid && e.UsuarioId == usuarioid);
+        public Prediccion? getPrediccionByEventoAndPencaAndUsuario(int eventoid, int pencaid, int usuarioid) => _prediccionRepository
+            .GetFirstOrDefault(e => e.EventoId == eventoid && e.PencaId == pencaid && e.UsuarioId == usuarioid);
 
         public int? isPrediccionCorrect(Prediccion prediccion, Resultado resultado, Puntaje puntaje)
         {
@@ -85,9 +86,14 @@ namespace tupenca_back.Services
             _prediccionRepository.UpdateScore(eventoId, resultado);
         }
 
-        public IEnumerable<Prediccion> getPrediccionesByEvento(int eventoId, int pencaId)
+        public IEnumerable<Prediccion> getPrediccionesByEventoAndPenca(int eventoId, int pencaId)
         {
-            return _prediccionRepository.getPrediccionesByEvento(eventoId, pencaId);
+            return _prediccionRepository.getPrediccionesByEventoAndPenca(eventoId, pencaId);
+        }
+
+        public IEnumerable<Prediccion> getPrediccionesByEvento(int eventoId)
+        {
+            return _prediccionRepository.getPrediccionesByEvento(eventoId);
         }
 
     }

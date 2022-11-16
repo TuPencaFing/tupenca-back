@@ -71,15 +71,26 @@ namespace tupenca_back.DataAccess.Repository
         }
 
 
+        public IEnumerable<Prediccion> getPrediccionesByEventoAndPenca(int eventoId, int pencaId)
+        {
+            return _appDbContext.Predicciones
+                .Where(p => p.EventoId == eventoId && p.PencaId == pencaId)
+                .ToList();
+        }
+
+
+        public IEnumerable<Prediccion> getPrediccionesByEvento(int eventoId)
+        {
+            return _appDbContext.Predicciones
+                .Where(p => p.EventoId == eventoId)
+                .ToList();
+        }
+
+
         public void Save()
         {
             _appDbContext.SaveChanges();
         }
-
-        public IEnumerable<Prediccion> getPrediccionesByEvento(int eventoId, int pencaId)
-        {
-            return _appDbContext.Predicciones.Where(p => p.EventoId == eventoId && p.PencaId == pencaId).ToList();
-        }
-
+    
     }
 }

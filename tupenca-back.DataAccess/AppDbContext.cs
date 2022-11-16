@@ -32,6 +32,7 @@ namespace tupenca_back.DataAccess
         public DbSet<UserInviteToken>? UserInviteTokens { get; set; }
         public DbSet<Puntaje>? Puntajes { get; set; }
         public DbSet<Foro>? Foros { get; set; }
+        public DbSet<PuntajeUsuarioPenca>? PuntajeUsuarioPencas { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -66,6 +67,10 @@ namespace tupenca_back.DataAccess
 
 
             });
+
+            //modelBuilder.Entity<PuntajeUsuarioPenca>()
+            //    .HasIndex(pup => pup.PencaId)
+            //    .IsUnique();
 
 
             #region DeporteSeed
