@@ -176,6 +176,27 @@ namespace tupenca_back.Controllers
             }
         }
 
+
+        // Patch: api/campeonatos/1/eventos
+        [HttpPatch("{id}/plan")]
+        public ActionResult<EmpresaDto> ChangePlan(int id, PlanDto plan)
+        {
+            try
+            {
+                var empresa = _empresaService.ChangePlan(id, plan.Id);
+
+                return Ok(_mapper.Map<EmpresaDto>(empresa));
+            }
+            catch (NotFoundException e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.NotFound, e.Message);
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+
+        }
     }
 }
 

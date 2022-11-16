@@ -6,6 +6,8 @@ using System.ComponentModel.DataAnnotations;
 using tupenca_back.Model;
 using tupenca_back.Services;
 using tupenca_back.Controllers.Dto;
+using System.Net;
+using tupenca_back.Services.Exceptions;
 
 namespace tupenca_back.Controllers
 {
@@ -103,7 +105,27 @@ namespace tupenca_back.Controllers
             userDto.token = token;
             return Ok(userDto);
         }
-    }
 
+
+        ////GET: api/administrador
+        //[HttpGet("metricas")]
+        //public ActionResult<> GetMetricas()
+        //{
+        //    try
+        //    {
+        //        var campeonatos = _campeonatoService.getCampeonatos();
+
+        //        var campeonatosDto = _mapper.Map<List<CampeonatoDto>>(campeonatos);
+
+        //        return Ok(campeonatosDto);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+        //    }
+        //}
+
+
+    }
 
 }
