@@ -107,23 +107,22 @@ namespace tupenca_back.Controllers
         }
 
 
-        ////GET: api/administrador
-        //[HttpGet("metricas")]
-        //public ActionResult<> GetMetricas()
-        //{
-        //    try
-        //    {
-        //        var campeonatos = _campeonatoService.getCampeonatos();
+        //GET: api/administrador
+        [HttpGet("metricas")]
+        [AllowAnonymous]
+        public ActionResult<Metrica> GetMetrica()
+        {
+            try
+            {
+                var metrica = _administradorService.GetMetrica();
 
-        //        var campeonatosDto = _mapper.Map<List<CampeonatoDto>>(campeonatos);
-
-        //        return Ok(campeonatosDto);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
-        //    }
-        //}
+                return Ok(metrica);
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
 
 
     }

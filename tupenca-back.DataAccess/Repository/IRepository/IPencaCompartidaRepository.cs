@@ -10,6 +10,8 @@ namespace tupenca_back.DataAccess.Repository.IRepository
         IEnumerable<PencaCompartida> GetPencaCompartidas();
        
         PencaCompartida GetFirst(Expression<Func<PencaCompartida, bool>> filter);
+
+        int GetCantActivas();
      
         void Save();
 

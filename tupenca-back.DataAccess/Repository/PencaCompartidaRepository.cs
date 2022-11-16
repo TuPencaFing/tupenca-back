@@ -34,11 +34,19 @@ namespace tupenca_back.DataAccess.Repository
                     .First();
         }
 
+        public int GetCantActivas()
+        {
+            return _appDbContext.PencaCompartidas
+                    .Where(p => p.Campeonato.FinishDate > DateTime.Now)
+                    .Count();
+        }
+
         public void Save()
         {
             _appDbContext.SaveChanges();
         }
 
+       
     }
 }
 

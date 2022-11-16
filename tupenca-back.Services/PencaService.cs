@@ -321,6 +321,16 @@ namespace tupenca_back.Services
             }
         }
 
+
+        public int CantPencasActivas()
+        {
+
+            int cantActivasEmpresa = _pencaEmpresaRepository.GetCantActivas();
+
+            int catActivasCompartido = _pencaCompartidaRepository.GetCantActivas();
+
+            return cantActivasEmpresa + catActivasCompartido;
+        }
     }
 }
 

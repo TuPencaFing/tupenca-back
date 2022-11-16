@@ -12,6 +12,8 @@ namespace tupenca_back.DataAccess.Repository.IRepository
 
         int GetCantPencaEmpresas(int id);
 
+        int GetCantActivas();
+
         void Save();
 
     }

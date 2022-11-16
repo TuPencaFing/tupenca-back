@@ -44,10 +44,19 @@ namespace tupenca_back.DataAccess.Repository
                  .ToList();
         }
 
+        public int GetCantActivas()
+        {
+            return _appDbContext.PencaEmpresas
+                    .Where(p => p.Campeonato.FinishDate > DateTime.Now)
+                    .Count();
+        }
+
         public void Save()
         {
             _appDbContext.SaveChanges();
         }
+
+        
     }
 }
 
