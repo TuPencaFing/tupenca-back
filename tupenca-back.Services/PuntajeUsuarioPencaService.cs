@@ -11,15 +11,21 @@ namespace tupenca_back.Services
         private readonly IPuntajeUsuarioPencaRepository _puntajeUsuarioPencaRepository;
         private readonly EventoService _eventoService;
         private readonly PrediccionService _prediccionService;
+        private readonly PencaService _pencaService;
+        private readonly PuntajeService _puntajeService;
 
 
         public PuntajeUsuarioPencaService(IPuntajeUsuarioPencaRepository puntajeUsuarioPencaRepository,
                                           EventoService eventoService,
-                                          PrediccionService prediccionService)
+                                          PrediccionService prediccionService,
+                                          PencaService pencaService,
+                                          PuntajeService puntajeService)
         {
             _puntajeUsuarioPencaRepository = puntajeUsuarioPencaRepository;
             _eventoService = eventoService;
             _prediccionService = prediccionService;
+            _pencaService = pencaService;
+            _puntajeService = puntajeService;
         }
 
 
@@ -86,10 +92,10 @@ namespace tupenca_back.Services
 
         }
 
-        //todo terminar calculo de score como estaba antes
-        public void CalcularPuntajes(int eventoId, Resultado resultado)
+
+        public void CalcularPuntajes(Resultado resultado)
         {
-            var evento = _eventoService.getEventoById(eventoId);
+            var evento = _eventoService.getEventoById(resultado.EventoId);
 
             if (evento != null)
             {
@@ -97,7 +103,36 @@ namespace tupenca_back.Services
 
                 foreach (var prediccion in predicciones)
                 {
-                    
+                    var penca = _pencaService.GetPencaById(prediccion.PencaId);
+
+                    var puntaje = _puntajeService.getPuntajeById(penca.PuntajeId);
+
+                    int scoreGenerado = 0;
+
+                    if (prediccion.prediccion == resultado.resultado)
+                    {
+                        // Acerto Resultado
+                        if (evento.IsPuntajeEquipoValid)
+                        {
+                            if (resultado.PuntajeEquipoLocal == prediccion.PuntajeEquipoLocal
+                                && resultado.PuntajeEquipoVisitante == prediccion.PuntajeEquipoVisitante)
+                            {
+                                scoreGenerado = puntaje.ResultadoExacto;
+                            }        
+                        }
+                        else
+                        {
+                            scoreGenerado = puntaje.Resultado;
+                        }
+                    }
+
+                    // Guardo el score en la prediccion, para mantener trazabilidad de puntos por evento
+                    prediccion.Score = scoreGenerado;
+                    _prediccionService.UpdatePrediccion(prediccion);
+
+                    // Actualizo score general por penca
+                    AgregarScore(prediccion.PencaId, prediccion.UsuarioId, scoreGenerado);
+
                 }
             }
 

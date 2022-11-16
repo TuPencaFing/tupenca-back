@@ -307,6 +307,20 @@ namespace tupenca_back.Services
         }
 
 
+        public Penca? GetPencaById(int id)
+        {
+            var penca = findPencaCompartidaById(id);
+
+            if (penca != null)
+            {
+                return penca;
+            }
+            else
+            {
+                return findPencaEmpresaById(id);
+            }
+        }
+
     }
 }
 

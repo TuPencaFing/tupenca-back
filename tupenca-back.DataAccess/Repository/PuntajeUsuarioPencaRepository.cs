@@ -17,14 +17,15 @@ namespace tupenca_back.DataAccess.Repository
         public IEnumerable<PuntajeUsuarioPenca> GetAllByPenca(int pencaId)
         {
             return _appDbContext.PuntajeUsuarioPencas
-                .Include(pup => pup.PencaId == pencaId )
+                .Where(pup => pup.PencaId == pencaId )
+                .OrderBy(pup => pup.Score)
                 .ToList();
         }
 
         public IEnumerable<PuntajeUsuarioPenca> GetAllByUsuario(int usuarioId)
         {
             return _appDbContext.PuntajeUsuarioPencas
-                .Include(pup => pup.UsuarioId == usuarioId)
+                .Where(pup => pup.UsuarioId == usuarioId)
                 .ToList();
         }
 

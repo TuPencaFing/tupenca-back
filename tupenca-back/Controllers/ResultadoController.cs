@@ -15,12 +15,17 @@ namespace tupenca_back.Controllers
         private readonly ILogger<ResultadoController> _logger;
         private readonly ResultadoService _resultadoService;
         private readonly PrediccionService _prediccionService;
+        private readonly PuntajeUsuarioPencaService _puntajeUsuarioPencaService;
 
-        public ResultadoController(ILogger<ResultadoController> logger, ResultadoService resultadoService, PrediccionService prediccionService)
+        public ResultadoController(ILogger<ResultadoController> logger,
+                                   ResultadoService resultadoService,
+                                   PrediccionService prediccionService,
+                                   PuntajeUsuarioPencaService puntajeUsuarioPencaService)
         {
             _logger = logger;
             _resultadoService = resultadoService;
             _prediccionService = prediccionService;
+            _puntajeUsuarioPencaService = puntajeUsuarioPencaService;
         }
 
         // GET: api/resultados/1        
@@ -80,7 +85,7 @@ namespace tupenca_back.Controllers
                 _resultadoService.CreateResultado(resultado);
 
                 //actualizar score
-                _prediccionService.UpdateScore(resultadoDto.EventoId, resultado);
+                _puntajeUsuarioPencaService.CalcularPuntajes(resultado);
 
 
                 return CreatedAtAction("GetResultadoById", new { id = resultado.Id }, resultado);
