@@ -34,13 +34,11 @@ namespace tupenca_back.Controllers
 
         //GET: api/empresas        
         [HttpGet]
-        public ActionResult<IEnumerable<EmpresaCountDto>> GetEmpresas()
+        public ActionResult<IEnumerable<EmpresaDto>> GetEmpresas()
         {
             var empresas = _empresaService.getEmpresas();
-            EmpresaCountDto empresasCount = new EmpresaCountDto();
-            empresasCount.Empresas = empresas;
-            empresasCount.CantEmpresas = _empresaService.CantEmpresas();
-            return Ok(empresasCount);
+            var empresasDto = _mapper.Map<List<EmpresaDto>>(empresas);
+            return Ok(empresasDto);
         }
 
         //GET: api/empresas/nuevas        
@@ -162,7 +160,7 @@ namespace tupenca_back.Controllers
         }
 
 
-        // PATCH: api/deportes/1/image        
+        // PATCH: api/empresas/1/image        
         [HttpPatch("{id}/image")]
         public ActionResult UploadImage(int id, [FromForm] ImagenDto imagenDto)
         {
