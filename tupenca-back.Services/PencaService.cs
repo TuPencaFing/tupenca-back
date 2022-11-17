@@ -56,7 +56,7 @@ namespace tupenca_back.Services
 
         public PencaCompartida? findPencaCompartidaById(int? id) => _pencaCompartidaRepository.GetFirst(p => p.Id == id);
 
-        public PencaEmpresa? findPencaEmpresaById(int? id) => _pencaEmpresaRepository.GetFirstOrDefault(p => p.Id == id);
+        public PencaEmpresa? findPencaEmpresaById(int? id) => _pencaEmpresaRepository.GetFirst(p => p.Id == id);
 
         public void AddPencaCompartida(PencaCompartida pencaCompartida)
         {
