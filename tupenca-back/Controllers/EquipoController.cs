@@ -32,7 +32,7 @@ namespace tupenca_back.Controllers
 
 
         // GET: api/equipos/1        
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Equipo> GetEquipoById(int id)
