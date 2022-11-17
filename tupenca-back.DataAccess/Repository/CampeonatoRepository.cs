@@ -18,7 +18,8 @@ namespace tupenca_back.DataAccess.Repository.IRepository
         {
             return _appDbContext.Campeonatos
                     .Include(c => c.Deporte)
-                    .Include(c => c.Eventos)
+                    .Include(c => c.Eventos).ThenInclude(e => e.EquipoLocal)
+                    .Include(c => c.Eventos).ThenInclude(e => e.EquipoVisitante)
                     .Where(c => c.Id == id)
                     .FirstOrDefault();
         }
@@ -27,7 +28,8 @@ namespace tupenca_back.DataAccess.Repository.IRepository
         {
             return _appDbContext.Campeonatos
                 .Include(c => c.Deporte)
-                .Include(c => c.Eventos)
+                .Include(c => c.Eventos).ThenInclude(e => e.EquipoLocal)
+                .Include(c => c.Eventos).ThenInclude(e => e.EquipoVisitante)
                 .ToList();
         }
 
