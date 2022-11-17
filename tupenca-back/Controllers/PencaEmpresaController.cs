@@ -57,7 +57,7 @@ namespace tupenca_back.Controllers
         {
             try
             {
-                if (id != null)
+                if (id != null && id != 0) // id se instancia en 0 si es vacio
                 {
                     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                     var pencasEmpresa = _pencaService.GetPencasFromEmpresaByUsuario(id, Convert.ToInt32(userId));
