@@ -43,6 +43,7 @@ namespace tupenca_back.Services
             metrica.cantEmpresasRegistradas = _empresaService.CantEmpresas();
             metrica.cantUsuariosRegistrados = _usuarioService.GetCantUsuarios();
             metrica.cantPencasActivas = _pencaService.CantPencasActivas();
+            metrica.ganancias = _pencaService.GananciasPencas();
 
             return metrica;
         }

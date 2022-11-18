@@ -331,6 +331,34 @@ namespace tupenca_back.Services
 
             return cantActivasEmpresa + catActivasCompartido;
         }
+
+
+        public decimal GananciasPencas()
+        {
+            int gananciaPorPencaEmpresa = 0;
+            decimal gananciaPorPencaCompartida = 0;
+
+            var pencasEmpresa = GetPencaEmpresas();
+
+            foreach (var pencaEmpresa in pencasEmpresa)
+            {
+                var empresa = pencaEmpresa.Empresa;
+                gananciaPorPencaEmpresa += empresa.Plan.Cost;
+            }
+
+
+            var pencasCompartidas = GetPencaCompartidas();
+
+            foreach (var pencaCompartida in pencasCompartidas)
+            {
+                decimal gananciaPenca = (pencaCompartida.Pozo * (pencaCompartida.Commission / 100));
+
+                gananciaPorPencaCompartida += gananciaPenca;
+            }
+
+
+            return gananciaPorPencaCompartida + gananciaPorPencaEmpresa;
+        }
     }
 }
 

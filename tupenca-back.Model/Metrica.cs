@@ -10,7 +10,7 @@ namespace tupenca_back.Model
 
         public int cantPencasActivas { get; set; }
 
-        public int sumaPozos { get; set; }
+        public decimal ganancias { get; set; }
     }
 }
 
