@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using System.Net;
 using tupenca_back.Services.Exceptions;
+using tupenca_back.Services.Dto;
 
 namespace tupenca_back.Controllers
 {
@@ -244,6 +245,19 @@ namespace tupenca_back.Controllers
             {
                 throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
             }
+        }
+
+
+        //GET: api/eventos/finalizados        
+        [HttpGet("finalizados")]
+        public ActionResult<IEnumerable<EventoResultado>> GetEventosResultadoFinalizados()
+        {
+            var eventos = _eventoService.GetEventosResultadoFinalizados();
+            if (eventos == null)
+            {
+                return NoContent();
+            }
+            return Ok(eventos);
         }
 
     }

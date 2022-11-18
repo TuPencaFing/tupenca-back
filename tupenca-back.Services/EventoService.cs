@@ -2,6 +2,7 @@
 using tupenca_back.DataAccess.Repository;
 using tupenca_back.DataAccess.Repository.IRepository;
 using tupenca_back.Model;
+using tupenca_back.Services.Dto;
 
 namespace tupenca_back.Services
 {
@@ -11,17 +12,20 @@ namespace tupenca_back.Services
         private readonly IUsuarioPencaRepository _usuariopencaRepository;
         private readonly UsuarioService _usuarioService;
         private readonly ImagesService _imagesService;
+        private readonly ResultadoService _resultadoService;
 
 
         public EventoService(IEventoRepository eventoRepository,
-                             UsuarioService usuarioService,
                              IUsuarioPencaRepository usuariopencaRepository,
-                             ImagesService imagesService)
+                             UsuarioService usuarioService,
+                             ImagesService imagesService,
+                             ResultadoService resultadoService)
         {
             _eventoRepository = eventoRepository;
             _usuariopencaRepository = usuariopencaRepository;
             _usuarioService = usuarioService;
             _imagesService = imagesService;
+            _resultadoService = resultadoService;
         }
 
         public IEnumerable<Evento> getEventos() => _eventoRepository.GetEventos();
@@ -98,6 +102,33 @@ namespace tupenca_back.Services
             else return false;
         }
 
+
+        public IEnumerable<EventoResultado> GetEventosResultadoFinalizados()
+        {
+            var eventosResultado = new List<EventoResultado>();
+
+            var eventos = _eventoRepository.GetEventosFinalizados();
+
+            foreach (var evento in eventos)
+            {
+                var eventoResultado = new EventoResultado();
+                eventoResultado.Id = evento.Id;
+                eventoResultado.Image = evento.Image;
+                eventoResultado.FechaInicial = evento.FechaInicial;
+                eventoResultado.EquipoLocal = evento.EquipoLocal;
+                eventoResultado.EquipoVisitante = evento.EquipoVisitante;
+                eventoResultado.IsEmpateValid = evento.IsEmpateValid;
+                eventoResultado.IsPuntajeEquipoValid = evento.IsPuntajeEquipoValid;
+
+                var resultado = _resultadoService.getResultadoByEventoId(evento.Id);
+
+                eventoResultado.tieneResultado = resultado != null;
+
+                eventosResultado.Add(eventoResultado);
+            }
+
+            return eventosResultado;
+        }
 
     }
 }
