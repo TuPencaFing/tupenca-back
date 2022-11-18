@@ -20,7 +20,7 @@ namespace tupenca_back.DataAccess.Repository
             return _appDbContext.PencaEmpresas
                  .Include(p => p.Campeonato)
                  .Include(p => p.Premios)
-                 .Include(p => p.Empresa)
+                 .Include(p => p.Empresa).ThenInclude(e => e.Plan)
                  .ToList();
         }
 

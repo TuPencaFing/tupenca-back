@@ -357,8 +357,8 @@ namespace tupenca_back.Services
             }
 
 
-            return gananciaPorPencaCompartida + gananciaPorPencaEmpresa;
-        }
+            return Math.Round(gananciaPorPencaCompartida + gananciaPorPencaEmpresa, 2);
+        } 
     }
 }
 
