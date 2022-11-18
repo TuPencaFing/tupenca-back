@@ -98,6 +98,21 @@ namespace tupenca_back.Services
             return empresa;
         }
 
+
+        public int GetGananciasPorPlan()
+        {
+            int ganancias = 0;
+
+            var empresas = getEmpresas();
+
+            foreach (var empresa in empresas)
+            {
+                ganancias += empresa.Plan.Cost;
+            }
+
+            return ganancias;
+        }
+
     }
 }
 

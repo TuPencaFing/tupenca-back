@@ -40,10 +40,12 @@ namespace tupenca_back.Services
         {
             Metrica metrica = new Metrica();
 
+            var ganancia = _pencaService.GananciasPencasCompartidas() + _empresaService.GetGananciasPorPlan();
+
             metrica.cantEmpresasRegistradas = _empresaService.CantEmpresas();
             metrica.cantUsuariosRegistrados = _usuarioService.GetCantUsuarios();
             metrica.cantPencasActivas = _pencaService.CantPencasActivas();
-            metrica.ganancias = _pencaService.GananciasPencas();
+            metrica.ganancias = ganancia;
 
             return metrica;
         }

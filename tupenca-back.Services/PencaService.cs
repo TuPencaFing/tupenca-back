@@ -333,19 +333,9 @@ namespace tupenca_back.Services
         }
 
 
-        public decimal GananciasPencas()
+        public decimal GananciasPencasCompartidas()
         {
-            int gananciaPorPencaEmpresa = 0;
             decimal gananciaPorPencaCompartida = 0;
-
-            var pencasEmpresa = GetPencaEmpresas();
-
-            foreach (var pencaEmpresa in pencasEmpresa)
-            {
-                var empresa = pencaEmpresa.Empresa;
-                gananciaPorPencaEmpresa += empresa.Plan.Cost;
-            }
-
 
             var pencasCompartidas = GetPencaCompartidas();
 
@@ -357,7 +347,7 @@ namespace tupenca_back.Services
             }
 
 
-            return Math.Round(gananciaPorPencaCompartida + gananciaPorPencaEmpresa, 2);
+            return Math.Round(gananciaPorPencaCompartida, 2);
         } 
     }
 }
