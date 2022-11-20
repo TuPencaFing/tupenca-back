@@ -29,9 +29,11 @@
     <None Remove="Quartz.Extensions.Hosting" />
     <None Remove="Quartz" />
     <None Remove="Microsoft.Extensions.Hosting" />
+    <None Remove="Dto\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Exceptions\" />
     <Folder Include="Scheduler\" />
+    <Folder Include="Dto\" />
   </ItemGroup>
 </Project>

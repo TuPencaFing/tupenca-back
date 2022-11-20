@@ -57,7 +57,7 @@ namespace tupenca_back.Controllers
         {
             try
             {
-                if (id != null)
+                if (id != null && id != 0) // id se instancia en 0 si es vacio
                 {
                     var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
                     var pencasEmpresa = _pencaService.GetPencasFromEmpresaByUsuario(id, Convert.ToInt32(userId));
@@ -87,7 +87,7 @@ namespace tupenca_back.Controllers
 
             try
             {
-                var pencas = _pencaService.GetPencaCompartidasByEmpresa(funcionario.EmpresaId);
+                var pencas = _pencaService.GetPencaEmpresasByEmpresa(funcionario.EmpresaId);
 
                 var pencasDto = _mapper.Map<List<PencaEmpresaDto>>(pencas);
 
@@ -105,7 +105,7 @@ namespace tupenca_back.Controllers
         {
             try
             {
-                var penca = _pencaService.findPencaCompartidaById(id);
+                var penca = _pencaService.findPencaEmpresaById(id);
 
                 if (penca == null)
                 {

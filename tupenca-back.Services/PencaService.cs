@@ -52,11 +52,11 @@ namespace tupenca_back.Services
 
         public IEnumerable<PencaEmpresa> GetPencaEmpresas() => _pencaEmpresaRepository.GetPencaEmpresas();
 
-        public IEnumerable<PencaEmpresa> GetPencaCompartidasByEmpresa(int empresaId) => _pencaEmpresaRepository.GetPencaEmpresasByEmpresa(empresaId);
+        public IEnumerable<PencaEmpresa> GetPencaEmpresasByEmpresa(int empresaId) => _pencaEmpresaRepository.GetPencaEmpresasByEmpresa(empresaId);
 
         public PencaCompartida? findPencaCompartidaById(int? id) => _pencaCompartidaRepository.GetFirst(p => p.Id == id);
 
-        public PencaEmpresa? findPencaEmpresaById(int? id) => _pencaEmpresaRepository.GetFirstOrDefault(p => p.Id == id);
+        public PencaEmpresa? findPencaEmpresaById(int? id) => _pencaEmpresaRepository.GetFirst(p => p.Id == id);
 
         public void AddPencaCompartida(PencaCompartida pencaCompartida)
         {
@@ -321,6 +321,34 @@ namespace tupenca_back.Services
             }
         }
 
+
+        public int CantPencasActivas()
+        {
+
+            int cantActivasEmpresa = _pencaEmpresaRepository.GetCantActivas();
+
+            int catActivasCompartido = _pencaCompartidaRepository.GetCantActivas();
+
+            return cantActivasEmpresa + catActivasCompartido;
+        }
+
+
+        public decimal GananciasPencasCompartidas()
+        {
+            decimal gananciaPorPencaCompartida = 0;
+
+            var pencasCompartidas = GetPencaCompartidas();
+
+            foreach (var pencaCompartida in pencasCompartidas)
+            {
+                decimal gananciaPenca = (pencaCompartida.Pozo * (pencaCompartida.Commission / 100));
+
+                gananciaPorPencaCompartida += gananciaPenca;
+            }
+
+
+            return Math.Round(gananciaPorPencaCompartida, 2);
+        } 
     }
 }
 

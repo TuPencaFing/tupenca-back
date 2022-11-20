@@ -23,6 +23,16 @@ namespace tupenca_back.DataAccess.Repository
                 .ToList();
         }
 
+
+        public IEnumerable<Evento> GetEventosFinalizados()
+        {
+            return _appDbContext.Eventos
+                    .Where(evento => evento.FechaInicial < DateTime.Now)
+                    .Include(evento => evento.EquipoLocal)
+                    .Include(evento => evento.EquipoVisitante)
+                    .ToList();
+        }
+
         public IEnumerable<Evento> GetEventos()
         {
             return _appDbContext.Eventos
@@ -43,5 +53,6 @@ namespace tupenca_back.DataAccess.Repository
         {
             _appDbContext.SaveChanges();
         }
+
     }
 }

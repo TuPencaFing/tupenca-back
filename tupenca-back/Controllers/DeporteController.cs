@@ -41,7 +41,7 @@ namespace tupenca_back.Controllers
         }
 
         // GET: api/deportes/1        
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public ActionResult<DeporteDto> GetDeporteById(int id)
         {
             var deporte = _deporteService.getDeporteById(id);

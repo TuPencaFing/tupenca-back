@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using tupenca_back.Model;
 
 namespace tupenca_back.DataAccess.Repository.IRepository
@@ -10,7 +11,11 @@ namespace tupenca_back.DataAccess.Repository.IRepository
 
         IEnumerable<PencaEmpresa> GetPencaEmpresasByEmpresa(int id);
 
+        PencaEmpresa GetFirst(Expression<Func<PencaEmpresa, bool>> filter);
+
         int GetCantPencaEmpresas(int id);
+
+        int GetCantActivas();
 
         void Save();
 

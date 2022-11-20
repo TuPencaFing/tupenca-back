@@ -7,6 +7,8 @@ namespace tupenca_back.DataAccess.Repository.IRepository
     {
         IEnumerable<Evento> GetEventosProximos();
 
+        IEnumerable<Evento> GetEventosFinalizados();
+
         IEnumerable<Evento> GetEventos();
 
         Evento GetFirst(Expression<Func<Evento, bool>> filter);
