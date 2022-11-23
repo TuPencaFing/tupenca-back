@@ -20,6 +20,7 @@ namespace tupenca_back.Services
         {
             if (foro != null)
             {
+                foro.Creacion = DateTime.Now;
                 _foroRepository.Add(foro);
                 _foroRepository.Save();
             }

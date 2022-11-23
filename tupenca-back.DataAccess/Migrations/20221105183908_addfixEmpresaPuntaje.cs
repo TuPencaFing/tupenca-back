@@ -79,49 +79,6 @@ namespace tupenca_back.DataAccess.Migrations
                     table.PrimaryKey("PK_Puntajes", x => x.Id);
                 });
 
-            migrationBuilder.InsertData(
-                table: "Planes",
-                columns: new[] { "Id", "CantPencas", "CantUser", "LookAndFeel", "PercentageCost" },
-                values: new object[] { 1, 1, 50, 1, 10m });
-
-            migrationBuilder.InsertData(
-                table: "Planes",
-                columns: new[] { "Id", "CantPencas", "CantUser", "LookAndFeel", "PercentageCost" },
-                values: new object[] { 2, 5, 100, 2, 10m });
-
-            migrationBuilder.InsertData(
-                table: "Planes",
-                columns: new[] { "Id", "CantPencas", "CantUser", "LookAndFeel", "PercentageCost" },
-                values: new object[] { 3, 10, 500, 2, 10m });
-
-            migrationBuilder.UpdateData(
-                table: "Empresas",
-                keyColumn: "Id",
-                keyValue: 1,
-                column: "PlanId",
-                value: 1);
-
-            migrationBuilder.UpdateData(
-                table: "Empresas",
-                keyColumn: "Id",
-                keyValue: 2,
-                column: "PlanId",
-                value: 2);
-
-            migrationBuilder.UpdateData(
-                table: "Empresas",
-                keyColumn: "Id",
-                keyValue: 3,
-                column: "PlanId",
-                value: 1);
-
-            migrationBuilder.UpdateData(
-                table: "Empresas",
-                keyColumn: "Id",
-                keyValue: 4,
-                column: "PlanId",
-                value: 3);
-
             migrationBuilder.CreateIndex(
                 name: "IX_Pencas_PuntajeId",
                 table: "Pencas",
@@ -170,20 +127,6 @@ namespace tupenca_back.DataAccess.Migrations
                 name: "IX_Empresas_PlanId",
                 table: "Empresas");
 
-            migrationBuilder.DeleteData(
-                table: "Planes",
-                keyColumn: "Id",
-                keyValue: 1);
-
-            migrationBuilder.DeleteData(
-                table: "Planes",
-                keyColumn: "Id",
-                keyValue: 2);
-
-            migrationBuilder.DeleteData(
-                table: "Planes",
-                keyColumn: "Id",
-                keyValue: 3);
 
             migrationBuilder.DropColumn(
                 name: "Score",
