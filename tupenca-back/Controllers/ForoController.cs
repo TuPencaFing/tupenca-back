@@ -16,10 +16,10 @@ namespace tupenca_back.Controllers
     [Route("api/foros")]
     public class ForoController : ControllerBase
     {
-        private readonly ILogger<DeporteController> _logger;
+        private readonly ILogger<ForoController> _logger;
         private readonly ForoService _foroService;
 
-        public ForoController(ILogger<DeporteController> logger,
+        public ForoController(ILogger<ForoController> logger,
                                  ForoService foroService)
         {
             _logger = logger;

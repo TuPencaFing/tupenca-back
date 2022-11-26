@@ -103,6 +103,7 @@ builder.Services.AddScoped<IPuntajeRepository, PuntajeRepository>();
 builder.Services.AddScoped<IPuntajeUsuarioPencaRepository, PuntajeUsuarioPencaRepository>();
 builder.Services.AddScoped<IResultadoRepository, ResultadoRepository>();
 builder.Services.AddScoped<IUsuarioPencaRepository, UsuarioPencaRepository>();
+builder.Services.AddScoped<ILookAndFeelRepository, LookAndFeelRepository>();
 
 
 
@@ -124,6 +125,7 @@ builder.Services.AddScoped<PuntajeService, PuntajeService>();
 builder.Services.AddScoped<PuntajeUsuarioPencaService, PuntajeUsuarioPencaService>();
 builder.Services.AddScoped<ResultadoService, ResultadoService>();
 builder.Services.AddScoped<UsuarioService, UsuarioService>();
+builder.Services.AddScoped<LookAndFeelService, LookAndFeelService>();
 
 
 
