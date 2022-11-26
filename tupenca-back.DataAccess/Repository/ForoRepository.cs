@@ -17,6 +17,7 @@ namespace tupenca_back.DataAccess.Repository
         {
             return _appDbContext.Foros.Where(f => f.PencaId == pencaId)
                                       .Include(f => f.Usuario)
+                                      .OrderBy(f => f.Creacion)
                                       .ToList();
         }
 

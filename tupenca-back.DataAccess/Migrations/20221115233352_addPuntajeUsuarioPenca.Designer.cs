@@ -104,17 +104,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.ToTable("Deportes");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Nombre = "Futbol"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Nombre = "Tennis"
-                        });
+
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Empresa", b =>
@@ -149,39 +139,6 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.ToTable("Empresas");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            FechaCreacion = new DateTime(2022, 11, 20, 13, 0, 0, 0, DateTimeKind.Unspecified),
-                            PlanId = 1,
-                            RUT = "214873040018",
-                            Razonsocial = "McDonald's S.A."
-                        },
-                        new
-                        {
-                            Id = 2,
-                            FechaCreacion = new DateTime(2022, 11, 21, 7, 0, 0, 0, DateTimeKind.Unspecified),
-                            PlanId = 2,
-                            RUT = "304001821487",
-                            Razonsocial = "BMW Ibérica S.A."
-                        },
-                        new
-                        {
-                            Id = 3,
-                            FechaCreacion = new DateTime(2022, 11, 21, 10, 0, 0, 0, DateTimeKind.Unspecified),
-                            PlanId = 1,
-                            RUT = "821473040018",
-                            Razonsocial = "Air Europa Líneas Aéreas S.A."
-                        },
-                        new
-                        {
-                            Id = 4,
-                            FechaCreacion = new DateTime(2022, 11, 21, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            PlanId = 3,
-                            RUT = "040001821487",
-                            Razonsocial = "Punto FA S.L."
-                        });
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Equipo", b =>
@@ -203,47 +160,6 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.ToTable("Equipos");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            Nombre = "Qatar"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Nombre = "Ecuador"
-                        },
-                        new
-                        {
-                            Id = 3,
-                            Nombre = "Senegal"
-                        },
-                        new
-                        {
-                            Id = 4,
-                            Nombre = "Holanda"
-                        },
-                        new
-                        {
-                            Id = 5,
-                            Nombre = "Portugal"
-                        },
-                        new
-                        {
-                            Id = 6,
-                            Nombre = "Ghana"
-                        },
-                        new
-                        {
-                            Id = 7,
-                            Nombre = "Uruguay"
-                        },
-                        new
-                        {
-                            Id = 8,
-                            Nombre = "Corea del Sur"
-                        });
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Evento", b =>
@@ -280,133 +196,6 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.ToTable("Eventos");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            EquipoLocalId = 1,
-                            EquipoVisitanteId = 2,
-                            FechaInicial = new DateTime(2022, 11, 20, 13, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = true,
-                            IsPuntajeEquipoValid = true
-                        },
-                        new
-                        {
-                            Id = 2,
-                            EquipoLocalId = 3,
-                            EquipoVisitanteId = 4,
-                            FechaInicial = new DateTime(2022, 11, 21, 7, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = true,
-                            IsPuntajeEquipoValid = true
-                        },
-                        new
-                        {
-                            Id = 3,
-                            EquipoLocalId = 7,
-                            EquipoVisitanteId = 8,
-                            FechaInicial = new DateTime(2022, 11, 24, 10, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = true,
-                            IsPuntajeEquipoValid = true
-                        },
-                        new
-                        {
-                            Id = 4,
-                            EquipoLocalId = 5,
-                            EquipoVisitanteId = 6,
-                            FechaInicial = new DateTime(2022, 11, 24, 13, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = true,
-                            IsPuntajeEquipoValid = true
-                        },
-                        new
-                        {
-                            Id = 5,
-                            EquipoLocalId = 1,
-                            EquipoVisitanteId = 3,
-                            FechaInicial = new DateTime(2022, 11, 25, 10, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = true,
-                            IsPuntajeEquipoValid = true
-                        },
-                        new
-                        {
-                            Id = 6,
-                            EquipoLocalId = 4,
-                            EquipoVisitanteId = 2,
-                            FechaInicial = new DateTime(2022, 11, 25, 13, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = true,
-                            IsPuntajeEquipoValid = true
-                        },
-                        new
-                        {
-                            Id = 7,
-                            EquipoLocalId = 8,
-                            EquipoVisitanteId = 6,
-                            FechaInicial = new DateTime(2022, 11, 28, 10, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = true,
-                            IsPuntajeEquipoValid = true
-                        },
-                        new
-                        {
-                            Id = 8,
-                            EquipoLocalId = 5,
-                            EquipoVisitanteId = 7,
-                            FechaInicial = new DateTime(2022, 11, 28, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = true,
-                            IsPuntajeEquipoValid = true
-                        },
-                        new
-                        {
-                            Id = 9,
-                            EquipoLocalId = 2,
-                            EquipoVisitanteId = 3,
-                            FechaInicial = new DateTime(2022, 11, 29, 12, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = true,
-                            IsPuntajeEquipoValid = true
-                        },
-                        new
-                        {
-                            Id = 10,
-                            EquipoLocalId = 4,
-                            EquipoVisitanteId = 1,
-                            FechaInicial = new DateTime(2022, 11, 29, 12, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = true,
-                            IsPuntajeEquipoValid = true
-                        },
-                        new
-                        {
-                            Id = 11,
-                            EquipoLocalId = 6,
-                            EquipoVisitanteId = 7,
-                            FechaInicial = new DateTime(2022, 12, 2, 12, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = true,
-                            IsPuntajeEquipoValid = true
-                        },
-                        new
-                        {
-                            Id = 12,
-                            EquipoLocalId = 8,
-                            EquipoVisitanteId = 5,
-                            FechaInicial = new DateTime(2022, 12, 2, 12, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = true,
-                            IsPuntajeEquipoValid = true
-                        },
-                        new
-                        {
-                            Id = 13,
-                            EquipoLocalId = 2,
-                            EquipoVisitanteId = 7,
-                            FechaInicial = new DateTime(2023, 1, 2, 7, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = false,
-                            IsPuntajeEquipoValid = false
-                        },
-                        new
-                        {
-                            Id = 14,
-                            EquipoLocalId = 7,
-                            EquipoVisitanteId = 2,
-                            FechaInicial = new DateTime(2023, 1, 2, 8, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = false,
-                            IsPuntajeEquipoValid = false
-                        });
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Foro", b =>
@@ -540,34 +329,6 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.ToTable("Planes");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1,
-                            CantPencas = 1,
-                            CantUser = 50,
-                            Cost = 100,
-                            LookAndFeel = 1,
-                            PercentageCost = 10m
-                        },
-                        new
-                        {
-                            Id = 2,
-                            CantPencas = 5,
-                            CantUser = 100,
-                            Cost = 200,
-                            LookAndFeel = 2,
-                            PercentageCost = 10m
-                        },
-                        new
-                        {
-                            Id = 3,
-                            CantPencas = 10,
-                            CantUser = 500,
-                            Cost = 500,
-                            LookAndFeel = 2,
-                            PercentageCost = 10m
-                        });
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Prediccion", b =>
@@ -743,23 +504,6 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasDiscriminator().HasValue("Administrador");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 10,
-                            Email = "mati98bor@gmail.com",
-                            HashedPassword = new byte[] { 153, 148, 216, 121, 132, 166, 219, 84, 199, 74, 223, 21, 206, 104, 41, 80, 159, 33, 184, 203, 104, 1, 107, 181, 246, 180, 162, 144, 178, 220, 202, 145, 188, 224, 218, 142, 17, 160, 124, 210, 223, 123, 193, 132, 59, 118, 174, 129, 190, 74, 110, 243, 237, 235, 225, 237, 67, 22, 126, 213, 210, 13, 213, 92 },
-                            PasswordSalt = new byte[] { 226, 213, 193, 138, 196, 8, 96, 194, 171, 33, 34, 161, 114, 134, 224, 87, 210, 54, 215, 215, 180, 143, 244, 68, 68, 7, 132, 220, 118, 30, 182, 96, 127, 135, 107, 29, 176, 100, 109, 67, 237, 72, 200, 254, 125, 115, 21, 155, 69, 148, 49, 60, 45, 142, 47, 78, 186, 3, 151, 191, 22, 250, 187, 174, 220, 84, 250, 240, 126, 220, 35, 83, 240, 91, 108, 2, 84, 50, 37, 33, 200, 186, 79, 248, 130, 166, 52, 98, 65, 30, 48, 48, 161, 159, 240, 95, 79, 17, 82, 156, 75, 163, 225, 235, 147, 203, 10, 229, 132, 225, 114, 15, 15, 38, 252, 103, 191, 30, 128, 26, 226, 67, 145, 199, 151, 3, 136, 22 },
-                            UserName = "Matibor"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Email = "user@example.com",
-                            HashedPassword = new byte[] { 153, 148, 216, 121, 132, 166, 219, 84, 199, 74, 223, 21, 206, 104, 41, 80, 159, 33, 184, 203, 104, 1, 107, 181, 246, 180, 162, 144, 178, 220, 202, 145, 188, 224, 218, 142, 17, 160, 124, 210, 223, 123, 193, 132, 59, 118, 174, 129, 190, 74, 110, 243, 237, 235, 225, 237, 67, 22, 126, 213, 210, 13, 213, 92 },
-                            PasswordSalt = new byte[] { 226, 213, 193, 138, 196, 8, 96, 194, 171, 33, 34, 161, 114, 134, 224, 87, 210, 54, 215, 215, 180, 143, 244, 68, 68, 7, 132, 220, 118, 30, 182, 96, 127, 135, 107, 29, 176, 100, 109, 67, 237, 72, 200, 254, 125, 115, 21, 155, 69, 148, 49, 60, 45, 142, 47, 78, 186, 3, 151, 191, 22, 250, 187, 174, 220, 84, 250, 240, 126, 220, 35, 83, 240, 91, 108, 2, 84, 50, 37, 33, 200, 186, 79, 248, 130, 166, 52, 98, 65, 30, 48, 48, 161, 159, 240, 95, 79, 17, 82, 156, 75, 163, 225, 235, 147, 203, 10, 229, 132, 225, 114, 15, 15, 38, 252, 103, 191, 30, 128, 26, 226, 67, 145, 199, 151, 3, 136, 22 },
-                            UserName = "Administrador123"
-                        });
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Funcionario", b =>
@@ -773,25 +517,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasDiscriminator().HasValue("Funcionario");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 8,
-                            Email = "mati98bor@gmail.com",
-                            HashedPassword = new byte[] { 153, 148, 216, 121, 132, 166, 219, 84, 199, 74, 223, 21, 206, 104, 41, 80, 159, 33, 184, 203, 104, 1, 107, 181, 246, 180, 162, 144, 178, 220, 202, 145, 188, 224, 218, 142, 17, 160, 124, 210, 223, 123, 193, 132, 59, 118, 174, 129, 190, 74, 110, 243, 237, 235, 225, 237, 67, 22, 126, 213, 210, 13, 213, 92 },
-                            PasswordSalt = new byte[] { 226, 213, 193, 138, 196, 8, 96, 194, 171, 33, 34, 161, 114, 134, 224, 87, 210, 54, 215, 215, 180, 143, 244, 68, 68, 7, 132, 220, 118, 30, 182, 96, 127, 135, 107, 29, 176, 100, 109, 67, 237, 72, 200, 254, 125, 115, 21, 155, 69, 148, 49, 60, 45, 142, 47, 78, 186, 3, 151, 191, 22, 250, 187, 174, 220, 84, 250, 240, 126, 220, 35, 83, 240, 91, 108, 2, 84, 50, 37, 33, 200, 186, 79, 248, 130, 166, 52, 98, 65, 30, 48, 48, 161, 159, 240, 95, 79, 17, 82, 156, 75, 163, 225, 235, 147, 203, 10, 229, 132, 225, 114, 15, 15, 38, 252, 103, 191, 30, 128, 26, 226, 67, 145, 199, 151, 3, 136, 22 },
-                            UserName = "Matibor",
-                            EmpresaId = 1
-                        },
-                        new
-                        {
-                            Id = 9,
-                            Email = "user@example.com",
-                            HashedPassword = new byte[] { 153, 148, 216, 121, 132, 166, 219, 84, 199, 74, 223, 21, 206, 104, 41, 80, 159, 33, 184, 203, 104, 1, 107, 181, 246, 180, 162, 144, 178, 220, 202, 145, 188, 224, 218, 142, 17, 160, 124, 210, 223, 123, 193, 132, 59, 118, 174, 129, 190, 74, 110, 243, 237, 235, 225, 237, 67, 22, 126, 213, 210, 13, 213, 92 },
-                            PasswordSalt = new byte[] { 226, 213, 193, 138, 196, 8, 96, 194, 171, 33, 34, 161, 114, 134, 224, 87, 210, 54, 215, 215, 180, 143, 244, 68, 68, 7, 132, 220, 118, 30, 182, 96, 127, 135, 107, 29, 176, 100, 109, 67, 237, 72, 200, 254, 125, 115, 21, 155, 69, 148, 49, 60, 45, 142, 47, 78, 186, 3, 151, 191, 22, 250, 187, 174, 220, 84, 250, 240, 126, 220, 35, 83, 240, 91, 108, 2, 84, 50, 37, 33, 200, 186, 79, 248, 130, 166, 52, 98, 65, 30, 48, 48, 161, 159, 240, 95, 79, 17, 82, 156, 75, 163, 225, 235, 147, 203, 10, 229, 132, 225, 114, 15, 15, 38, 252, 103, 191, 30, 128, 26, 226, 67, 145, 199, 151, 3, 136, 22 },
-                            UserName = "funcionario123",
-                            EmpresaId = 2
-                        });
+
                 });
 
             modelBuilder.Entity("tupenca_back.Model.PencaCompartida", b =>
@@ -831,23 +557,6 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasDiscriminator().HasValue("Usuario");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 49,
-                            Email = "mati98bor@gmail.com",
-                            HashedPassword = new byte[] { 153, 148, 216, 121, 132, 166, 219, 84, 199, 74, 223, 21, 206, 104, 41, 80, 159, 33, 184, 203, 104, 1, 107, 181, 246, 180, 162, 144, 178, 220, 202, 145, 188, 224, 218, 142, 17, 160, 124, 210, 223, 123, 193, 132, 59, 118, 174, 129, 190, 74, 110, 243, 237, 235, 225, 237, 67, 22, 126, 213, 210, 13, 213, 92 },
-                            PasswordSalt = new byte[] { 226, 213, 193, 138, 196, 8, 96, 194, 171, 33, 34, 161, 114, 134, 224, 87, 210, 54, 215, 215, 180, 143, 244, 68, 68, 7, 132, 220, 118, 30, 182, 96, 127, 135, 107, 29, 176, 100, 109, 67, 237, 72, 200, 254, 125, 115, 21, 155, 69, 148, 49, 60, 45, 142, 47, 78, 186, 3, 151, 191, 22, 250, 187, 174, 220, 84, 250, 240, 126, 220, 35, 83, 240, 91, 108, 2, 84, 50, 37, 33, 200, 186, 79, 248, 130, 166, 52, 98, 65, 30, 48, 48, 161, 159, 240, 95, 79, 17, 82, 156, 75, 163, 225, 235, 147, 203, 10, 229, 132, 225, 114, 15, 15, 38, 252, 103, 191, 30, 128, 26, 226, 67, 145, 199, 151, 3, 136, 22 },
-                            UserName = "Matibor"
-                        },
-                        new
-                        {
-                            Id = 50,
-                            Email = "user123@example.com",
-                            HashedPassword = new byte[] { 153, 148, 216, 121, 132, 166, 219, 84, 199, 74, 223, 21, 206, 104, 41, 80, 159, 33, 184, 203, 104, 1, 107, 181, 246, 180, 162, 144, 178, 220, 202, 145, 188, 224, 218, 142, 17, 160, 124, 210, 223, 123, 193, 132, 59, 118, 174, 129, 190, 74, 110, 243, 237, 235, 225, 237, 67, 22, 126, 213, 210, 13, 213, 92 },
-                            PasswordSalt = new byte[] { 226, 213, 193, 138, 196, 8, 96, 194, 171, 33, 34, 161, 114, 134, 224, 87, 210, 54, 215, 215, 180, 143, 244, 68, 68, 7, 132, 220, 118, 30, 182, 96, 127, 135, 107, 29, 176, 100, 109, 67, 237, 72, 200, 254, 125, 115, 21, 155, 69, 148, 49, 60, 45, 142, 47, 78, 186, 3, 151, 191, 22, 250, 187, 174, 220, 84, 250, 240, 126, 220, 35, 83, 240, 91, 108, 2, 84, 50, 37, 33, 200, 186, 79, 248, 130, 166, 52, 98, 65, 30, 48, 48, 161, 159, 240, 95, 79, 17, 82, 156, 75, 163, 225, 235, 147, 203, 10, 229, 132, 225, 114, 15, 15, 38, 252, 103, 191, 30, 128, 26, 226, 67, 145, 199, 151, 3, 136, 22 },
-                            UserName = "user123"
-                        });
                 });
 
             modelBuilder.Entity("CampeonatoEvento", b =>
