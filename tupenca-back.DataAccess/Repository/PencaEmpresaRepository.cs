@@ -48,7 +48,7 @@ namespace tupenca_back.DataAccess.Repository
         public int GetCantActivas()
         {
             return _appDbContext.PencaEmpresas
-                    .Where(p => p.Campeonato.FinishDate > DateTime.Now)
+                    .Where(p => p.Campeonato.FinishDate > DateTime.UtcNow)
                     .Count();
         }
 

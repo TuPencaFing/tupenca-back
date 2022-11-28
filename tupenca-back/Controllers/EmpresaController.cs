@@ -79,7 +79,7 @@ namespace tupenca_back.Controllers
             Empresa empresa = new Empresa();
             empresa.RUT = empresaDto.RUT;
             empresa.Razonsocial = empresaDto.Razonsocial;
-            empresa.FechaCreacion = DateTime.Now;
+            empresa.FechaCreacion = DateTime.UtcNow;
 
 
             var plan = _planService.FindPlanById(empresaDto.PlanId);

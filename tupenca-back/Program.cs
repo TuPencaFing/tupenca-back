@@ -22,7 +22,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       builder =>
                       {
-                          builder.WithOrigins("http://localhost:3000", " https://admin-tupenca-tsi.azurewebsites.net", "https://tupenca-user-front.azurewebsites.net").AllowAnyMethod().AllowAnyHeader();
+                          builder.WithOrigins("http://localhost:3000", " https://admin-tupenca-tsi.azurewebsites.net", "https://tupenca-user-front.azurewebsites.net", "https://admin-tupenca-tsi.azurewebsites.net").AllowAnyMethod().AllowAnyHeader();
                       });
 });
 // Add services to the container.
