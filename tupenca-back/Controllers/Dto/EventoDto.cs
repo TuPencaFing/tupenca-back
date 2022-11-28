@@ -21,9 +21,9 @@ namespace tupenca_back.Controllers.Dto
 
         public EquipoDto EquipoVisitante { get; set; }
 
-        public bool IsEmpateValid { get; set; } = true;
+        public bool IsEmpateValid { get; set; }
 
-        public bool IsPuntajeEquipoValid { get; set; } = true;
+        public bool IsPuntajeEquipoValid { get; set; }
 
     }
 }

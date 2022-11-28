@@ -38,8 +38,18 @@ namespace tupenca_back.DataAccess.Repository
         public int GetCantActivas()
         {
             return _appDbContext.PencaCompartidas
-                    .Where(p => p.Campeonato.FinishDate > DateTime.Now)
+                    .Where(p => p.Campeonato.FinishDate > DateTime.UtcNow)
                     .Count();
+        }
+
+
+        public IEnumerable<PencaCompartida> GetPencasHot()
+        {
+            return _appDbContext.PencaCompartidas
+                .Where(p => p.Campeonato.FinishDate > DateTime.UtcNow)
+                .OrderByDescending(p => p.Pozo)
+                .Take(5)
+                .ToList();
         }
 
         public void Save()

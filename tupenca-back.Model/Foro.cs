@@ -15,7 +15,8 @@ namespace tupenca_back.Model
 
         [Required]
         public int UsuarioId { get; set; }
-        public virtual Usuario Usuario { get; set; }
+
+        public string UserName { get; set; }
 
         [Required]
         public int PencaId { get; set; }

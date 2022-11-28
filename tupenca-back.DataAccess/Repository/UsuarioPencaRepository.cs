@@ -37,10 +37,24 @@ namespace tupenca_back.DataAccess.Repository
         public IEnumerable<PencaCompartida> GetUsuarioPencasCompartidasNoJoined(int id)
         {
             return _appDbContext.PencaCompartidas
+                .Where(p => p.Campeonato.FinishDate > DateTime.UtcNow)
                 .Where(pc => !_appDbContext.UsuariosPencas
                     .Any(up => up.PencaId == pc.Id && up.UsuarioId == id)
-                ).ToList();
+                )
+                .ToList();
         }
+
+
+        public IEnumerable<PencaCompartida> SearchUsuarioPencasCompartidasNoJoined(int id, string searchString)
+        {
+            return _appDbContext.PencaCompartidas
+                .Where(p => p.Campeonato.FinishDate > DateTime.UtcNow && p.Title.Contains(searchString))
+                .Where(pc => !_appDbContext.UsuariosPencas
+                    .Any(up => up.PencaId == pc.Id && up.UsuarioId == id)
+                )
+                .ToList();
+        }
+
 
         public IEnumerable<PencaEmpresa> GetUsuarioPencasEmpresa(int empresaid, int id)
         {
@@ -55,7 +69,7 @@ namespace tupenca_back.DataAccess.Repository
 
         public IEnumerable<Evento> GetEventosProximosPencaCompartida(int id, int pencaid)
         {
-            var today = DateTime.Now;
+            var today = DateTime.UtcNow;
             return _appDbContext.UsuariosPencas
                 .Where(p => p.UsuarioId == id && p.habilitado == true && p.PencaId == pencaid)
                 .Select(p => p.Penca)
@@ -69,7 +83,7 @@ namespace tupenca_back.DataAccess.Repository
 
         public IEnumerable<Evento> GetEventosProximosPencas(int id)
         {
-            var today = DateTime.Now;
+            var today = DateTime.UtcNow;
             return _appDbContext.UsuariosPencas
                 .Where(p => p.UsuarioId == id && p.habilitado == true)
                 .Select(p => p.Penca)

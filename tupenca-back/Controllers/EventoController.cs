@@ -142,7 +142,7 @@ namespace tupenca_back.Controllers
             if (!_equipoService.EquipoExists(evento.EquipoLocalId))
                 return BadRequest("El equipo Local ingresado no existe");
 
-            if (!_eventoService.IsDateBeforeThan(DateTime.Now, evento.FechaInicial))
+            if (!_eventoService.IsDateBeforeThan(DateTime.UtcNow, evento.FechaInicial))
                 return BadRequest("El evento debe ser en el futuro");
 
             _eventoService.CreateEvento(evento);
@@ -166,7 +166,7 @@ namespace tupenca_back.Controllers
                 return NotFound();
             }
 
-            if (!_eventoService.IsDateBeforeThan(DateTime.Now, eventoFechaDto.FechaInicial))
+            if (!_eventoService.IsDateBeforeThan(DateTime.UtcNow, eventoFechaDto.FechaInicial))
                 return BadRequest("El evento debe ser en el futuro");
 
             evento.FechaInicial = eventoFechaDto.FechaInicial;
@@ -200,9 +200,11 @@ namespace tupenca_back.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Prediccion> CreatePrediccionEvento(int id, PrediccionDto prediccionDto, [FromQuery] int pencaId)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        {   var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var evento = _eventoService.getEventoById(id);
+
+            if (DateTime.UtcNow > evento.FechaInicial) return BadRequest("Ya es tarde para pronosticar este evento");
+
             if (evento == null)
             {
                 return NotFound("No existe el evento");

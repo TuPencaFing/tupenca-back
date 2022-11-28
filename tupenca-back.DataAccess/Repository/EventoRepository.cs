@@ -15,7 +15,7 @@ namespace tupenca_back.DataAccess.Repository
 
         public IEnumerable<Evento> GetEventosProximos()
         {
-            var today = DateTime.Now;
+            var today = DateTime.UtcNow;
             return _appDbContext.Eventos
                 .Where(evento => evento.FechaInicial > today & evento.FechaInicial < today.AddDays(7))
                 .Include(evento => evento.EquipoLocal)
@@ -27,7 +27,7 @@ namespace tupenca_back.DataAccess.Repository
         public IEnumerable<Evento> GetEventosFinalizados()
         {
             return _appDbContext.Eventos
-                    .Where(evento => evento.FechaInicial < DateTime.Now)
+                    .Where(evento => evento.FechaInicial < DateTime.UtcNow)
                     .Include(evento => evento.EquipoLocal)
                     .Include(evento => evento.EquipoVisitante)
                     .ToList();
