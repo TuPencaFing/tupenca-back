@@ -121,7 +121,6 @@ namespace tupenca_back.Controllers
             }
         }
 
-
         // POST: api/eventos       
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]

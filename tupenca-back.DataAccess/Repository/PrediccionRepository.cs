@@ -78,6 +78,28 @@ namespace tupenca_back.DataAccess.Repository
                 .ToList();
         }
 
+        public decimal? getPorcentajeLocal(int idPenca, int idEvento)
+        {
+            var cantTotal = _appDbContext.Predicciones.Where(p => p.EventoId == idEvento && p.PencaId == idPenca).Count();
+            if (cantTotal == 0) return null;
+            var cantLocal = _appDbContext.Predicciones
+                            .Where(p => p.EventoId == idEvento && p.PencaId == idPenca && p.prediccion == TipoResultado.VictoriaEquipoLocal)
+                            .Count();
+            
+            return ((cantLocal*100)/cantTotal);
+        }
+
+        public decimal? getPorcentajeEmpate(int idPenca, int idEvento)
+        {
+            var cantTotal = _appDbContext.Predicciones.Where(p => p.EventoId == idEvento && p.PencaId == idPenca).Count();
+            if (cantTotal == 0) return null;
+            var cantLocal = _appDbContext.Predicciones
+                            .Where(p => p.EventoId == idEvento && p.PencaId == idPenca && p.prediccion == TipoResultado.Empate)
+                            .Count();
+            return ((cantLocal * 100) / cantTotal);
+        }
+
+
 
         public IEnumerable<Prediccion> getPrediccionesByEvento(int eventoId)
         {
