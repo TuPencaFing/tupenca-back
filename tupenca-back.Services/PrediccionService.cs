@@ -96,6 +96,17 @@ namespace tupenca_back.Services
             return _prediccionRepository.getPrediccionesByEvento(eventoId);
         }
 
+
+        public decimal? GetPorcentajeLocal(int idPenca, int idEvento)
+        {
+            return _prediccionRepository.getPorcentajeLocal(idPenca, idEvento);
+        }
+
+        public decimal? GetPorcentajeEmpate(int idPenca, int idEvento)
+        {
+            return _prediccionRepository.getPorcentajeEmpate(idPenca, idEvento);
+        }
+
     }
 }
 

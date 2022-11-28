@@ -16,6 +16,10 @@ namespace tupenca_back.DataAccess.Repository.IRepository
 
         public IEnumerable<Prediccion> getPrediccionesByEvento(int eventoId);
 
+        public decimal? getPorcentajeLocal(int idPenca, int idEvento);
+
+        public decimal? getPorcentajeEmpate(int idPenca, int idEvento);
+
         void Save();
     }
 }
