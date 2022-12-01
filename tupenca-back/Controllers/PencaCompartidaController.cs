@@ -257,22 +257,6 @@ namespace tupenca_back.Controllers
             }
         }
 
-        [HttpGet("{id}/usuarios")]
-        public ActionResult<IEnumerable<UsuarioScore>> GetUsuariosPencaCompartida(int id)
-        {
-            try
-            {
-                var usuarios = _prediccionService.GetUsuariosByPenca(id);
-                return Ok(usuarios);
-
-            }
-            catch (Exception e)
-            {
-                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
-            }
-
-        }
-
         // PATCH: api/deportes/1/image        
         [HttpPatch("{id}/image")]
         public ActionResult UploadImage(int id, [FromForm] ImagenDto imagenDto)

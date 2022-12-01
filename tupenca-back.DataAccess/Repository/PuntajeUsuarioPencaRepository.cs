@@ -19,6 +19,7 @@ namespace tupenca_back.DataAccess.Repository
             return _appDbContext.PuntajeUsuarioPencas
                 .Where(pup => pup.PencaId == pencaId )
                 .OrderBy(pup => pup.Score)
+                .Include(pup => pup.Usuario)
                 .ToList();
         }
 
@@ -26,6 +27,7 @@ namespace tupenca_back.DataAccess.Repository
         {
             return _appDbContext.PuntajeUsuarioPencas
                 .Where(pup => pup.UsuarioId == usuarioId)
+                .Include(pup => pup.Usuario)
                 .ToList();
         }
 

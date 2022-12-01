@@ -14,6 +14,7 @@ namespace tupenca_back.Model
 
         [Required]
         public int UsuarioId { get; set; }
+        public virtual Usuario Usuario { get; set; } 
 
         public int? Score { get; set; } = 0;
     }
