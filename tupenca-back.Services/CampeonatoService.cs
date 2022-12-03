@@ -90,6 +90,7 @@ namespace tupenca_back.Services
                 campeonatoToUpdate.Image = campeonato.Image;
                 campeonatoToUpdate.StartDate = campeonato.StartDate;
                 campeonatoToUpdate.FinishDate = campeonato.FinishDate;
+                campeonatoToUpdate.PremiosEntregados = campeonato.PremiosEntregados;
 
                 _campeonatoRepository.Update(campeonatoToUpdate);
                 _campeonatoRepository.Save();
@@ -151,6 +152,12 @@ namespace tupenca_back.Services
             campeonato.Image = image;
 
             UpdateCampeonato(id, campeonato);
+        }
+
+
+        public List<Campeonato> GetCampeonatosFinalized()
+        {
+            return _campeonatoRepository.GetCampeonatosFinalized().ToList();
         }
 
 

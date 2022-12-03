@@ -74,6 +74,9 @@ namespace tupenca_back.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("PremiosEntregados")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
@@ -289,6 +292,9 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PremiosEntregados")
+                        .HasColumnType("bit");
 
                     b.Property<int>("PuntajeId")
                         .HasColumnType("int");
@@ -559,6 +565,41 @@ namespace tupenca_back.DataAccess.Migrations
                     b.HasIndex("UsuarioId");
 
                     b.ToTable("UsuariosPencas");
+                });
+
+            modelBuilder.Entity("tupenca_back.Model.UsuarioPremio", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Banco")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CuentaBancaria")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("IdPenca")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdUsuario")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("PendientePago")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("Premio")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("Reclamado")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UsuarioPremios");
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Administrador", b =>

@@ -28,6 +28,8 @@ namespace tupenca_back.Model
 
         public List<Penca> Pencas { get; set; } = new List<Penca>();
 
+        public bool PremiosEntregados { get; set; } = false;
+
     }
 }
 

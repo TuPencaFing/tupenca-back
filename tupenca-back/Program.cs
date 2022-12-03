@@ -117,6 +117,7 @@ builder.Services.AddScoped<IPuntajeUsuarioPencaRepository, PuntajeUsuarioPencaRe
 builder.Services.AddScoped<IResultadoRepository, ResultadoRepository>();
 builder.Services.AddScoped<IUsuarioPencaRepository, UsuarioPencaRepository>();
 builder.Services.AddScoped<ILookAndFeelRepository, LookAndFeelRepository>();
+builder.Services.AddScoped<IUsuarioPremioRepository, UsuarioPemioRepository>();
 
 
 

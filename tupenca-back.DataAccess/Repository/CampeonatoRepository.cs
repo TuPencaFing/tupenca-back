@@ -33,6 +33,13 @@ namespace tupenca_back.DataAccess.Repository.IRepository
                 .ToList();
         }
 
+        public IEnumerable<Campeonato> GetCampeonatosFinalized()
+        {
+            return _appDbContext.Campeonatos
+                .Where(c => c.FinishDate < DateTime.Now && !c.PremiosEntregados)
+                .ToList();
+        }
+
         public void Save()
         {
             _appDbContext.SaveChanges();

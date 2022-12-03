@@ -36,6 +36,9 @@ namespace tupenca_back.DataAccess
         public DbSet<PersonaResetPassword>? PersonaResetPassword { get; set; }
         public DbSet<PuntajeUsuarioPenca>? PuntajeUsuarioPencas { get; set; }
         public DbSet<LookAndFeel>? LookAndFeels { get; set; }
+        public DbSet<UsuarioPremio>? UsuarioPremios { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Evento>()
