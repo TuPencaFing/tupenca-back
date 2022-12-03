@@ -29,6 +29,7 @@ namespace tupenca_back.Model
 
         public List<UsuarioPenca> UsuariosPencas { get; set; }
 
+        public bool PremiosEntregados { get; set; } = false;
     }
 }
 

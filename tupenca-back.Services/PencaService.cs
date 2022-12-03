@@ -142,6 +142,7 @@ namespace tupenca_back.Services
             pencaToUpdate.Image = pencaCompartida.Image;
             pencaToUpdate.CostEntry = pencaCompartida.CostEntry;
             pencaToUpdate.Commission = pencaCompartida.Commission;
+            pencaToUpdate.PremiosEntregados = pencaCompartida.PremiosEntregados;
 
             _pencaCompartidaRepository.Update(pencaToUpdate);
             _pencaCompartidaRepository.Save();
@@ -157,6 +158,7 @@ namespace tupenca_back.Services
             pencaToUpdate.Title = pencaEmpresa.Title;
             pencaToUpdate.Description = pencaEmpresa.Description;
             pencaToUpdate.Image = pencaEmpresa.Image;
+            pencaToUpdate.PremiosEntregados = pencaEmpresa.PremiosEntregados;
 
             _pencaEmpresaRepository.Update(pencaToUpdate);
             _pencaEmpresaRepository.Save();
@@ -348,7 +350,9 @@ namespace tupenca_back.Services
 
 
             return Math.Round(gananciaPorPencaCompartida, 2);
-        } 
+        }
+
+
     }
 }
 

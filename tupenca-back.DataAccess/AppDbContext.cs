@@ -34,6 +34,7 @@ namespace tupenca_back.DataAccess
         public DbSet<Foro>? Foros { get; set; }
         public DbSet<PuntajeUsuarioPenca>? PuntajeUsuarioPencas { get; set; }
         public DbSet<LookAndFeel>? LookAndFeels { get; set; }
+        public DbSet<UsuarioPremio>? UsuarioPremios { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

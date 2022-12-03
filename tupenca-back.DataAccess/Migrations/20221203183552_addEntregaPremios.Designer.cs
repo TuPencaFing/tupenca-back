@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using tupenca_back.DataAccess;
 
@@ -11,9 +12,10 @@ using tupenca_back.DataAccess;
 namespace tupenca_back.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221203183552_addEntregaPremios")]
+    partial class addEntregaPremios
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -466,8 +468,6 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UsuarioId");
-
                     b.ToTable("PuntajeUsuarioPencas");
                 });
 
@@ -722,17 +722,6 @@ namespace tupenca_back.DataAccess.Migrations
                     b.HasOne("tupenca_back.Model.Penca", null)
                         .WithMany("Premios")
                         .HasForeignKey("PencaId");
-                });
-
-            modelBuilder.Entity("tupenca_back.Model.PuntajeUsuarioPenca", b =>
-                {
-                    b.HasOne("tupenca_back.Model.Usuario", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("tupenca_back.Model.UsuarioPenca", b =>
