@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.EntityFrameworkCore;
 
 namespace tupenca_back.Model
 {
@@ -9,6 +10,7 @@ namespace tupenca_back.Model
         public int Id { get; set; }
 
         [Required]
+        [Precision(18, 2)]
         public decimal Premio { get; set; }
 
         public string? Banco { get; set; }

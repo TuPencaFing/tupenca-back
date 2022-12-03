@@ -6,17 +6,17 @@ namespace tupenca_back.Services.Scheduler
 	public class PuntajeJob : IJob
     {
 
-        private readonly PremioService _premioService;
+        private readonly EntregaPremioService _entregaPremioService;
 
-        public PuntajeJob(PremioService premioService)
+        public PuntajeJob(EntregaPremioService entregaPremioService)
         {
-            _premioService = premioService;
+            _entregaPremioService = entregaPremioService;
         }
 
 
         public async Task Execute(IJobExecutionContext context)
         {
-            _premioService.AsignarPremio();
+            _entregaPremioService.AsignarPremio();
             await Task.CompletedTask;
         }
     }
