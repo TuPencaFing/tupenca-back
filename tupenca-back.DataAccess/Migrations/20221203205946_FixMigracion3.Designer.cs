@@ -12,8 +12,8 @@ using tupenca_back.DataAccess;
 namespace tupenca_back.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221203195353_notifications")]
-    partial class notifications
+    [Migration("20221203205946_FixMigracion3")]
+    partial class FixMigracion3
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -77,8 +77,7 @@ namespace tupenca_back.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PremiosEntregados")
-                       .HasColumnType("bit");
-
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
@@ -297,7 +296,7 @@ namespace tupenca_back.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PremiosEntregados")
-                      .HasColumnType("bit");
+                        .HasColumnType("bit");
 
                     b.Property<int>("PuntajeId")
                         .HasColumnType("int");
@@ -571,29 +570,39 @@ namespace tupenca_back.DataAccess.Migrations
                 });
 
             modelBuilder.Entity("tupenca_back.Model.UsuarioPremio", b =>
-            {
-                b.Property<int>("Id")
-                    .ValueGeneratedOnAdd()
-                    .HasColumnType("int");
-                SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-                b.Property<string>("Banco")
-                    .HasColumnType("nvarchar(max)");
-                b.Property<string>("CuentaBancaria")
-                    .HasColumnType("nvarchar(max)");
-                b.Property<int>("IdPenca")
-                    .HasColumnType("int");
-                b.Property<int>("IdUsuario")
-                    .HasColumnType("int");
-                b.Property<bool>("PendientePago")
-                    .HasColumnType("bit");
-                b.Property<decimal>("Premio")
-                    .HasPrecision(18, 2)
-                    .HasColumnType("decimal(18,2)");
-                b.Property<bool>("Reclamado")
-                    .HasColumnType("bit");
-                b.HasKey("Id");
-                b.ToTable("UsuarioPremios");
-            });
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Banco")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CuentaBancaria")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("IdPenca")
+                        .HasColumnType("int");
+
+                    b.Property<int>("IdUsuario")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("PendientePago")
+                        .HasColumnType("bit");
+
+                    b.Property<decimal>("Premio")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<bool>("Reclamado")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UsuarioPremios");
+                });
 
             modelBuilder.Entity("tupenca_back.Model.Administrador", b =>
                 {
