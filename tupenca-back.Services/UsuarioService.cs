@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Xml.Linq;
@@ -93,10 +94,45 @@ namespace tupenca_back.Services
 
         }
 
-
         public int GetCantUsuarios()
         {
             return _db.getCantUsuarios();
+        }
+        public string createResetToken(int id)
+        {
+            return _db.createResetToken(id);
+        }
+
+        public IEnumerable<Usuario> getUsuarios()
+        {
+            return _db.GetAll().OfType<Usuario>().ToList();
+        }
+        public int getPersonaIdFromToken(string access_token)
+        {
+            var token = _db.getPersonaResetPassword(access_token);
+            if (token == null)
+            {
+                throw new NotFoundException("El Token no existe");
+            }
+            else
+            {
+                return token.PersonaId;
+
+            }
+        }
+
+        public void UpdateUsuario(Usuario user)
+        {
+            if (user != null)
+            {
+                _db.Update(user);
+                _db.Save();
+            }
+        }
+
+        public Usuario getUsuario(int id)
+        {
+            return _db.GetFirstOrDefault(db => db.Id == id) as Usuario;
         }
     }
 

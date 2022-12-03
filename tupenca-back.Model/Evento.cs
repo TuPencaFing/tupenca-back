@@ -29,6 +29,8 @@ namespace tupenca_back.Model
         public bool IsEmpateValid { get; set; } = true;
 
         public bool IsPuntajeEquipoValid { get; set; } = true;
+        [JsonIgnore]
+        public List<Prediccion> Predicciones { get; set; }
 
     }
 }

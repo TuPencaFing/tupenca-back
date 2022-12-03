@@ -33,6 +33,7 @@ namespace tupenca_back.DataAccess
         public DbSet<Puntaje>? Puntajes { get; set; }
         public DbSet<Foro>? Foros { get; set; }
         public DbSet<NotificationUserDeviceId>? NotificationUserDeviceIds { get; set; }
+        public DbSet<PersonaResetPassword>? PersonaResetPassword { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

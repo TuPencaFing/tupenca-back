@@ -8,10 +8,11 @@ using Swashbuckle.AspNetCore.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using CorePush.Google;
-
 using tupenca_back.Utilities.EmailService;
 using tupenca_back.Model.Notification;
+using Quartz;
+using tupenca_back.Services.Scheduler;
+using CorePush.Google;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
@@ -68,6 +69,33 @@ builder.Services.AddSingleton(emailConfig);
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 
+builder.Services.AddQuartz(q =>
+{
+    q.UseMicrosoftDependencyInjectionScopedJobFactory();
+
+    var jobKey = new JobKey("ResultadoJob");
+
+    q.AddJob<ResultadoJob>(opts => opts.WithIdentity(jobKey));
+
+    var jobKey2 = new JobKey("NotificationEventoProximoJob");
+
+    q.AddJob<NotificationEventoProximoJob>(opts => opts.WithIdentity(jobKey2));
+
+
+    q.AddTrigger(opts => opts
+        .ForJob(jobKey)
+        .WithIdentity("ResultadoJob-trigger")
+        .WithCronSchedule("0 * * * * ?"));
+
+    q.AddTrigger(opts => opts
+        .ForJob(jobKey2)
+        .WithIdentity("NotificationEventoProximoJob-trigger")
+        .WithCronSchedule("1 * * * * ?"));
+
+
+});
+builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
+
 // Repository
 builder.Services.AddScoped<ICampeonatoRepository, CampeonatoRepository>();
 builder.Services.AddScoped<IDeporteRepository, DeporteRepository>();
@@ -83,7 +111,6 @@ builder.Services.AddScoped<IPremioRepository, PremioRepository>();
 builder.Services.AddScoped<IResultadoRepository, ResultadoRepository>();
 builder.Services.AddScoped<IUsuarioPencaRepository, UsuarioPencaRepository>();
 builder.Services.AddScoped<IPuntajeRepository, PuntajeRepository>();
-builder.Services.AddScoped<IForoRepository, ForoRepository>();
 
 
 // Service
@@ -102,15 +129,13 @@ builder.Services.AddScoped<PremioService, PremioService>();
 builder.Services.AddScoped<ResultadoService, ResultadoService>();
 builder.Services.AddScoped<UsuarioService, UsuarioService>();
 builder.Services.AddScoped<PuntajeService, PuntajeService>();
-builder.Services.AddScoped<ForoService, ForoService>();
-
+builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddTransient<INotificationService, NotificationService>();
 builder.Services.AddHttpClient<FcmSender>();
 
 // Configure strongly typed settings objects
 var appSettingsSection = builder.Configuration.GetSection("FcmNotification");
 builder.Services.Configure<FcmNotificationSetting>(appSettingsSection);
-
 
 // Mapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

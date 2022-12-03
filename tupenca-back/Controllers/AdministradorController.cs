@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using tupenca_back.Model;
 using tupenca_back.Services;
 using tupenca_back.Controllers.Dto;
+using tupenca_back.Utilities.EmailService;
 
 namespace tupenca_back.Controllers
 {
@@ -17,6 +18,7 @@ namespace tupenca_back.Controllers
         private readonly IConfiguration _configuration;
         private readonly ILogger<AdministradorController> _logger;
         private readonly AdministradorService _administradorService;
+        
         public AdministradorController(ILogger<AdministradorController> logger, AdministradorService administradorService, IConfiguration configuration)
         {
             _logger = logger;

@@ -27,9 +27,9 @@ namespace tupenca_back.DataAccess.Repository
         public IEnumerable<PencaCompartida> GetUsuarioPencasCompartidas(int id)
         {
             return _appDbContext.UsuariosPencas
-                .Where(p => p.UsuarioId == id )
+                .Where(p => p.UsuarioId == id && p.habilitado == true)
                 .Select(p => p.Penca)
-                .Join(_appDbContext.PencaCompartidas, penca => penca.Id, p => p.Id, (penca, p) => p)
+                .Join(_appDbContext.PencaCompartidas, penca => penca.Id, p => p.Id, (penca,p) => p)
                 .ToList();
 
         }
@@ -39,7 +39,7 @@ namespace tupenca_back.DataAccess.Repository
             return _appDbContext.PencaCompartidas
                 .Where(pc => !_appDbContext.UsuariosPencas
                     .Any(up => up.PencaId == pc.Id && up.UsuarioId == id)
-                ).ToList();
+                ).ToList();                           
         }
 
         public IEnumerable<PencaEmpresa> GetUsuarioPencasEmpresa(int empresaid, int id)
@@ -74,7 +74,7 @@ namespace tupenca_back.DataAccess.Repository
                 .Where(p => p.UsuarioId == id && p.habilitado == true)
                 .Select(p => p.Penca)
                 .SelectMany(p => p.Campeonato.Eventos)
-                .Where(evento => evento.FechaInicial > today & evento.FechaInicial < today.AddDays(7))
+                .Where(evento => evento.FechaInicial > today )
                 .OrderBy(evento => evento.FechaInicial)
                 .Distinct()
                 .Include(evento => evento.EquipoLocal)
@@ -89,12 +89,11 @@ namespace tupenca_back.DataAccess.Repository
                 .Count();
         }
 
-
+       
         public void Save()
         {
             _appDbContext.SaveChanges();
         }
-
 
         public void HabilitarUsuario(int pencaId, int usuarioId)
         {
@@ -103,6 +102,5 @@ namespace tupenca_back.DataAccess.Repository
             _appDbContext.UsuariosPencas.Update(userpenca);
             _appDbContext.SaveChanges();
         }
-
     }
 }
