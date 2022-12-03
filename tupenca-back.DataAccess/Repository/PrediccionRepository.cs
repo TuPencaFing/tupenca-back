@@ -71,15 +71,48 @@ namespace tupenca_back.DataAccess.Repository
         }
 
 
+        public IEnumerable<Prediccion> getPrediccionesByEventoAndPenca(int eventoId, int pencaId)
+        {
+            return _appDbContext.Predicciones
+                .Where(p => p.EventoId == eventoId && p.PencaId == pencaId)
+                .ToList();
+        }
+
+        public decimal? getPorcentajeLocal(int idPenca, int idEvento)
+        {
+            var cantTotal = _appDbContext.Predicciones.Where(p => p.EventoId == idEvento && p.PencaId == idPenca).Count();
+            if (cantTotal == 0) return null;
+            var cantLocal = _appDbContext.Predicciones
+                            .Where(p => p.EventoId == idEvento && p.PencaId == idPenca && p.prediccion == TipoResultado.VictoriaEquipoLocal)
+                            .Count();
+            
+            return ((cantLocal*100)/cantTotal);
+        }
+
+        public decimal? getPorcentajeEmpate(int idPenca, int idEvento)
+        {
+            var cantTotal = _appDbContext.Predicciones.Where(p => p.EventoId == idEvento && p.PencaId == idPenca).Count();
+            if (cantTotal == 0) return null;
+            var cantLocal = _appDbContext.Predicciones
+                            .Where(p => p.EventoId == idEvento && p.PencaId == idPenca && p.prediccion == TipoResultado.Empate)
+                            .Count();
+            return ((cantLocal * 100) / cantTotal);
+        }
+
+
+
+        public IEnumerable<Prediccion> getPrediccionesByEvento(int eventoId)
+        {
+            return _appDbContext.Predicciones
+                .Where(p => p.EventoId == eventoId)
+                .ToList();
+        }
+
+
         public void Save()
         {
             _appDbContext.SaveChanges();
         }
-
-        public IEnumerable<Prediccion> getPrediccionesByEvento(int eventoId, int pencaId)
-        {
-            return _appDbContext.Predicciones.Where(p => p.EventoId == eventoId && p.PencaId == pencaId).ToList();
-        }
-
+    
     }
 }

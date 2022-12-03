@@ -31,7 +31,25 @@ namespace tupenca_back.DataAccess.Repository
             return _appDbContext.PencaCompartidas
                     .Where(filter)
                     .Include(p => p.Campeonato)
+                    .Include(p => p.Premios)
                     .First();
+        }
+
+        public int GetCantActivas()
+        {
+            return _appDbContext.PencaCompartidas
+                    .Where(p => p.Campeonato.FinishDate > DateTime.UtcNow)
+                    .Count();
+        }
+
+
+        public IEnumerable<PencaCompartida> GetPencasHot()
+        {
+            return _appDbContext.PencaCompartidas
+                .Where(p => p.Campeonato.FinishDate > DateTime.UtcNow)
+                .OrderByDescending(p => p.Pozo)
+                .Take(5)
+                .ToList();
         }
 
         public void Save()
@@ -39,6 +57,7 @@ namespace tupenca_back.DataAccess.Repository
             _appDbContext.SaveChanges();
         }
 
+       
     }
 }
 

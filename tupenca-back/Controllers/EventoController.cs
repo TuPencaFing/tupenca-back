@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using System.Net;
 using tupenca_back.Services.Exceptions;
+using tupenca_back.Services.Dto;
 using AutoMapper;
 
 namespace tupenca_back.Controllers
@@ -80,7 +81,8 @@ ILogger<EventoController> logger, EventoService eventoService, EquipoService equ
                 var prediccionDto = _mapper.Map<PrediccionDto>(prediccion);
                 EventoPrediccionDto eventoret = new EventoPrediccionDto { Id = evento.Id, EquipoLocal = equipoLocalDto,
                                                                          EquipoVisitante = equipoVisitanteDto, FechaInicial = evento.FechaInicial,
-                                                                         Prediccion = prediccionDto
+                                                                         Prediccion = prediccionDto, IsEmpateValid = evento.IsEmpateValid,
+                                                                         IsPuntajeEquipoValid = evento.IsPuntajeEquipoValid
                 };
 
 
@@ -88,7 +90,7 @@ ILogger<EventoController> logger, EventoService eventoService, EquipoService equ
                 var cantEmpate = 0;
                 var cantVictoriaLocal = 0;
                 var cantVictoriaVisitante = 0;
-                var predicciones = _prediccionService.getPrediccionesByEvento(evento.Id, penca);
+                var predicciones = _prediccionService.getPrediccionesByEventoAndPenca(evento.Id, penca);
                 foreach (var elem in predicciones)
                 {
                     if (elem != null)
@@ -105,6 +107,7 @@ ILogger<EventoController> logger, EventoService eventoService, EquipoService equ
 
                 eventosRet.Add(eventoret);
             }
+
             return Ok(eventosRet);
         }
 
@@ -147,7 +150,7 @@ ILogger<EventoController> logger, EventoService eventoService, EquipoService equ
             if (!_equipoService.EquipoExists(evento.EquipoLocalId))
                 return BadRequest("El equipo Local ingresado no existe");
 
-            if (!_eventoService.IsDateBeforeThan(DateTime.Now, evento.FechaInicial))
+            if (!_eventoService.IsDateBeforeThan(DateTime.UtcNow, evento.FechaInicial))
                 return BadRequest("El evento debe ser en el futuro");
 
             _eventoService.CreateEvento(evento);
@@ -171,7 +174,7 @@ ILogger<EventoController> logger, EventoService eventoService, EquipoService equ
                 return NotFound();
             }
 
-            if (!_eventoService.IsDateBeforeThan(DateTime.Now, eventoFechaDto.FechaInicial))
+            if (!_eventoService.IsDateBeforeThan(DateTime.UtcNow, eventoFechaDto.FechaInicial))
                 return BadRequest("El evento debe ser en el futuro");
 
             evento.FechaInicial = eventoFechaDto.FechaInicial;
@@ -205,14 +208,16 @@ ILogger<EventoController> logger, EventoService eventoService, EquipoService equ
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<Prediccion> CreatePrediccionEvento(int id, PrediccionDto prediccionDto, [FromQuery] int pencaId)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        {   var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var evento = _eventoService.getEventoById(id);
+
+            if (DateTime.UtcNow > evento.FechaInicial) return BadRequest("Ya es tarde para pronosticar este evento");
+
             if (evento == null)
             {
                 return NotFound("No existe el evento");
             }
-            var prediccionExistente = _prediccionService.getPrediccionByEventoId(id, pencaId, Convert.ToInt32(userId));
+            var prediccionExistente = _prediccionService.getPrediccionByEventoAndPencaAndUsuario(id, pencaId, Convert.ToInt32(userId));
             if (prediccionExistente != null)
             {
                 prediccionExistente.prediccion = prediccionDto.resultado;
@@ -250,6 +255,19 @@ ILogger<EventoController> logger, EventoService eventoService, EquipoService equ
             {
                 throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
             }
+        }
+
+
+        //GET: api/eventos/finalizados        
+        [HttpGet("finalizados")]
+        public ActionResult<IEnumerable<EventoResultado>> GetEventosResultadoFinalizados()
+        {
+            var eventos = _eventoService.GetEventosResultadoFinalizados();
+            if (eventos == null)
+            {
+                return NoContent();
+            }
+            return Ok(eventos);
         }
 
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using tupenca_back.DataAccess.Repository.IRepository;
 using tupenca_back.Model;
@@ -19,7 +20,7 @@ namespace tupenca_back.DataAccess.Repository
             return _appDbContext.PencaEmpresas
                  .Include(p => p.Campeonato)
                  .Include(p => p.Premios)
-                 .Include(p => p.Empresa)
+                 .Include(p => p.Empresa).ThenInclude(e => e.Plan)
                  .ToList();
         }
 
@@ -44,10 +45,29 @@ namespace tupenca_back.DataAccess.Repository
                  .ToList();
         }
 
+        public int GetCantActivas()
+        {
+            return _appDbContext.PencaEmpresas
+                    .Where(p => p.Campeonato.FinishDate > DateTime.UtcNow)
+                    .Count();
+        }
+
+        public PencaEmpresa GetFirst(Expression<Func<PencaEmpresa, bool>> filter)
+        {
+            return _appDbContext.PencaEmpresas
+                    .Where(filter)
+                    .Include(p => p.Campeonato)
+                    .Include(p => p.Premios)
+                    .Include(p => p.Empresa)
+                    .First();
+        }
+
         public void Save()
         {
             _appDbContext.SaveChanges();
         }
+
+       
     }
 }
 

@@ -7,6 +7,7 @@ using tupenca_back.Services.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
 using System.Security.Claims;
+using MercadoPago.Resource.User;
 
 namespace tupenca_back.Controllers
 {
@@ -16,14 +17,17 @@ namespace tupenca_back.Controllers
     [Route("api/foros")]
     public class ForoController : ControllerBase
     {
-        private readonly ILogger<DeporteController> _logger;
+        private readonly ILogger<ForoController> _logger;
         private readonly ForoService _foroService;
+        private readonly UsuarioService _usuarioService;
 
-        public ForoController(ILogger<DeporteController> logger,
-                                 ForoService foroService)
+        public ForoController(ILogger<ForoController> logger,
+                                 ForoService foroService,
+                                 UsuarioService usuarioService)
         {
             _logger = logger;
             _foroService = foroService;
+            _usuarioService = usuarioService;
         }
 
         //GET: api/foros/1        
@@ -36,12 +40,19 @@ namespace tupenca_back.Controllers
 
         // POST: api/foros        
         [HttpPost]
-        public ActionResult CreateMessage(Foro foro)
+        public ActionResult CreateMessage(ForoDto forodto)
         {
             try
             {
                 var userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
-                if (userId != foro.UsuarioId) return BadRequest();
+                var user = _usuarioService.find(userId);
+                if (user == null) return BadRequest();
+                Foro foro = new Foro();
+                foro.PencaId = forodto.PencaId;
+                foro.UserName = user.UserName;
+                foro.UsuarioId = userId;
+                foro.Message = forodto.Message;
+                foro.Creacion = DateTime.UtcNow;
                 _foroService.CreateMessage(foro);
                 return Ok();
             }

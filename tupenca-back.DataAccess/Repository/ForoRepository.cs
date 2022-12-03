@@ -16,7 +16,7 @@ namespace tupenca_back.DataAccess.Repository
         public IEnumerable<Foro> getMessagesByPenca(int pencaId)
         {
             return _appDbContext.Foros.Where(f => f.PencaId == pencaId)
-                                      .Include(f => f.Usuario)
+                                      .OrderBy(f => f.Creacion)
                                       .ToList();
         }
 

@@ -16,12 +16,38 @@ namespace tupenca_back.Services
     {
         private readonly IPersonaRepository _db;
         private readonly IConfiguration _configuration;
+        private readonly EmpresaService _empresaService;
+        private readonly UsuarioService _usuarioService;
+        private readonly PencaService _pencaService;
 
-        public AdministradorService(IPersonaRepository db, IConfiguration configuration) : base(db, configuration)
+
+        public AdministradorService(IPersonaRepository db,
+                                    IConfiguration configuration,
+                                    EmpresaService empresaService,
+                                    UsuarioService usuarioService,
+                                    PencaService pencaService) : base(db, configuration)
         {
             _db = db;
             _configuration = configuration;
+            _empresaService = empresaService;
+            _usuarioService = usuarioService;
+            _pencaService = pencaService;
         }
 
+
+
+        public Metrica GetMetrica()
+        {
+            Metrica metrica = new Metrica();
+
+            var ganancia = _pencaService.GananciasPencasCompartidas() + _empresaService.GetGananciasPorPlan();
+
+            metrica.cantEmpresasRegistradas = _empresaService.CantEmpresas();
+            metrica.cantUsuariosRegistrados = _usuarioService.GetCantUsuarios();
+            metrica.cantPencasActivas = _pencaService.CantPencasActivas();
+            metrica.ganancias = ganancia;
+
+            return metrica;
+        }
     }
 }

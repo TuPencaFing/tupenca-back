@@ -15,12 +15,22 @@ namespace tupenca_back.DataAccess.Repository
 
         public IEnumerable<Evento> GetEventosProximos()
         {
-            var today = DateTime.Now;
+            var today = DateTime.UtcNow;
             return _appDbContext.Eventos
                 .Where(evento => evento.FechaInicial > today & evento.FechaInicial < today.AddDays(7))
                 .Include(evento => evento.EquipoLocal)
                 .Include(evento => evento.EquipoVisitante)
                 .ToList();
+        }
+
+
+        public IEnumerable<Evento> GetEventosFinalizados()
+        {
+            return _appDbContext.Eventos
+                    .Where(evento => evento.FechaInicial < DateTime.UtcNow)
+                    .Include(evento => evento.EquipoLocal)
+                    .Include(evento => evento.EquipoVisitante)
+                    .ToList();
         }
 
         public IEnumerable<Evento> GetEventos()
@@ -43,5 +53,6 @@ namespace tupenca_back.DataAccess.Repository
         {
             _appDbContext.SaveChanges();
         }
+
     }
 }

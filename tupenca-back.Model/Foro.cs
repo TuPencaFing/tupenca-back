@@ -15,10 +15,13 @@ namespace tupenca_back.Model
 
         [Required]
         public int UsuarioId { get; set; }
-        public virtual Usuario Usuario { get; set; }
+
+        public string UserName { get; set; }
 
         [Required]
         public int PencaId { get; set; }
 
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm}", ApplyFormatInEditMode = true)]
+        public DateTime Creacion { get; set; }
     }
 }

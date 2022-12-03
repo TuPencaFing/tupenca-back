@@ -9,19 +9,25 @@ using Microsoft.AspNetCore.Authorization;
 namespace tupenca_back.Controllers
 {
     [ApiController]
+    [Authorize]
     public class ResultadoController : ControllerBase
     {
         private readonly ILogger<ResultadoController> _logger;
         private readonly ResultadoService _resultadoService;
         private readonly PrediccionService _prediccionService;
+        private readonly PuntajeUsuarioPencaService _puntajeUsuarioPencaService;
         private readonly INotificationService _notificacionService;
 
-        public ResultadoController(ILogger<ResultadoController> logger, ResultadoService resultadoService, PrediccionService prediccionService, INotificationService notificationService)
+        public ResultadoController(ILogger<ResultadoController> logger,
+                                   ResultadoService resultadoService,
+                                   PrediccionService prediccionService,
+                                   PuntajeUsuarioPencaService puntajeUsuarioPencaService,INotificationService notificationService)
         {
             _logger = logger;
             _resultadoService = resultadoService;
             _prediccionService = prediccionService;
             _notificacionService = notificationService;
+            _puntajeUsuarioPencaService = puntajeUsuarioPencaService;
         }
 
         // GET: api/resultados/1        
@@ -78,13 +84,11 @@ namespace tupenca_back.Controllers
                 resultado.PuntajeEquipoLocal = resultadoDto.PuntajeEquipoLocal;
                 resultado.PuntajeEquipoVisitante = resultadoDto.PuntajeEquipoVisitante;
                 resultado.EventoId = resultadoDto.EventoId;
-
                 _resultadoService.CreateResultado(resultado);
 
                 //actualizar score
-                _prediccionService.UpdateScore(resultadoDto.EventoId, resultado);
+                _puntajeUsuarioPencaService.CalcularPuntajes(resultado);
                 _notificacionService.SendScore(resultado.EventoId, resultado);
-
 
                 return CreatedAtAction("GetResultadoById", new { id = resultado.Id }, resultado);
             }

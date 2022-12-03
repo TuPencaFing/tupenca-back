@@ -50,7 +50,7 @@ namespace tupenca_back.Controllers
         public ActionResult<Prediccion> GetPrediccionByEventoPencaId(int eventoid, int pencaid)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var prediccion = _prediccionService.getPrediccionByEventoId(eventoid, pencaid, Convert.ToInt32(userId));
+            var prediccion = _prediccionService.getPrediccionByEventoAndPencaAndUsuario(eventoid, pencaid, Convert.ToInt32(userId));
             if (prediccion == null)
             {
                 return NotFound();

@@ -12,8 +12,8 @@ using tupenca_back.DataAccess;
 namespace tupenca_back.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221112222506_PlanSeedUpdate")]
-    partial class PlanSeedUpdate
+    [Migration("20221107004029_UsuarioPencafix")]
+    partial class UsuarioPencafix
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -68,9 +68,6 @@ namespace tupenca_back.DataAccess.Migrations
                     b.Property<DateTime>("FinishDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -93,7 +90,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Image")
+                    b.Property<string>("ImagenName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nombre")
@@ -109,11 +106,6 @@ namespace tupenca_back.DataAccess.Migrations
                         {
                             Id = 1,
                             Nombre = "Futbol"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Nombre = "Tennis"
                         });
                 });
 
@@ -127,9 +119,6 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.Property<DateTime>("FechaCreacion")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PlanId")
                         .HasColumnType("int");
@@ -191,9 +180,6 @@ namespace tupenca_back.DataAccess.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -263,15 +249,6 @@ namespace tupenca_back.DataAccess.Migrations
                     b.Property<DateTime>("FechaInicial")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsEmpateValid")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsPuntajeEquipoValid")
-                        .HasColumnType("bit");
-
                     b.HasKey("Id");
 
                     b.HasIndex("EquipoLocalId");
@@ -286,126 +263,84 @@ namespace tupenca_back.DataAccess.Migrations
                             Id = 1,
                             EquipoLocalId = 1,
                             EquipoVisitanteId = 2,
-                            FechaInicial = new DateTime(2022, 11, 20, 13, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = true,
-                            IsPuntajeEquipoValid = true
+                            FechaInicial = new DateTime(2022, 11, 20, 13, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 2,
                             EquipoLocalId = 3,
                             EquipoVisitanteId = 4,
-                            FechaInicial = new DateTime(2022, 11, 21, 7, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = true,
-                            IsPuntajeEquipoValid = true
+                            FechaInicial = new DateTime(2022, 11, 21, 7, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 3,
                             EquipoLocalId = 7,
                             EquipoVisitanteId = 8,
-                            FechaInicial = new DateTime(2022, 11, 24, 10, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = true,
-                            IsPuntajeEquipoValid = true
+                            FechaInicial = new DateTime(2022, 11, 24, 10, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 4,
                             EquipoLocalId = 5,
                             EquipoVisitanteId = 6,
-                            FechaInicial = new DateTime(2022, 11, 24, 13, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = true,
-                            IsPuntajeEquipoValid = true
+                            FechaInicial = new DateTime(2022, 11, 24, 13, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 5,
                             EquipoLocalId = 1,
                             EquipoVisitanteId = 3,
-                            FechaInicial = new DateTime(2022, 11, 25, 10, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = true,
-                            IsPuntajeEquipoValid = true
+                            FechaInicial = new DateTime(2022, 11, 25, 10, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 6,
                             EquipoLocalId = 4,
                             EquipoVisitanteId = 2,
-                            FechaInicial = new DateTime(2022, 11, 25, 13, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = true,
-                            IsPuntajeEquipoValid = true
+                            FechaInicial = new DateTime(2022, 11, 25, 13, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 7,
                             EquipoLocalId = 8,
                             EquipoVisitanteId = 6,
-                            FechaInicial = new DateTime(2022, 11, 28, 10, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = true,
-                            IsPuntajeEquipoValid = true
+                            FechaInicial = new DateTime(2022, 11, 28, 10, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 8,
                             EquipoLocalId = 5,
                             EquipoVisitanteId = 7,
-                            FechaInicial = new DateTime(2022, 11, 28, 16, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = true,
-                            IsPuntajeEquipoValid = true
+                            FechaInicial = new DateTime(2022, 11, 28, 16, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 9,
                             EquipoLocalId = 2,
                             EquipoVisitanteId = 3,
-                            FechaInicial = new DateTime(2022, 11, 29, 12, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = true,
-                            IsPuntajeEquipoValid = true
+                            FechaInicial = new DateTime(2022, 11, 29, 12, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 10,
                             EquipoLocalId = 4,
                             EquipoVisitanteId = 1,
-                            FechaInicial = new DateTime(2022, 11, 29, 12, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = true,
-                            IsPuntajeEquipoValid = true
+                            FechaInicial = new DateTime(2022, 11, 29, 12, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 11,
                             EquipoLocalId = 6,
                             EquipoVisitanteId = 7,
-                            FechaInicial = new DateTime(2022, 12, 2, 12, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = true,
-                            IsPuntajeEquipoValid = true
+                            FechaInicial = new DateTime(2022, 12, 2, 12, 0, 0, 0, DateTimeKind.Unspecified)
                         },
                         new
                         {
                             Id = 12,
                             EquipoLocalId = 8,
                             EquipoVisitanteId = 5,
-                            FechaInicial = new DateTime(2022, 12, 2, 12, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = true,
-                            IsPuntajeEquipoValid = true
-                        },
-                        new
-                        {
-                            Id = 13,
-                            EquipoLocalId = 2,
-                            EquipoVisitanteId = 7,
-                            FechaInicial = new DateTime(2023, 1, 2, 7, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = false,
-                            IsPuntajeEquipoValid = false
-                        },
-                        new
-                        {
-                            Id = 14,
-                            EquipoLocalId = 7,
-                            EquipoVisitanteId = 2,
-                            FechaInicial = new DateTime(2023, 1, 2, 8, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsEmpateValid = false,
-                            IsPuntajeEquipoValid = false
+                            FechaInicial = new DateTime(2022, 12, 2, 12, 0, 0, 0, DateTimeKind.Unspecified)
                         });
                 });
 
@@ -429,6 +364,7 @@ namespace tupenca_back.DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Image")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PuntajeId")
@@ -469,9 +405,6 @@ namespace tupenca_back.DataAccess.Migrations
                         .HasMaxLength(64)
                         .HasColumnType("varbinary(64)");
 
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<byte[]>("PasswordSalt")
                         .HasMaxLength(128)
                         .HasColumnType("varbinary(128)");
@@ -501,9 +434,6 @@ namespace tupenca_back.DataAccess.Migrations
                     b.Property<int>("CantUser")
                         .HasColumnType("int");
 
-                    b.Property<int>("Cost")
-                        .HasColumnType("int");
-
                     b.Property<int>("LookAndFeel")
                         .HasColumnType("int");
 
@@ -521,7 +451,6 @@ namespace tupenca_back.DataAccess.Migrations
                             Id = 1,
                             CantPencas = 1,
                             CantUser = 50,
-                            Cost = 100,
                             LookAndFeel = 1,
                             PercentageCost = 10m
                         },
@@ -530,7 +459,6 @@ namespace tupenca_back.DataAccess.Migrations
                             Id = 2,
                             CantPencas = 5,
                             CantUser = 100,
-                            Cost = 200,
                             LookAndFeel = 2,
                             PercentageCost = 10m
                         },
@@ -539,7 +467,6 @@ namespace tupenca_back.DataAccess.Migrations
                             Id = 3,
                             CantPencas = 10,
                             CantUser = 500,
-                            Cost = 500,
                             LookAndFeel = 2,
                             PercentageCost = 10m
                         });
@@ -586,9 +513,6 @@ namespace tupenca_back.DataAccess.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("PencaId")
                         .HasColumnType("int");

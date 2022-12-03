@@ -7,6 +7,8 @@ using tupenca_back.Model;
 using tupenca_back.Services;
 using tupenca_back.Controllers.Dto;
 using tupenca_back.Utilities.EmailService;
+using tupenca_back.Services.Exceptions;
+using System.Net;
 
 namespace tupenca_back.Controllers
 {
@@ -18,7 +20,6 @@ namespace tupenca_back.Controllers
         private readonly IConfiguration _configuration;
         private readonly ILogger<AdministradorController> _logger;
         private readonly AdministradorService _administradorService;
-        
         public AdministradorController(ILogger<AdministradorController> logger, AdministradorService administradorService, IConfiguration configuration)
         {
             _logger = logger;
@@ -105,6 +106,26 @@ namespace tupenca_back.Controllers
             userDto.token = token;
             return Ok(userDto);
         }
+
+
+        //GET: api/administrador
+        [HttpGet("metricas")]
+        [AllowAnonymous]
+        public ActionResult<Metrica> GetMetrica()
+        {
+            try
+            {
+                var metrica = _administradorService.GetMetrica();
+
+                return Ok(metrica);
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+
     }
 
 

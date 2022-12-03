@@ -34,13 +34,11 @@ namespace tupenca_back.Controllers
 
         //GET: api/empresas        
         [HttpGet]
-        public ActionResult<IEnumerable<EmpresaCountDto>> GetEmpresas()
+        public ActionResult<IEnumerable<EmpresaDto>> GetEmpresas()
         {
             var empresas = _empresaService.getEmpresas();
-            EmpresaCountDto empresasCount = new EmpresaCountDto();
-            empresasCount.Empresas = empresas;
-            empresasCount.CantEmpresas = _empresaService.CantEmpresas();
-            return Ok(empresasCount);
+            var empresasDto = _mapper.Map<List<EmpresaDto>>(empresas);
+            return Ok(empresasDto);
         }
 
         //GET: api/empresas/nuevas        
@@ -81,7 +79,7 @@ namespace tupenca_back.Controllers
             Empresa empresa = new Empresa();
             empresa.RUT = empresaDto.RUT;
             empresa.Razonsocial = empresaDto.Razonsocial;
-            empresa.FechaCreacion = DateTime.Now;
+            empresa.FechaCreacion = DateTime.UtcNow;
 
 
             var plan = _planService.FindPlanById(empresaDto.PlanId);
@@ -162,7 +160,7 @@ namespace tupenca_back.Controllers
         }
 
 
-        // PATCH: api/deportes/1/image        
+        // PATCH: api/empresas/1/image        
         [HttpPatch("{id}/image")]
         public ActionResult UploadImage(int id, [FromForm] ImagenDto imagenDto)
         {
@@ -178,6 +176,27 @@ namespace tupenca_back.Controllers
             }
         }
 
+
+        // Patch: api/campeonatos/1/eventos
+        [HttpPatch("{id}/plan")]
+        public ActionResult<EmpresaDto> ChangePlan(int id, PlanDto plan)
+        {
+            try
+            {
+                var empresa = _empresaService.ChangePlan(id, plan.Id);
+
+                return Ok(_mapper.Map<EmpresaDto>(empresa));
+            }
+            catch (NotFoundException e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.NotFound, e.Message);
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+
+        }
     }
 }
 

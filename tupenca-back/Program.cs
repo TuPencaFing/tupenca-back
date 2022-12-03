@@ -8,6 +8,9 @@ using Swashbuckle.AspNetCore.Filters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using tupenca_back.Utilities.EmailService;
 using tupenca_back.Model.Notification;
 using Quartz;
@@ -21,7 +24,7 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       builder =>
                       {
-                          builder.WithOrigins("http://localhost:3000", " https://admin-tupenca-tsi.azurewebsites.net", "https://tupenca-user-front.azurewebsites.net").AllowAnyMethod().AllowAnyHeader();
+                          builder.WithOrigins("http://localhost:3000", " https://admin-tupenca-tsi.azurewebsites.net", "https://tupenca-user-front.azurewebsites.net", "https://admin-tupenca-tsi.azurewebsites.net").AllowAnyMethod().AllowAnyHeader();
                       });
 });
 // Add services to the container.
@@ -102,15 +105,19 @@ builder.Services.AddScoped<IDeporteRepository, DeporteRepository>();
 builder.Services.AddScoped<IEmpresaRepository, EmpresaRepository>();
 builder.Services.AddScoped<IEquipoRepository, EquipoRepository>();
 builder.Services.AddScoped<IEventoRepository, EventoRepository>();
+builder.Services.AddScoped<IForoRepository, ForoRepository>();
 builder.Services.AddScoped<IPencaCompartidaRepository, PencaCompartidaRepository>();
 builder.Services.AddScoped<IPencaEmpresaRepository, PencaEmpresaRepository>();
 builder.Services.AddScoped<IPersonaRepository, PersonaRepository>();
 builder.Services.AddScoped<IPlanRepository, PlanRepository>();
 builder.Services.AddScoped<IPrediccionRepository, PrediccionRepository>();
 builder.Services.AddScoped<IPremioRepository, PremioRepository>();
+builder.Services.AddScoped<IPuntajeRepository, PuntajeRepository>();
+builder.Services.AddScoped<IPuntajeUsuarioPencaRepository, PuntajeUsuarioPencaRepository>();
 builder.Services.AddScoped<IResultadoRepository, ResultadoRepository>();
 builder.Services.AddScoped<IUsuarioPencaRepository, UsuarioPencaRepository>();
-builder.Services.AddScoped<IPuntajeRepository, PuntajeRepository>();
+builder.Services.AddScoped<ILookAndFeelRepository, LookAndFeelRepository>();
+
 
 
 // Service
@@ -120,19 +127,21 @@ builder.Services.AddScoped<DeporteService, DeporteService>();
 builder.Services.AddScoped<EmpresaService, EmpresaService>();
 builder.Services.AddScoped<EquipoService, EquipoService>();
 builder.Services.AddScoped<EventoService, EventoService>();
+builder.Services.AddScoped<ForoService, ForoService>();
 builder.Services.AddScoped<FuncionarioService, FuncionarioService>();
 builder.Services.AddScoped<ImagesService, ImagesService>();
 builder.Services.AddScoped<PencaService, PencaService>();
 builder.Services.AddScoped<PlanService, PlanService>();
 builder.Services.AddScoped<PrediccionService, PrediccionService>();
 builder.Services.AddScoped<PremioService, PremioService>();
+builder.Services.AddScoped<PuntajeService, PuntajeService>();
+builder.Services.AddScoped<PuntajeUsuarioPencaService, PuntajeUsuarioPencaService>();
 builder.Services.AddScoped<ResultadoService, ResultadoService>();
 builder.Services.AddScoped<UsuarioService, UsuarioService>();
-builder.Services.AddScoped<PuntajeService, PuntajeService>();
+builder.Services.AddScoped<LookAndFeelService, LookAndFeelService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddTransient<INotificationService, NotificationService>();
 builder.Services.AddHttpClient<FcmSender>();
-
 // Configure strongly typed settings objects
 var appSettingsSection = builder.Configuration.GetSection("FcmNotification");
 builder.Services.Configure<FcmNotificationSetting>(appSettingsSection);
@@ -143,12 +152,6 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 var app = builder.Build();
 
 
-//Image create directory
-var commonpath = Path.Combine(app.Environment.ContentRootPath, "Images");
-if (!System.IO.Directory.Exists(commonpath))
-{
-    System.IO.Directory.CreateDirectory(commonpath);
-}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

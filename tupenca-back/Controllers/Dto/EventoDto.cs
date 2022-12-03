@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using tupenca_back.Model;
 
 namespace tupenca_back.Controllers.Dto
 {
@@ -16,9 +17,13 @@ namespace tupenca_back.Controllers.Dto
 
         public int EquipoVisitanteId { get; set; }
 
-        public bool IsEmpateValid { get; set; } = true;
+        public EquipoDto EquipoLocal { get; set; }
 
-        public bool IsPuntajeEquipoValid { get; set; } = true;
+        public EquipoDto EquipoVisitante { get; set; }
+
+        public bool IsEmpateValid { get; set; }
+
+        public bool IsPuntajeEquipoValid { get; set; }
 
     }
 }

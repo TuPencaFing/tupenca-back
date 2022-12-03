@@ -76,6 +76,16 @@ namespace tupenca_back.Services
                     throw new NotFoundException("El Campeonato no existe");
                 }
 
+                if (campeonato.Deporte.Id != null)
+                {
+                    var deporte = _deporteService.getDeporteById(campeonato.Deporte.Id);
+
+                    if (deporte == null)
+                        throw new NotFoundException("El Deporte no encontrado");
+
+                    campeonatoToUpdate.Deporte = deporte;
+                }
+
                 campeonatoToUpdate.Name = campeonato.Name;
                 campeonatoToUpdate.Image = campeonato.Image;
                 campeonatoToUpdate.StartDate = campeonato.StartDate;
