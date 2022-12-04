@@ -208,12 +208,34 @@ namespace tupenca_back.Services
 
         }
 
+        public IEnumerable<PencaCompartida>? SearchPencasCompartidasByUsuario(int userId, string searchString)
+        {
+            var usuario = _usuarioService.find(userId);
+            if (usuario != null)
+            {
+                return _usuariopencaRepository.SearchUsuarioPencasCompartidas(userId, searchString);
+            }
+            else throw new NotFoundException("Usuario no exsite");
+
+        }
+
         public IEnumerable<PencaCompartida> GetPencasCompartidasNoJoinedByUsuario(int userId)
         {
             var usuario = _usuarioService.find(userId);
             if (usuario != null)
             {
                 return _usuariopencaRepository.GetUsuarioPencasCompartidasNoJoined(userId);
+            }
+            else throw new NotFoundException("Usuario no exsite");
+
+        }
+
+        public IEnumerable<PencaCompartida>? SerchPencasCompartidasNoJoinedByUsuario(int userId, string searchString)
+        {
+            var usuario = _usuarioService.find(userId);
+            if (usuario != null)
+            {
+                return _usuariopencaRepository.SearchUsuarioPencasCompartidasNoJoined(userId , searchString);
             }
             else throw new NotFoundException("Usuario no exsite");
 
@@ -356,6 +378,11 @@ namespace tupenca_back.Services
         public IEnumerable<EventoPrediccion> GetInfoEventosByPencaUsuario(int PencaId, int userId)
         {
             return _pencaCompartidaRepository.GetInfoEventosByPencaUsuario(PencaId, userId);
+        }
+
+        public IEnumerable<PencaCompartida> GetPencasHot()
+        {
+            return _pencaCompartidaRepository.GetPencasHot();
         }
 
     }

@@ -28,5 +28,8 @@ namespace tupenca_back.DataAccess.Repository.IRepository
 
         public void HabilitarUsuario(int pencaId, int usuarioId);
 
+        public IEnumerable<PencaCompartida>? SearchUsuarioPencasCompartidas(int id, string searchString);
+
+        public IEnumerable<PencaCompartida>? SearchUsuarioPencasCompartidasNoJoined(int id, string searchString);
     }
 }

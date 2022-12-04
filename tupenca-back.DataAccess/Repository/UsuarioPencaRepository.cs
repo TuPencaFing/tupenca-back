@@ -45,14 +45,37 @@ namespace tupenca_back.DataAccess.Repository
         }
 
 
-        public IEnumerable<PencaCompartida> SearchUsuarioPencasCompartidasNoJoined(int id, string searchString)
+        public IEnumerable<PencaCompartida>? SearchUsuarioPencasCompartidasNoJoined(int id, string searchString)
         {
-            return _appDbContext.PencaCompartidas
-                .Where(p => p.Campeonato.FinishDate > DateTime.UtcNow && p.Title.Contains(searchString))
+            var pencas = _appDbContext.PencaCompartidas
+                .Where(p => p.Campeonato.FinishDate > DateTime.UtcNow)
                 .Where(pc => !_appDbContext.UsuariosPencas
                     .Any(up => up.PencaId == pc.Id && up.UsuarioId == id)
                 )
                 .ToList();
+
+            if (pencas != null)
+            {
+                var pencaSearch = pencas.Where(p => p.Title.Contains(searchString)).ToList();
+                return pencaSearch;
+            }
+            return null;
+        }
+
+        public IEnumerable<PencaCompartida>? SearchUsuarioPencasCompartidas(int id, string searchString)
+        {
+            var pencas = _appDbContext.UsuariosPencas
+                .Where(p => p.UsuarioId == id && p.habilitado == true)
+                .Select(p => p.Penca)
+                .Join(_appDbContext.PencaCompartidas, penca => penca.Id, p => p.Id, (penca, p) => p)
+                .ToList();
+
+            if (pencas != null)
+            {
+                var pencaSearch = pencas.Where(p => p.Title.Contains(searchString)).ToList();
+                return pencaSearch;
+            }
+            return null;
         }
 
 

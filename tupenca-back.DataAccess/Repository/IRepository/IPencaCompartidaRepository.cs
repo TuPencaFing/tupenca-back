@@ -17,6 +17,8 @@ namespace tupenca_back.DataAccess.Repository.IRepository
 
         IEnumerable<EventoPrediccion> GetInfoEventosByPencaUsuario(int PencaId, int userId);
 
+        IEnumerable<PencaCompartida> GetPencasHot();
+
     }
 }
 
