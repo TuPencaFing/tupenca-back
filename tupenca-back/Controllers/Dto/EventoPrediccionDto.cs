@@ -13,15 +13,13 @@ namespace tupenca_back.Controllers.Dto
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy HH:mm}", ApplyFormatInEditMode = true)]
         public DateTime FechaInicial { get; set; }
 
-        public int EquipoLocalId { get; set; }
-        public Equipo EquipoLocal { get; set; }
+        public EquipoDto EquipoLocal { get; set; }
 
-        public int EquipoVisitanteId { get; set; }
-        public Equipo EquipoVisitante { get; set; }
+        public EquipoDto EquipoVisitante { get; set; }
 
-        public Prediccion? Prediccion { get; set; }
+        public PrediccionDto? Prediccion { get; set; }
 
-        public Resultado? Resultado { get; set; }
+        public ResultadoDto? Resultado { get; set; }
 
         public bool IsEmpateValid { get; set; } = true;
 

@@ -6,8 +6,9 @@ using System.ComponentModel.DataAnnotations;
 using tupenca_back.Model;
 using tupenca_back.Services;
 using tupenca_back.Controllers.Dto;
-using System.Net;
+using tupenca_back.Utilities.EmailService;
 using tupenca_back.Services.Exceptions;
+using System.Net;
 
 namespace tupenca_back.Controllers
 {
@@ -126,5 +127,6 @@ namespace tupenca_back.Controllers
 
 
     }
+
 
 }

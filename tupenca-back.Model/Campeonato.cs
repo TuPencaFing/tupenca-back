@@ -22,10 +22,13 @@ namespace tupenca_back.Model
 
         [Required]
         public Deporte? Deporte { get; set; }
+        public int ? DeporteId { get; set; } 
 
         public List<Evento> Eventos { get; set; } = new List<Evento>();
 
         public List<Penca> Pencas { get; set; } = new List<Penca>();
+
+        public bool PremiosEntregados { get; set; } = false;
 
     }
 }

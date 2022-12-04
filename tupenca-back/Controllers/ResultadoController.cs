@@ -16,15 +16,17 @@ namespace tupenca_back.Controllers
         private readonly ResultadoService _resultadoService;
         private readonly PrediccionService _prediccionService;
         private readonly PuntajeUsuarioPencaService _puntajeUsuarioPencaService;
+        private readonly INotificationService _notificacionService;
 
         public ResultadoController(ILogger<ResultadoController> logger,
                                    ResultadoService resultadoService,
                                    PrediccionService prediccionService,
-                                   PuntajeUsuarioPencaService puntajeUsuarioPencaService)
+                                   PuntajeUsuarioPencaService puntajeUsuarioPencaService,INotificationService notificationService)
         {
             _logger = logger;
             _resultadoService = resultadoService;
             _prediccionService = prediccionService;
+            _notificacionService = notificationService;
             _puntajeUsuarioPencaService = puntajeUsuarioPencaService;
         }
 
@@ -86,7 +88,7 @@ namespace tupenca_back.Controllers
 
                 //actualizar score
                 _puntajeUsuarioPencaService.CalcularPuntajes(resultado);
-
+                _notificacionService.SendScore(resultado.EventoId, resultado);
 
                 return CreatedAtAction("GetResultadoById", new { id = resultado.Id }, resultado);
             }

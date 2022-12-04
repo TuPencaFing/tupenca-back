@@ -12,8 +12,10 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using tupenca_back.Utilities.EmailService;
+using tupenca_back.Model.Notification;
 using Quartz;
 using tupenca_back.Services.Scheduler;
+using CorePush.Google;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 var builder = WebApplication.CreateBuilder(args);
@@ -78,10 +80,21 @@ builder.Services.AddQuartz(q =>
 
     q.AddJob<ResultadoJob>(opts => opts.WithIdentity(jobKey));
 
+    var jobKey2 = new JobKey("NotificationEventoProximoJob");
+
+    q.AddJob<NotificationEventoProximoJob>(opts => opts.WithIdentity(jobKey2));
+
+
     q.AddTrigger(opts => opts
         .ForJob(jobKey)
         .WithIdentity("ResultadoJob-trigger")
         .WithCronSchedule("0 * * * * ?"));
+
+    q.AddTrigger(opts => opts
+        .ForJob(jobKey2)
+        .WithIdentity("NotificationEventoProximoJob-trigger")
+        .WithCronSchedule("1 * * * * ?"));
+
 
 });
 builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
@@ -104,6 +117,7 @@ builder.Services.AddScoped<IPuntajeUsuarioPencaRepository, PuntajeUsuarioPencaRe
 builder.Services.AddScoped<IResultadoRepository, ResultadoRepository>();
 builder.Services.AddScoped<IUsuarioPencaRepository, UsuarioPencaRepository>();
 builder.Services.AddScoped<ILookAndFeelRepository, LookAndFeelRepository>();
+builder.Services.AddScoped<IUsuarioPremioRepository, UsuarioPemioRepository>();
 
 
 
@@ -126,9 +140,12 @@ builder.Services.AddScoped<PuntajeUsuarioPencaService, PuntajeUsuarioPencaServic
 builder.Services.AddScoped<ResultadoService, ResultadoService>();
 builder.Services.AddScoped<UsuarioService, UsuarioService>();
 builder.Services.AddScoped<LookAndFeelService, LookAndFeelService>();
-
-
-
+builder.Services.AddScoped<INotificationService, NotificationService>();
+builder.Services.AddTransient<INotificationService, NotificationService>();
+builder.Services.AddHttpClient<FcmSender>();
+// Configure strongly typed settings objects
+var appSettingsSection = builder.Configuration.GetSection("FcmNotification");
+builder.Services.Configure<FcmNotificationSetting>(appSettingsSection);
 
 // Mapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

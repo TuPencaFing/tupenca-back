@@ -120,7 +120,11 @@ namespace tupenca_back.Services
                                 && resultado.PuntajeEquipoVisitante == prediccion.PuntajeEquipoVisitante)
                             {
                                 scoreGenerado = puntaje.ResultadoExacto;
-                            }        
+                            }
+                            else
+                            {
+                                scoreGenerado = puntaje.Resultado;
+                            }
                         }
                         else
                         {

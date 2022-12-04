@@ -11,5 +11,7 @@ namespace tupenca_back.Controllers.Dto
 
         public int? PuntajeEquipoVisitante { get; set; }
 
+        public int? Score { get; set; }
+
     }
 }
