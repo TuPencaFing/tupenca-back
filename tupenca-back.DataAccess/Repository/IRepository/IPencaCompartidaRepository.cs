@@ -15,6 +15,8 @@ namespace tupenca_back.DataAccess.Repository.IRepository
      
         void Save();
 
+        IEnumerable<EventoPrediccion> GetInfoEventosByPencaUsuario(int PencaId, int userId);
+
     }
 }
 

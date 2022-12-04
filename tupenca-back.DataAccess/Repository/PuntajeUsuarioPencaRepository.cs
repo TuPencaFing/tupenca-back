@@ -31,6 +31,14 @@ namespace tupenca_back.DataAccess.Repository
                 .ToList();
         }
 
+        public int? GetTotal(int pencaId, int usuairoId)
+        {
+            return _appDbContext.PuntajeUsuarioPencas
+                .Where(pup => pup.UsuarioId == usuairoId && pup.PencaId == pencaId)
+                .Sum(pup => pup.Score);
+        }
+
+
         public void Save()
         {
             _appDbContext.SaveChanges();

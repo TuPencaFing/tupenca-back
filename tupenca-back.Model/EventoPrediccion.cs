@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using tupenca_back.Model;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
-namespace tupenca_back.Controllers.Dto
+namespace tupenca_back.Model
 {
-    public class EventoPrediccionDto
+    public class EventoPrediccion
     {
-
         public int Id { get; set; }
 
         public string? Image { get; set; }
@@ -14,24 +14,18 @@ namespace tupenca_back.Controllers.Dto
         public DateTime FechaInicial { get; set; }
 
         public int EquipoLocalId { get; set; }
-        public Equipo EquipoLocal { get; set; }
+        public virtual Equipo EquipoLocal { get; set; }
 
         public int EquipoVisitanteId { get; set; }
-        public Equipo EquipoVisitante { get; set; }
-
-        public Prediccion? Prediccion { get; set; }
-
-        public Resultado? Resultado { get; set; }
+        public virtual Equipo EquipoVisitante { get; set; }
 
         public bool IsEmpateValid { get; set; } = true;
 
         public bool IsPuntajeEquipoValid { get; set; } = true;
 
-        public decimal? PorcentajeEmpate { get; set; }
+        public Prediccion? Prediccion { get; set; }
 
-        public decimal? PorcentajeLocal { get; set; }
-
-        public decimal? PorcentajeVisitante { get; set; }
+        public Resultado? Resultado { get; set; }
 
     }
 }

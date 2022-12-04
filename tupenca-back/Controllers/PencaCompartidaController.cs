@@ -31,6 +31,7 @@ namespace tupenca_back.Controllers
         private readonly ResultadoService _resultadoService;
         private readonly PuntajeService _puntajeService;
         private readonly EventoService _eventoService;
+        private readonly PuntajeUsuarioPencaService _puntajeUsuarioPencaService;
 
         public PencaCompartidaController(ILogger<PencaCompartidaController> logger,
                                IMapper mapper,
@@ -40,7 +41,8 @@ namespace tupenca_back.Controllers
                                EquipoService equipoService,
                                ResultadoService resultadoService,
                                PuntajeService puntajeService,
-                               EventoService eventoService)
+                               EventoService eventoService,
+                               PuntajeUsuarioPencaService puntajeUsuarioPencaService)
         {
             _logger = logger;
             _mapper = mapper;
@@ -51,6 +53,7 @@ namespace tupenca_back.Controllers
             _resultadoService = resultadoService;
             _puntajeService = puntajeService;
             _eventoService = eventoService;
+            _puntajeUsuarioPencaService = puntajeUsuarioPencaService;
         }
 
         //GET: api/pencas-compartidas
@@ -319,60 +322,32 @@ namespace tupenca_back.Controllers
         {
             try
             {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var penca = _pencaService.findPencaCompartidaById(id);
+                var userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                var penca = _pencaService.findPencaCompartidaById(id);                
                 if (penca == null)
                 {
                     return NotFound();
                 }
-                PencaInfoDto pencainfo = new PencaInfoDto();                
-                pencainfo.Id = penca.Id;
-                pencainfo.PencaTitle = penca.Title;
-                pencainfo.PencaDescription = penca.Description;
-                pencainfo.Image = penca.Image;
-                pencainfo.Pozo = penca.Pozo;
-                var campeonato = _campeonatoService.findCampeonatoById(penca.Campeonato.Id);
-                pencainfo.CampeonatoName = campeonato.Name;
-                pencainfo.StartDate = campeonato.StartDate;
-                pencainfo.FinishDate = campeonato.FinishDate;
-                DeporteDto deportedto = new DeporteDto();
-                deportedto.Id = campeonato.Deporte.Id;
-                deportedto.Nombre = campeonato.Deporte.Nombre;
-                deportedto.Image = campeonato.Deporte.Image;
-                pencainfo.Deporte = deportedto;                
-                List<EventoPrediccionDto> eventos = new List<EventoPrediccionDto>();
-                var puntaje = _puntajeService.getPuntajeById(penca.PuntajeId);
-                int? puntajeTotal = 0;
-                foreach (var evento in penca.Campeonato.Eventos)
+                PencaInfoDto pencaInfo = new PencaInfoDto();                
+                pencaInfo.Id = penca.Id;
+                pencaInfo.PencaTitle = penca.Title;
+                pencaInfo.PencaDescription = penca.Description;
+                pencaInfo.Image = penca.Image;                
+                pencaInfo.CampeonatoName = penca.Campeonato.Name;                
+                pencaInfo.DeporteName = _campeonatoService.findCampeonatoById(penca.Campeonato.Id).Deporte.Nombre;
+                var eventos = _pencaService.GetInfoEventosByPencaUsuario(id, userId);
+                pencaInfo.Eventos = eventos;
+                var score = _puntajeUsuarioPencaService.GetTotalByPencaAndUsuario(id, userId);
+                if (score == null)
                 {
-                    var prediccion = _prediccionService.GetPrediccionByUsuarioEvento(Convert.ToInt32(userId), evento.Id, penca.Id);
-                    var resultado = _resultadoService.getResultadoByEventoId(evento.Id);
-                    var equipolocal = _equipoService.getEquipoById(evento.EquipoLocalId);
-                    var equipovisitante = _equipoService.getEquipoById(evento.EquipoVisitanteId);
-                    
-                    EventoPrediccionDto eventoinfo = new EventoPrediccionDto
-                    {
-                        Id = evento.Id,
-                        EquipoLocal = equipolocal,
-                        EquipoVisitante = equipovisitante,
-                        FechaInicial = evento.FechaInicial,
-                        Resultado = resultado,
-                        Prediccion = prediccion
-                    };
-                    eventos.Add(eventoinfo);
-                    if (prediccion != null)
-                    {
-                        if (prediccion.Score != null)
-                        {
-                            puntajeTotal += prediccion.Score;
-                        }
-                    }
+                    pencaInfo.PuntajeTotal = 0;
                 }
-                pencainfo.Eventos = eventos;
-                pencainfo.PuntajeTotal = puntajeTotal;                
+                else
+                {
+                    pencaInfo.PuntajeTotal = score;
 
-                return Ok(pencainfo);
-                
+                }
+                return Ok(pencaInfo);                
             }
             catch (Exception e)
             {
