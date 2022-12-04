@@ -76,11 +76,6 @@ namespace tupenca_back.Services
         }
         
         
-        public IEnumerable<UsuarioScore> GetUsuariosByPenca(int pencaId)
-        {
-            return _prediccionRepository.GetUsuariosByPenca(pencaId);
-        }
-
         public void UpdateScore(int eventoId, Resultado resultado)
         {
             _prediccionRepository.UpdateScore(eventoId, resultado);

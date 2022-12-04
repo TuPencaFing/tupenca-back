@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using tupenca_back.DataAccess;
 using tupenca_back.DataAccess.Repository;
 using tupenca_back.DataAccess.Repository.IRepository;
 using tupenca_back.Model;
@@ -352,6 +353,10 @@ namespace tupenca_back.Services
             return Math.Round(gananciaPorPencaCompartida, 2);
         }
 
+        public IEnumerable<EventoPrediccion> GetInfoEventosByPencaUsuario(int PencaId, int userId)
+        {
+            return _pencaCompartidaRepository.GetInfoEventosByPencaUsuario(PencaId, userId);
+        }
 
     }
 }
