@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
 using System.Security.Claims;
 using MercadoPago.Resource.User;
+using System.Runtime.CompilerServices;
 
 namespace tupenca_back.Controllers
 {
@@ -20,19 +21,22 @@ namespace tupenca_back.Controllers
         private readonly ILogger<ForoController> _logger;
         private readonly ForoService _foroService;
         private readonly UsuarioService _usuarioService;
+        public readonly IMapper _mapper;
 
         public ForoController(ILogger<ForoController> logger,
                                  ForoService foroService,
-                                 UsuarioService usuarioService)
+                                 UsuarioService usuarioService,
+                                 IMapper mapper)
         {
             _logger = logger;
             _foroService = foroService;
             _usuarioService = usuarioService;
+            _mapper = mapper;
         }
 
         //GET: api/foros/1        
         [HttpGet]
-        public ActionResult<IEnumerable<Foro>> GetMessages([FromQuery] int pencaId)
+        public ActionResult<IEnumerable<ForoUsers>> GetMessages([FromQuery] int pencaId)
         {
             var messages = _foroService.getMessagesByPenca(pencaId);
             return Ok(messages);
@@ -49,7 +53,6 @@ namespace tupenca_back.Controllers
                 if (user == null) return BadRequest();
                 Foro foro = new Foro();
                 foro.PencaId = forodto.PencaId;
-                foro.UserName = user.UserName;
                 foro.UsuarioId = userId;
                 foro.Message = forodto.Message;
                 foro.Creacion = DateTime.UtcNow;

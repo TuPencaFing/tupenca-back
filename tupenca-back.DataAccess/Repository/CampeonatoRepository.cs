@@ -44,6 +44,11 @@ namespace tupenca_back.DataAccess.Repository.IRepository
         {
             _appDbContext.SaveChanges();
         }
+
+        public IEnumerable<Campeonato>? SearchCampeonato(string searchString)
+        {
+            return _appDbContext.Campeonatos.Where(e => e.Name.Contains(searchString)).ToList();
+        }
     }
 }
 
