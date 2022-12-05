@@ -47,30 +47,6 @@ namespace tupenca_back.DataAccess.Repository
             }
         }
 
-
-        public IEnumerable<UsuarioScore> GetUsuariosByPenca(int id)
-        {
-            var list = _appDbContext.Predicciones
-            .Where(p => p.PencaId == id && p.Score != null)
-            //.Join(_appDbContext.Usuarios, p => p.UsuarioId, user => user.Id, (p, user) => user)
-            .GroupBy(p => p.UsuarioId)
-            .Select(p => new { ID = p.Key, TotalScore = p.Sum(b => b.Score)})
-            .OrderByDescending(a => a.TotalScore)
-            .ToList();
-
-            List<UsuarioScore> usuarios = new List<UsuarioScore>();
-
-            foreach (var elem in list)
-            {
-                var user = _appDbContext.Personas.Where(p => p.Id == elem.ID).First();
-
-                var usuarioScore = new UsuarioScore{ ID = elem.ID, UserName = user.UserName,TotalScore = elem.TotalScore};
-                usuarios.Add(usuarioScore);
-            }
-            return usuarios;
-        }
-
-
         public IEnumerable<Prediccion> getPrediccionesByEventoAndPenca(int eventoId, int pencaId)
         {
             return _appDbContext.Predicciones

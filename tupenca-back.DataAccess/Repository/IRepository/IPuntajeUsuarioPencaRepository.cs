@@ -10,6 +10,8 @@ namespace tupenca_back.DataAccess.Repository.IRepository
 
         IEnumerable<PuntajeUsuarioPenca> GetAllByUsuario(int usuarioId);
 
+        int? GetTotal(int pencaId, int usuairoId);
+
         void Save();
 
     }

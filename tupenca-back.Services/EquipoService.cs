@@ -22,6 +22,8 @@ namespace tupenca_back.Services
 
         public Equipo? getEquipoByNombre(string Nombre) => _equipoRepository.GetFirstOrDefault(e => e.Nombre == Nombre);
 
+        public IEnumerable<Equipo>? SearchEquipos(string searchString) => _equipoRepository.SearchEquipo(searchString); 
+
         public void CreateEquipo(Equipo equipo)
         {
             if (equipo != null)

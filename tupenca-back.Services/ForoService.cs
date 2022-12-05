@@ -14,7 +14,7 @@ namespace tupenca_back.Services
             _foroRepository = foroRepository;
         }
 
-        public IEnumerable<Foro> getMessagesByPenca(int pencaId) => _foroRepository.getMessagesByPenca(pencaId);
+        public IEnumerable<ForoUsers> getMessagesByPenca(int pencaId) => _foroRepository.getMessagesByPenca(pencaId);
 
         public void CreateMessage(Foro foro)
         {

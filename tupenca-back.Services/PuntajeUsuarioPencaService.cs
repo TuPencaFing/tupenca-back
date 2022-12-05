@@ -34,6 +34,8 @@ namespace tupenca_back.Services
         public PuntajeUsuarioPenca? GetByPencaAndUsuario(int pencaId, int usuarioId) => _puntajeUsuarioPencaRepository
             .GetFirstOrDefault(pup => pup.PencaId == pencaId && pup.UsuarioId == usuarioId);
 
+        public int? GetTotalByPencaAndUsuario(int pencaId, int usuarioId) => _puntajeUsuarioPencaRepository.GetTotal(pencaId, usuarioId);
+
         public IEnumerable<PuntajeUsuarioPenca> GetAllByPenca(int pencaId) => _puntajeUsuarioPencaRepository.GetAllByPenca(pencaId);
 
         public IEnumerable<PuntajeUsuarioPenca> GetAllByUsuario(int usuarioId) => _puntajeUsuarioPencaRepository.GetAllByUsuario(usuarioId);
@@ -118,7 +120,11 @@ namespace tupenca_back.Services
                                 && resultado.PuntajeEquipoVisitante == prediccion.PuntajeEquipoVisitante)
                             {
                                 scoreGenerado = puntaje.ResultadoExacto;
-                            }        
+                            }
+                            else
+                            {
+                                scoreGenerado = puntaje.Resultado;
+                            }
                         }
                         else
                         {

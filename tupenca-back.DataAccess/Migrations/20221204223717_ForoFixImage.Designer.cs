@@ -12,8 +12,8 @@ using tupenca_back.DataAccess;
 namespace tupenca_back.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20221203210437_notificationsfix")]
-    partial class notificationsfix
+    [Migration("20221204223717_ForoFixImage")]
+    partial class ForoFixImage
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -207,6 +207,9 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.Property<DateTime>("Creacion")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Message")
                         .IsRequired()

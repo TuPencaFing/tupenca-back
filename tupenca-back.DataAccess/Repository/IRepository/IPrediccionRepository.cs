@@ -10,8 +10,6 @@ namespace tupenca_back.DataAccess.Repository.IRepository
 
         public void UpdateScore(int eventoId, Resultado resultado);
 
-        public IEnumerable<UsuarioScore> GetUsuariosByPenca(int id);
-
         public IEnumerable<Prediccion> getPrediccionesByEventoAndPenca(int eventoId, int pencaId);
 
         public IEnumerable<Prediccion> getPrediccionesByEvento(int eventoId);

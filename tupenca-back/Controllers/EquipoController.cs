@@ -24,10 +24,19 @@ namespace tupenca_back.Controllers
         //GET: api/equipos        
         [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
-        public ActionResult<IEnumerable<Equipo>> GetEquipos()
+        public ActionResult<IEnumerable<Equipo>?> GetEquipos([FromQuery] string? searchString = null)
         {
-            var equipos = _equipoService.getEquipos();
-            return Ok(equipos);
+            if (searchString == null)
+            {
+                var equipos = _equipoService.getEquipos();
+                return Ok(equipos);
+            }
+            else
+            {
+                var equipos = _equipoService.SearchEquipos(searchString);
+                return Ok(equipos);
+            }
+
         }
 
 

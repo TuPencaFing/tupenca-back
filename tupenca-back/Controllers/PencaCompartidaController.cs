@@ -12,6 +12,7 @@ using MercadoPago.Client.Common;
 using MercadoPago.Client.Payment;
 using MercadoPago.Config;
 using MercadoPago.Resource.Payment;
+using System.Drawing;
 
 namespace tupenca_back.Controllers
 {
@@ -31,6 +32,7 @@ namespace tupenca_back.Controllers
         private readonly ResultadoService _resultadoService;
         private readonly PuntajeService _puntajeService;
         private readonly EventoService _eventoService;
+        private readonly PuntajeUsuarioPencaService _puntajeUsuarioPencaService;
 
         public PencaCompartidaController(ILogger<PencaCompartidaController> logger,
                                IMapper mapper,
@@ -40,7 +42,8 @@ namespace tupenca_back.Controllers
                                EquipoService equipoService,
                                ResultadoService resultadoService,
                                PuntajeService puntajeService,
-                               EventoService eventoService)
+                               EventoService eventoService,
+                               PuntajeUsuarioPencaService puntajeUsuarioPencaService)
         {
             _logger = logger;
             _mapper = mapper;
@@ -51,6 +54,7 @@ namespace tupenca_back.Controllers
             _resultadoService = resultadoService;
             _puntajeService = puntajeService;
             _eventoService = eventoService;
+            _puntajeUsuarioPencaService = puntajeUsuarioPencaService;
         }
 
         //GET: api/pencas-compartidas
@@ -171,15 +175,24 @@ namespace tupenca_back.Controllers
         //Pencas de cada usuario
 
         [HttpGet("me")]
-        public ActionResult<IEnumerable<PencaCompartida>> GetPencasCompartidasByUsuario([FromQuery] bool joined = true)
+        public ActionResult<IEnumerable<PencaCompartida>?> GetPencasCompartidasByUsuario([FromQuery] bool joined = true, [FromQuery] string? searchString = null)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (joined == true)
             {
                 try
                 {
-                    var pencas = _pencaService.GetPencasCompartidasByUsuario(Convert.ToInt32(userId));
-                    return Ok(pencas);
+                    if (searchString != null)
+                    {
+                        var pencas = _pencaService.SearchPencasCompartidasByUsuario(Convert.ToInt32(userId), searchString);
+                        return Ok(pencas);
+                    }
+                    else
+                    {
+                        var pencas = _pencaService.GetPencasCompartidasByUsuario(Convert.ToInt32(userId));
+                        return Ok(pencas);
+                    }
+
                 }
                 catch (Exception e)
                 {
@@ -190,8 +203,16 @@ namespace tupenca_back.Controllers
             {
                 try
                 {
-                    var pencas = _pencaService.GetPencasCompartidasNoJoinedByUsuario(Convert.ToInt32(userId));
-                    return Ok(pencas);
+                    if (searchString != null)
+                    {
+                        var pencas = _pencaService.SerchPencasCompartidasNoJoinedByUsuario(Convert.ToInt32(userId), searchString);
+                        return Ok(pencas);
+                    }
+                    else
+                    {
+                        var pencas = _pencaService.GetPencasCompartidasNoJoinedByUsuario(Convert.ToInt32(userId));
+                        return Ok(pencas);
+                    }
                 }
                 catch (Exception e)
                 {
@@ -234,7 +255,7 @@ namespace tupenca_back.Controllers
         }
 
         // GET: api/pencas-compartidas/1/evento/1/estadisticas     
-        [HttpGet("{id}/evento/{idEvento}/estadisticas")]
+        [HttpGet("{id}/eventos/{idEvento}/estadisticas")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<EstadisticaEventoDto> GetEstadisticas(int id, int idEvento)
@@ -279,69 +300,57 @@ namespace tupenca_back.Controllers
         {
             try
             {
-                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var penca = _pencaService.findPencaCompartidaById(id);
+                var userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                var penca = _pencaService.findPencaCompartidaById(id);                
                 if (penca == null)
                 {
                     return NotFound();
                 }
-                PencaInfoDto pencainfo = new PencaInfoDto();                
-                pencainfo.Id = penca.Id;
-                pencainfo.PencaTitle = penca.Title;
-                pencainfo.PencaDescription = penca.Description;
-                pencainfo.Image = penca.Image;
-                pencainfo.Pozo = penca.Pozo;
-                var campeonato = _campeonatoService.findCampeonatoById(penca.Campeonato.Id);
-                pencainfo.CampeonatoName = campeonato.Name;
-                pencainfo.StartDate = campeonato.StartDate;
-                pencainfo.FinishDate = campeonato.FinishDate;
-                DeporteDto deportedto = new DeporteDto();
-                deportedto.Id = campeonato.Deporte.Id;
-                deportedto.Nombre = campeonato.Deporte.Nombre;
-                deportedto.Image = campeonato.Deporte.Image;
-                pencainfo.Deporte = deportedto;                
-                List<EventoPrediccionDto> eventos = new List<EventoPrediccionDto>();
-                var puntaje = _puntajeService.getPuntajeById(penca.PuntajeId);
-                int? puntajeTotal = 0;
-                foreach (var evento in penca.Campeonato.Eventos)
+                PencaInfoDto pencaInfo = new PencaInfoDto();                
+                pencaInfo.Id = penca.Id;
+                pencaInfo.PencaTitle = penca.Title;
+                pencaInfo.PencaDescription = penca.Description;
+                pencaInfo.Image = penca.Image;                
+                pencaInfo.CampeonatoName = penca.Campeonato.Name;                
+                pencaInfo.DeporteName = _campeonatoService.findCampeonatoById(penca.Campeonato.Id).Deporte.Nombre;
+                var eventos = _pencaService.GetInfoEventosByPencaUsuario(id, userId);
+                pencaInfo.Eventos = eventos;
+                var score = _puntajeUsuarioPencaService.GetTotalByPencaAndUsuario(id, userId);
+                if (score == null)
                 {
-                    var prediccion = _prediccionService.GetPrediccionByUsuarioEvento(Convert.ToInt32(userId), evento.Id, penca.Id);
-                    var resultado = _resultadoService.getResultadoByEventoId(evento.Id);
-                    var equipolocal = _equipoService.getEquipoById(evento.EquipoLocalId);
-                    var equipovisitante = _equipoService.getEquipoById(evento.EquipoVisitanteId);
-                    var equipoLocalDto = _mapper.Map<EquipoDto>(equipolocal);
-                    var equipoVisitanteDto = _mapper.Map<EquipoDto>(equipovisitante);
-                    var prediccionDto = _mapper.Map<PrediccionDto>(prediccion);
-                    var resultadoDto = _mapper.Map<ResultadoDto>(resultado);
-                    EventoPrediccionDto eventoinfo = new EventoPrediccionDto
-                    {
-                        Id = evento.Id,
-                        EquipoLocal = equipoLocalDto,
-                        EquipoVisitante = equipoVisitanteDto,
-                        FechaInicial = evento.FechaInicial,
-                        Resultado = resultadoDto,
-                        Prediccion = prediccionDto
-                    };
-                    eventos.Add(eventoinfo);
-                    if (prediccion != null)
-                    {
-                        if (prediccion.Score != null)
-                        {
-                            puntajeTotal += prediccion.Score;
-                        }
-                    }
+                    pencaInfo.PuntajeTotal = 0;
                 }
-                pencainfo.Eventos = eventos;
-                pencainfo.PuntajeTotal = puntajeTotal;                
+                else
+                {
+                    pencaInfo.PuntajeTotal = score;
 
-                return Ok(pencainfo);
-                
+                }
+                return Ok(pencaInfo);                
             }
             catch (Exception e)
             {
                 throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
             }
-        }       
+        }
+
+
+        [HttpGet("hot"), AllowAnonymous]
+        public ActionResult<IEnumerable<PencaCompartidaDto>> GetPencasHot()
+        {
+            try
+            {
+                var pencas = _pencaService.GetPencasHot();
+                var pencasDto = _mapper.Map<List<PencaCompartidaDto>>(pencas);
+                return Ok(pencasDto);
+
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+
     }
 }
 

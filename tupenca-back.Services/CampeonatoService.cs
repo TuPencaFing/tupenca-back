@@ -32,6 +32,8 @@ namespace tupenca_back.Services
 
         public Campeonato? findCampeonatoByName(string name) => _campeonatoRepository.GetFirstOrDefault(c => c.Name == name);
 
+        public IEnumerable<Campeonato>? SearchCampeonato(string searchString) => _campeonatoRepository.SearchCampeonato(searchString);
+
         public void AddCampeonato(Campeonato campeonato)
         {
             var deporte = _deporteService.getDeporteById(campeonato.Deporte.Id);
