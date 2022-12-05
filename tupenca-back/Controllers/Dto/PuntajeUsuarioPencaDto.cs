@@ -12,7 +12,7 @@ namespace tupenca_back.Controllers.Dto
         public int PencaId { get; set; }
 
         public int UsuarioId { get; set; }
-        public Usuario Usuario { get; set; }
+        public UsuarioDto Usuario { get; set; }
 
         public int Score { get; set; }
 
