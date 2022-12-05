@@ -11,6 +11,12 @@ namespace tupenca_back.DataAccess.Repository
         {
             _appDbContext = db;
         }
+
+        public IEnumerable<Equipo>? SearchEquipo(string searchString)
+        {
+            return _appDbContext.Equipos.Where(e => e.Nombre.Contains(searchString)).ToList();
+        }
+
         public void Save()
         {
             _appDbContext.SaveChanges();

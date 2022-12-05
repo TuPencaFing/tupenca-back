@@ -28,6 +28,7 @@ namespace tupenca_back.Controllers
         private readonly ResultadoService _resultadoService;
         private readonly EquipoService _equipoService;
         private readonly PuntajeUsuarioPencaService _puntajeUsuarioPencaService;
+        private readonly EventoService _eventoService;
 
         public PencaEmpresaController(ILogger<PencaEmpresaController> logger,
                                IMapper mapper,
@@ -39,7 +40,8 @@ namespace tupenca_back.Controllers
                                PrediccionService prediccionService,
                                ResultadoService resultadoService,
                                EquipoService equipoService,
-                               PuntajeUsuarioPencaService puntajeUsuarioPencaService)
+                               PuntajeUsuarioPencaService puntajeUsuarioPencaService,
+                               EventoService eventoService)
         {
             _logger = logger;
             _mapper = mapper;
@@ -52,6 +54,7 @@ namespace tupenca_back.Controllers
             _resultadoService = resultadoService;
             _equipoService = equipoService;
             _puntajeUsuarioPencaService = puntajeUsuarioPencaService;
+            _eventoService = eventoService;
         }
 
         //GET: api/pencas-empresas
@@ -265,6 +268,46 @@ namespace tupenca_back.Controllers
             }
         }
 
+        // GET: api/pencas-compartidas/1/evento/1/estadisticas     
+        [HttpGet("{id}/eventos/{idEvento}/estadisticas")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<EstadisticaEventoDto> GetEstadisticas(int id, int idEvento)
+        {
+            var penca = _pencaService.findPencaEmpresaById(id);
+            if (penca == null) return NotFound();
+            EstadisticaEventoDto eventodto = new EstadisticaEventoDto();
+            var porcentajeLocal = _prediccionService.GetPorcentajeLocal(id, idEvento);
+            eventodto.PorcentajeLocal = porcentajeLocal;
+            var evento = _eventoService.getEventoById(idEvento);
+            if (evento.IsEmpateValid)
+            {
+                if (porcentajeLocal == null)
+                {
+                    eventodto.PorcentajeVisitante = null;
+                    eventodto.PorcentajeEmpate = null;
+                }
+                else
+                {
+                    var porcentajeEmpate = _prediccionService.GetPorcentajeEmpate(id, idEvento);
+                    eventodto.PorcentajeEmpate = porcentajeEmpate;
+                    eventodto.PorcentajeVisitante = (100 - (porcentajeLocal + porcentajeEmpate));
+                }
+            }
+            else
+            {
+                eventodto.PorcentajeEmpate = null;
+                if (porcentajeLocal == null)
+                {
+                    eventodto.PorcentajeVisitante = null;
+                }
+                else
+                {
+                    eventodto.PorcentajeVisitante = (100 - porcentajeLocal);
+                }
+            }
+            return Ok(eventodto);
+        }
 
     }
 }

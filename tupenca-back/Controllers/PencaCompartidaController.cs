@@ -12,6 +12,7 @@ using MercadoPago.Client.Common;
 using MercadoPago.Client.Payment;
 using MercadoPago.Config;
 using MercadoPago.Resource.Payment;
+using System.Drawing;
 
 namespace tupenca_back.Controllers
 {
@@ -174,15 +175,24 @@ namespace tupenca_back.Controllers
         //Pencas de cada usuario
 
         [HttpGet("me")]
-        public ActionResult<IEnumerable<PencaCompartida>> GetPencasCompartidasByUsuario([FromQuery] bool joined = true)
+        public ActionResult<IEnumerable<PencaCompartida>?> GetPencasCompartidasByUsuario([FromQuery] bool joined = true, [FromQuery] string? searchString = null)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (joined == true)
             {
                 try
                 {
-                    var pencas = _pencaService.GetPencasCompartidasByUsuario(Convert.ToInt32(userId));
-                    return Ok(pencas);
+                    if (searchString != null)
+                    {
+                        var pencas = _pencaService.SearchPencasCompartidasByUsuario(Convert.ToInt32(userId), searchString);
+                        return Ok(pencas);
+                    }
+                    else
+                    {
+                        var pencas = _pencaService.GetPencasCompartidasByUsuario(Convert.ToInt32(userId));
+                        return Ok(pencas);
+                    }
+
                 }
                 catch (Exception e)
                 {
@@ -193,8 +203,16 @@ namespace tupenca_back.Controllers
             {
                 try
                 {
-                    var pencas = _pencaService.GetPencasCompartidasNoJoinedByUsuario(Convert.ToInt32(userId));
-                    return Ok(pencas);
+                    if (searchString != null)
+                    {
+                        var pencas = _pencaService.SerchPencasCompartidasNoJoinedByUsuario(Convert.ToInt32(userId), searchString);
+                        return Ok(pencas);
+                    }
+                    else
+                    {
+                        var pencas = _pencaService.GetPencasCompartidasNoJoinedByUsuario(Convert.ToInt32(userId));
+                        return Ok(pencas);
+                    }
                 }
                 catch (Exception e)
                 {
@@ -237,7 +255,7 @@ namespace tupenca_back.Controllers
         }
 
         // GET: api/pencas-compartidas/1/evento/1/estadisticas     
-        [HttpGet("{id}/evento/{idEvento}/estadisticas")]
+        [HttpGet("{id}/eventos/{idEvento}/estadisticas")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public ActionResult<EstadisticaEventoDto> GetEstadisticas(int id, int idEvento)
@@ -313,7 +331,26 @@ namespace tupenca_back.Controllers
             {
                 throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
             }
-        }       
+        }
+
+
+        [HttpGet("hot"), AllowAnonymous]
+        public ActionResult<IEnumerable<PencaCompartidaDto>> GetPencasHot()
+        {
+            try
+            {
+                var pencas = _pencaService.GetPencasHot();
+                var pencasDto = _mapper.Map<List<PencaCompartidaDto>>(pencas);
+                return Ok(pencasDto);
+
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
+
     }
 }
 

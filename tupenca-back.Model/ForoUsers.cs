@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace tupenca_back.Model
 {
-    public class Foro
+    public class ForoUsers
     {
         [Key]
         public int Id { get; set; }
@@ -15,6 +15,10 @@ namespace tupenca_back.Model
 
         [Required]
         public int UsuarioId { get; set; }
+
+        public string UserName { get; set; }
+
+        public string? Image { get; set; }
 
         [Required]
         public int PencaId { get; set; }
