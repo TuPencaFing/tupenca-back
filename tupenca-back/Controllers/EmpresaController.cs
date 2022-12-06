@@ -223,13 +223,13 @@ namespace tupenca_back.Controllers
         {
             try
             {
-                var funcionario = _funcionarioService.getFuncionariosByEmpresa(id).First();
-                
                 var empresa = _empresaService.getEmpresaById(id);
                 if (empresa == null)
                 {
                     return NotFound();
                 }
+                var funcionario = _funcionarioService.getFuncionariosByEmpresa(id).First();
+
                 empresa.Habilitado = true;
                 _empresaService.UpdateEmpresa(empresa);
                 
