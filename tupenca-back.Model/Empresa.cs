@@ -26,6 +26,12 @@ namespace tupenca_back.Model
         public int PlanId { get; set; }
         public virtual Plan? Plan { get; set; }
 
+        [Required]
+        [RegularExpression(@"^[0-9a-zA-Z]+$", ErrorMessage = "Debe contener unicamente letras o numeros")]
+        public string TenantCode { get; set; }
+
+        public bool Habilitado { get; set; } = false;
+
         public List<Funcionario> Funcionarios { get; set; }
 
         public List<Usuario> Usuarios { get; set; }
