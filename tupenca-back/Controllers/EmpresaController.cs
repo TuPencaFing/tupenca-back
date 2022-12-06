@@ -223,18 +223,13 @@ namespace tupenca_back.Controllers
         {
             try
             {
-                var funcionarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var funcionario = _funcionarioService.find(Convert.ToInt32(funcionarioId));
-                if (funcionario == null)
-                {
-                    return Unauthorized();
-                }
-
                 var empresa = _empresaService.getEmpresaById(id);
                 if (empresa == null)
                 {
                     return NotFound();
                 }
+                var funcionario = _funcionarioService.getFuncionariosByEmpresa(id).First();
+
                 empresa.Habilitado = true;
                 _empresaService.UpdateEmpresa(empresa);
                 
