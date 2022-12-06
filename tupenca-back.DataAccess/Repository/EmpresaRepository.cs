@@ -30,12 +30,13 @@ namespace tupenca_back.DataAccess.Repository
         }
 
 
-        public Empresa GetFirst(Expression<Func<Empresa, bool>> filter)
+        public Empresa? GetFirst(Expression<Func<Empresa, bool>> filter)
         {
             return _appDbContext.Empresas.Where(filter)
                 .Include(empresa => empresa.Plan)
                 .FirstOrDefault();
         }
+
         public IEnumerable<Empresa> GetEmpresas()
         {
             return _appDbContext.Empresas

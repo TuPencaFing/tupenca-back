@@ -9,6 +9,8 @@ using MercadoPago.Client.Common;
 using MercadoPago.Client.Payment;
 using MercadoPago.Config;
 using MercadoPago.Resource.Payment;
+using System.Security.Claims;
+using tupenca_back.Utilities.EmailService;
 
 namespace tupenca_back.Controllers
 {
@@ -20,16 +22,22 @@ namespace tupenca_back.Controllers
         public readonly IMapper _mapper;
         private readonly EmpresaService _empresaService;
         private readonly PlanService _planService;
+        private readonly IEmailSender _emailSender;
+        private readonly FuncionarioService _funcionarioService;
 
         public EmpresaController(ILogger<EmpresaController> logger,
                                  IMapper mapper,
                                  EmpresaService empresaService,
-                                 PlanService planService)
+                                 PlanService planService,
+                                 IEmailSender emailSender,
+                                 FuncionarioService funcionarioService)
         {
             _logger = logger;
             _mapper = mapper;
             _empresaService = empresaService;
             _planService = planService;
+            _emailSender = emailSender;
+            _funcionarioService = funcionarioService;
         }
 
         //GET: api/empresas        
@@ -69,12 +77,30 @@ namespace tupenca_back.Controllers
             }
         }
 
+        // GET: api/empresas/        
+        [HttpGet("code/{TenantCode}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Empresa> GetEmpresaByTenantCode(string TenantCode)
+        {
+            var empresa = _empresaService.getEmpresaByTenantCode(TenantCode);
+
+            if (empresa == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return Ok(empresa);
+            }
+        }
+
 
         // POST: api/empresas       
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<Empresa>> CreateEmpresaAsync(EmpresaPaymentDto empresaDto)
+        public ActionResult<Empresa> CreateEmpresa(EmpresaPaymentDto empresaDto)
         {
             Empresa empresa = new Empresa();
             empresa.RUT = empresaDto.RUT;
@@ -121,7 +147,7 @@ namespace tupenca_back.Controllers
             Console.WriteLine(paymentRequest.Payer.Email);
 
             var client = new PaymentClient();
-            Payment payment = await client.CreateAsync(paymentRequest);
+            Payment payment = client.Create(paymentRequest);
             Console.WriteLine(payment.Status);
             if (payment.Status == "approved")
             {
@@ -131,15 +157,9 @@ namespace tupenca_back.Controllers
             }
             else
             {
-                return BadRequest();
+                return BadRequest("Se produjo un error en el pago, intente nuevamente");
             }
             
-            /*
-            _empresaService.CreateEmpresa(empresa);
-
-            //return CreatedAtAction("GetEmpresaById", new { id = empresa.Id }, _mapper.Map<EmpresaDto>(empresa));
-            return CreatedAtAction("GetEmpresaById", new { id = empresa.Id }, empresa);
-            */
         }
 
 
@@ -197,6 +217,43 @@ namespace tupenca_back.Controllers
             }
 
         }
+
+        [HttpPatch("{id}/habilitar")]
+        public ActionResult<Empresa> HabilitarEmpresa(int id)
+        {
+            try
+            {
+                var funcionarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var funcionario = _funcionarioService.find(Convert.ToInt32(funcionarioId));
+                if (funcionario == null)
+                {
+                    return Unauthorized();
+                }
+
+                var empresa = _empresaService.getEmpresaById(id);
+                if (empresa == null)
+                {
+                    return NotFound();
+                }
+                empresa.Habilitado = true;
+                _empresaService.UpdateEmpresa(empresa);
+                
+                //var message = new Message(new string[] { funcionario.Email }, "This is the URL of your bussines", "https://" + empresa.TenantCode + "azure bla bla");
+                //_emailSender.SendEmail(message);
+                return Ok(empresa);
+            }
+            catch (NotFoundException e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.NotFound, e.Message);
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+
+        }
+
+
     }
 }
 

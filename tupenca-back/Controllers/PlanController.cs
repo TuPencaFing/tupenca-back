@@ -30,7 +30,7 @@ namespace tupenca_back.Controllers
         }
 
         //GET: api/planes
-        [HttpGet]
+        [HttpGet, AllowAnonymous]
         public ActionResult<IEnumerable<PlanDto>> GetPlanes()
         {
             try
@@ -49,7 +49,7 @@ namespace tupenca_back.Controllers
 
 
         //GET: api/planes/1
-        [HttpGet("{id}")]
+        [HttpGet("{id}"), AllowAnonymous]
         public ActionResult<PlanDto> GetPlan(int id)
         {
             try
