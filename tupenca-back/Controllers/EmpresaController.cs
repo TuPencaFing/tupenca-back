@@ -106,6 +106,7 @@ namespace tupenca_back.Controllers
             empresa.RUT = empresaDto.RUT;
             empresa.Razonsocial = empresaDto.Razonsocial;
             empresa.FechaCreacion = DateTime.UtcNow;
+            empresa.TenantCode = empresaDto.TenantCode;
 
 
             var plan = _planService.FindPlanById(empresaDto.PlanId);

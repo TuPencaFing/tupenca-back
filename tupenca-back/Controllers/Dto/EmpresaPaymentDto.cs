@@ -20,6 +20,8 @@ namespace tupenca_back.Controllers.Dto
 
         public int PlanId { get; set; }
 
+        public string TenantCode { get; set; }
+
         public PagosTarjetaDto Pago { get; set; }
 
     }
