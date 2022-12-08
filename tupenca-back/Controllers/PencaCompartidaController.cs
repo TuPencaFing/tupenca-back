@@ -263,6 +263,10 @@ namespace tupenca_back.Controllers
                     _pencaService.AddUsuarioToPencaCompartida(Convert.ToInt32(userId), id);
                     //habilitar usuario
                     _pencaService.HabilitarUsuario(id, Convert.ToInt32(userId));
+
+                    PuntajeUsuarioPenca puntajeusuario = new PuntajeUsuarioPenca { PencaId = id, UsuarioId = Convert.ToInt32(userId), Score = 0 };
+                    _puntajeUsuarioPencaService.Create(puntajeusuario);
+
                     return Ok();
                 }
                 else
