@@ -115,6 +115,11 @@ namespace tupenca_back.Services
             return ganancias;
         }
 
+        public bool chekAuthUserEmpresa(string TenantCode, int userId)
+        {
+            return _empresaRepository.chekAuthUserEmpresa(TenantCode, userId);
+        }
+
     }
 }
 

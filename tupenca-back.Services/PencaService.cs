@@ -34,7 +34,8 @@ namespace tupenca_back.Services
                             EmpresaService empresaService,
                             UsuarioService usuarioService,
                             PrediccionService prediccionService,
-                            ImagesService imagesService)
+                            ImagesService imagesService,
+                            IPersonaRepository personaRepository)
         {
             _logger = logger;
             _pencaCompartidaRepository = pencaCompartidaRepository;
@@ -321,12 +322,12 @@ namespace tupenca_back.Services
         }
 
 
-        public IEnumerable<PencaEmpresa> GetPencasFromEmpresaByUsuario(int empresaId, int usuarioId)
+        public IEnumerable<PencaEmpresa> GetPencasFromEmpresaByUsuario(string TenantCode, int usuarioId)
         {
             var usuario = _usuarioService.find(usuarioId);
             if (usuario != null)
             {
-                return _usuariopencaRepository.GetUsuarioPencasEmpresa(empresaId, usuarioId);
+                return _usuariopencaRepository.GetUsuarioPencasEmpresa(TenantCode, usuarioId);
             }
             else throw new NotFoundException("Usuario no exsite");
         }
@@ -384,6 +385,16 @@ namespace tupenca_back.Services
         {
             return _pencaCompartidaRepository.GetPencasHot();
         }
+
+        public bool chekAuthUserEmpresa(string TenantCode, int userId)
+        {
+            if (_usuarioService.find(userId) == null)
+            {
+                return false;
+            }
+            return _empresaService.chekAuthUserEmpresa(TenantCode, userId);
+        }
+
 
     }
 }

@@ -24,7 +24,7 @@ namespace tupenca_back.Model
 
         public string Password { get; set; }
         [Required]
-        public EmpresaDto? Empresa { get; set; }
+        public int EmpresaId { get; set; }
 
     }
 }
