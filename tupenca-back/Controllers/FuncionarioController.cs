@@ -98,9 +98,7 @@ namespace tupenca_back.Controllers
             var str = String.Join(",", passwordHash);
             var str2 = String.Join(",", passwordSalt);
 
-
-            var Empresa = _mapper.Map<Empresa>(request.Empresa);
-            var user = new Funcionario { UserName = request.Username, Email = request.Email, HashedPassword = passwordHash, PasswordSalt = passwordSalt, EmpresaId = Empresa.Id };
+            var user = new Funcionario { UserName = request.Username, Email = request.Email, HashedPassword = passwordHash, PasswordSalt = passwordSalt, EmpresaId = request.EmpresaId };
             _funcionarioService.add(user);
             return Ok(new { message = "User added" });
         }

@@ -29,6 +29,8 @@ namespace tupenca_back.Controllers
         private readonly EquipoService _equipoService;
         private readonly PuntajeUsuarioPencaService _puntajeUsuarioPencaService;
         private readonly EventoService _eventoService;
+        private readonly UsuarioService _usuarioService;
+        private readonly EmpresaService _empresaService;
 
         public PencaEmpresaController(ILogger<PencaEmpresaController> logger,
                                IMapper mapper,
@@ -41,7 +43,9 @@ namespace tupenca_back.Controllers
                                ResultadoService resultadoService,
                                EquipoService equipoService,
                                PuntajeUsuarioPencaService puntajeUsuarioPencaService,
-                               EventoService eventoService)
+                               EventoService eventoService,
+                               UsuarioService usuarioService,
+                               EmpresaService empresaService)
         {
             _logger = logger;
             _mapper = mapper;
@@ -55,20 +59,41 @@ namespace tupenca_back.Controllers
             _equipoService = equipoService;
             _puntajeUsuarioPencaService = puntajeUsuarioPencaService;
             _eventoService = eventoService;
+            _usuarioService = usuarioService;
+            _empresaService = empresaService;
         }
 
         //GET: api/pencas-empresas
         [HttpGet]
-        public ActionResult<IEnumerable<PencaEmpresaDto>> GetPencasEmpresa([FromQuery] int id)
+        public ActionResult<IEnumerable<PencaEmpresaDto>> GetPencasEmpresa([FromQuery] string? TenantCode = null)
         {
             try
             {
-                if (id != null && id != 0) // id se instancia en 0 si es vacio
+                if (TenantCode != null)
                 {
-                    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                    var pencasEmpresa = _pencaService.GetPencasFromEmpresaByUsuario(id, Convert.ToInt32(userId));
-                    var pencasEmpresaDto = _mapper.Map<List<PencaEmpresaDto>>(pencasEmpresa);
-                    return Ok(pencasEmpresa);
+                    var userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                    var user = _usuarioService.find(userId);
+                    if (user == null)
+                    {
+                        return BadRequest();
+                    }
+                    var empresa = _empresaService.getEmpresaByTenantCode(TenantCode);
+                    if (empresa == null)
+                    {
+                        return BadRequest();
+                    }
+                    
+                    if (_pencaService.chekAuthUserEmpresa(TenantCode, userId))
+                    {
+                        Console.WriteLine("ODIO MI VIDA");
+                        var pencasEmpresa = _pencaService.GetPencasFromEmpresaByUsuario(TenantCode, userId);
+                        var pencasEmpresaDto = _mapper.Map<List<PencaEmpresaDto>>(pencasEmpresa);
+                        return Ok(pencasEmpresa);
+                    }
+                    else
+                    {
+                        return Unauthorized();
+                    }
 
                 }
 
@@ -241,6 +266,38 @@ namespace tupenca_back.Controllers
                 {
                     return NotFound();
                 }
+                
+                /*
+                if (_pencaService.chekAuthUserEmpresa(penca.Empresa.TenantCode, userId))
+                {
+                    PencaInfoDto pencaInfo = new PencaInfoDto();
+                    pencaInfo.Id = penca.Id;
+                    pencaInfo.PencaTitle = penca.Title;
+                    pencaInfo.PencaDescription = penca.Description;
+                    pencaInfo.Image = penca.Image;
+                    pencaInfo.CampeonatoName = penca.Campeonato.Name;
+                    pencaInfo.DeporteName = _campeonatoService.findCampeonatoById(penca.Campeonato.Id).Deporte.Nombre;
+                    var eventos = _pencaService.GetInfoEventosByPencaUsuario(id, userId);
+                    pencaInfo.Eventos = eventos;
+                    var score = _puntajeUsuarioPencaService.GetTotalByPencaAndUsuario(id, userId);
+                    if (score == null)
+                    {
+                        pencaInfo.PuntajeTotal = 0;
+                    }
+                    else
+                    {
+                        pencaInfo.PuntajeTotal = score;
+
+                    }
+                    return Ok(pencaInfo);
+                }
+                else
+                {
+                    return Unauthorized();
+                }
+                */
+
+
                 PencaInfoDto pencaInfo = new PencaInfoDto();
                 pencaInfo.Id = penca.Id;
                 pencaInfo.PencaTitle = penca.Title;
@@ -261,6 +318,8 @@ namespace tupenca_back.Controllers
 
                 }
                 return Ok(pencaInfo);
+
+
             }
             catch (Exception e)
             {
@@ -308,6 +367,7 @@ namespace tupenca_back.Controllers
             }
             return Ok(eventodto);
         }
+
 
     }
 }

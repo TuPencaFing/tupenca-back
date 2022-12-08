@@ -15,5 +15,6 @@ namespace tupenca_back.DataAccess.Repository.IRepository
 
         void Save();
 
+        bool chekAuthUserEmpresa(string TenantCode, int userId);
     }
 }

@@ -102,6 +102,12 @@ namespace tupenca_back.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public ActionResult<Empresa> CreateEmpresa(EmpresaPaymentDto empresaDto)
         {
+            var existente = _empresaService.getEmpresaByTenantCode(empresaDto.TenantCode);
+            if (existente != null)
+            {
+                return BadRequest("El codigo para el tenant ya esta siendo utilizado");
+            }
+
             Empresa empresa = new Empresa();
             empresa.RUT = empresaDto.RUT;
             empresa.Razonsocial = empresaDto.Razonsocial;
