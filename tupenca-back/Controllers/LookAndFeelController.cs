@@ -62,14 +62,31 @@ namespace tupenca_back.Controllers
             {
                 if (_empresaService.getEmpresaById(EmpresaId) == null) return BadRequest();
                 var existente = _lookandfeelService.getLookAndFeelByEmpresaId(EmpresaId);
-                if (existente == null) return BadRequest();
-                
-                existente.Generaltext = lookandfeel.Generaltext;
-                existente.Generalbackground = lookandfeel.Generalbackground;
-                existente.Textnavbar = lookandfeel.Textnavbar;
-                existente.Navbar = lookandfeel.Navbar;
+                if (existente == null)
+                {
+                    LookAndFeel look = new LookAndFeel
+                    {
+                        EmpresaId = EmpresaId,
+                        Navbar = lookandfeel.Navbar,
+                        Generalbackground = lookandfeel.Generalbackground,
+                        Generaltext = lookandfeel.Generaltext,
+                        Textnavbar = lookandfeel.Textnavbar
+                    };
 
-                _lookandfeelService.UpdateLookAndFeel(existente);
+                   _lookandfeelService.CreateLookAndFeel(look);
+
+
+                }
+                else
+                {
+                    existente.Generaltext = lookandfeel.Generaltext;
+                    existente.Generalbackground = lookandfeel.Generalbackground;
+                    existente.Textnavbar = lookandfeel.Textnavbar;
+                    existente.Navbar = lookandfeel.Navbar;
+
+                    _lookandfeelService.UpdateLookAndFeel(existente);
+                }               
+
                 return Ok();
             }
             catch (NotFoundException e)
