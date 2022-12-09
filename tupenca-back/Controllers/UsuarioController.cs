@@ -14,6 +14,7 @@ using tupenca_back.DataAccess.Repository;
 using tupenca_back.Utilities.EmailService;
 using System.Text;
 using System;
+using AutoMapper;
 
 namespace tupenca_back.Controllers
 {
@@ -27,14 +28,17 @@ namespace tupenca_back.Controllers
         private readonly UsuarioService _userService;
         private readonly PencaService _pencaService;
         private readonly IEmailSender _emailSender;
+        public readonly IMapper _mapper;
 
-        public UsuarioController(ILogger<UsuarioController> logger, UsuarioService userService, PencaService pencaService, IConfiguration configuration, IEmailSender emailSender)
+        public UsuarioController(ILogger<UsuarioController> logger, UsuarioService userService, PencaService pencaService, IConfiguration configuration, IEmailSender emailSender, IMapper imapper)
         {
             _logger = logger;
             _userService = userService;
             _configuration = configuration;
             _pencaService = pencaService;
             _emailSender = emailSender;
+            _mapper = imapper;
+
         }
 
         //GET: api/user
@@ -50,9 +54,11 @@ namespace tupenca_back.Controllers
         [HttpGet("{id}"), AllowAnonymous]
         public ActionResult<UsuarioDto> GetUsuario(int id)
         {
-            Usuario user = _userService.find(id);
-            //EmpresaDto empresasDto = new EmpresaDto() { };
-            UsuarioDto userDto = new UsuarioDto() { Email = user.Email, Username = user.UserName, Image = user.Image, Empresas = null};
+            Usuario user = _userService.getUsuario(id);
+            //EmpresaDto empresasDto = new EmpresaDto() { Id = user.Empresas};
+            var userDto = _mapper.Map<UsuarioDto>(user);
+
+            //UsuarioDto userDto = new UsuarioDto() { Email = user.Email, UserName = user.UserName, Image = user.Image, Empresas = null};
 
             if (user == null)
             {
@@ -60,7 +66,7 @@ namespace tupenca_back.Controllers
             }
             else
             {
-                return Ok(user);
+                return Ok(userDto);
             }
         }
 

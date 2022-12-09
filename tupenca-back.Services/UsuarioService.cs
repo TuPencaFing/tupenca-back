@@ -132,7 +132,7 @@ namespace tupenca_back.Services
 
         public Usuario getUsuario(int id)
         {
-            return _db.GetFirstOrDefault(db => db.Id == id) as Usuario;
+            return _db.GetUsuario(db => db.Id == id);
         }
     }
 

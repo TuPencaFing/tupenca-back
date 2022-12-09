@@ -49,7 +49,7 @@ namespace tupenca_back.Services
 
         public async Task<ResponseModel> SendNotification(NotificationModel notificationModel, int? pencaId = null)
         {
-            pencaId = 12;
+            //pencaId = 12;
             ResponseModel response = new ResponseModel();
             try
             {
