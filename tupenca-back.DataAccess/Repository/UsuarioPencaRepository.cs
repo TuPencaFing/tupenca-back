@@ -79,13 +79,13 @@ namespace tupenca_back.DataAccess.Repository
         }
 
 
-        public IEnumerable<PencaEmpresa> GetUsuarioPencasEmpresa(int empresaid, int id)
+        public IEnumerable<PencaEmpresa> GetUsuarioPencasEmpresa(string TenantCode, int id)
         {
             return _appDbContext.UsuariosPencas
                 .Where(p => p.UsuarioId == id && p.habilitado == true)
                 .Select(p => p.Penca)
                 .Join(_appDbContext.PencaEmpresas, penca => penca.Id, p => p.Id, (penca, p) => p)
-                .Where(pe => pe.Empresa.Id == empresaid)
+                .Where(pe => pe.Empresa.TenantCode == TenantCode)
                 .ToList();
         }
 

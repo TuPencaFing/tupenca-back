@@ -9,11 +9,12 @@ namespace tupenca_back.DataAccess.Repository.IRepository
 
         int GetCantEmpresas();
 
-        Empresa GetFirst(Expression<Func<Empresa, bool>> filter);
+        Empresa? GetFirst(Expression<Func<Empresa, bool>> filter);
 
         IEnumerable<Empresa> GetEmpresas();
 
         void Save();
 
+        bool chekAuthUserEmpresa(string TenantCode, int userId);
     }
 }

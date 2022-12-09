@@ -223,14 +223,56 @@ namespace tupenca_back.Controllers
         }
 
         [HttpPost("{id}/add")]
-        public IActionResult AddUsuarioToPencaCompartida(int id)
+        public IActionResult AddUsuarioToPencaCompartidaAsync(int id, [FromBody] PagosTarjetaDto pago)
         {
             try
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                _pencaService.AddUsuarioToPencaCompartida(Convert.ToInt32(userId), id);
-                return Ok();
+                var penca = _pencaService.findPencaCompartidaById(id);
+                if (penca == null) return BadRequest();
+                if (penca.CostEntry != pago.transaction_amount) return BadRequest();
+                //pago
+                MercadoPagoConfig.AccessToken = "TEST-5999360588657313-111213-86de986d139e8b73944ea408b6e3478f-1228301365";
 
+
+                var paymentRequest = new PaymentCreateRequest
+                {
+                    TransactionAmount = pago.transaction_amount,
+                    Token = pago.token,
+                    Installments = pago.installments,
+                    PaymentMethodId = pago.payment_method_id,
+                    Payer = new PaymentPayerRequest
+                    {
+                        Email = pago.payer.email,
+                        Identification = new IdentificationRequest
+                        {
+                            Type = pago.payer.identification.type,
+                            Number = pago.payer.identification.number,
+                        }
+                    }
+                };
+
+                Console.WriteLine("obtengo datos pago:");
+                Console.WriteLine(paymentRequest.Payer.Email);
+
+                var client = new PaymentClient();
+                Payment payment = client.Create(paymentRequest);
+                Console.WriteLine(payment.Status);
+                if (payment.Status == "approved")
+                {
+                    _pencaService.AddUsuarioToPencaCompartida(Convert.ToInt32(userId), id);
+                    //habilitar usuario
+                    _pencaService.HabilitarUsuario(id, Convert.ToInt32(userId));
+
+                    PuntajeUsuarioPenca puntajeusuario = new PuntajeUsuarioPenca { PencaId = id, UsuarioId = Convert.ToInt32(userId), Score = 0 };
+                    _puntajeUsuarioPencaService.Create(puntajeusuario);
+
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest();
+                }
             }
             catch (Exception e)
             {

@@ -17,9 +17,9 @@ namespace tupenca_back.Controllers.Dto
 
         public int EquipoVisitanteId { get; set; }
 
-        public EquipoDto EquipoLocal { get; set; }
+        public EquipoDto? EquipoLocal { get; set; }
 
-        public EquipoDto EquipoVisitante { get; set; }
+        public EquipoDto? EquipoVisitante { get; set; }
 
         public bool IsEmpateValid { get; set; }
 

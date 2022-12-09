@@ -30,12 +30,13 @@ namespace tupenca_back.DataAccess.Repository
         }
 
 
-        public Empresa GetFirst(Expression<Func<Empresa, bool>> filter)
+        public Empresa? GetFirst(Expression<Func<Empresa, bool>> filter)
         {
             return _appDbContext.Empresas.Where(filter)
                 .Include(empresa => empresa.Plan)
                 .FirstOrDefault();
         }
+
         public IEnumerable<Empresa> GetEmpresas()
         {
             return _appDbContext.Empresas
@@ -48,5 +49,17 @@ namespace tupenca_back.DataAccess.Repository
             _appDbContext.SaveChanges();
         }
 
+        public bool chekAuthUserEmpresa(string TenantCode, int userId)
+        {
+            var usuarios = _appDbContext.Empresas.Where(e => e.TenantCode == TenantCode).Include(u => u.Usuarios).First().Usuarios;
+            if (usuarios.Any())
+            {
+                return usuarios.Contains(_appDbContext.Usuarios.Where(u => u.Id == userId).First());
+            }
+            else
+            {
+                return false;
+            } 
+        }
     }
 }

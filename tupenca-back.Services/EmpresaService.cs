@@ -27,6 +27,8 @@ namespace tupenca_back.Services
 
         public Empresa? getEmpresaByRUT(string? rut) => _empresaRepository.GetFirst(e => e.RUT == rut);
 
+        public Empresa? getEmpresaByTenantCode(string code) => _empresaRepository.GetFirst(e => e.TenantCode == code);
+
         public void CreateEmpresa(Empresa empresa)
         {
             if (empresa != null)
@@ -111,6 +113,11 @@ namespace tupenca_back.Services
             }
 
             return ganancias;
+        }
+
+        public bool chekAuthUserEmpresa(string TenantCode, int userId)
+        {
+            return _empresaRepository.chekAuthUserEmpresa(TenantCode, userId);
         }
 
     }
