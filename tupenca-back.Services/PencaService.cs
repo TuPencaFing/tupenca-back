@@ -381,6 +381,12 @@ namespace tupenca_back.Services
             return _pencaCompartidaRepository.GetInfoEventosByPencaUsuario(PencaId, userId);
         }
 
+        public IEnumerable<EventoPrediccion> GetInfoEventosByPencaUsuarioFinalizados(int PencaId, int userId)
+        {
+            return _pencaCompartidaRepository.GetInfoEventosByPencaUsuarioFinalizados(PencaId, userId);
+        }
+        
+
         public IEnumerable<PencaCompartida> GetPencasHot()
         {
             return _pencaCompartidaRepository.GetPencasHot();
