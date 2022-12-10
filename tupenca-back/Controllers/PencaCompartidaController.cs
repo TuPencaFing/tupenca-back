@@ -338,36 +338,69 @@ namespace tupenca_back.Controllers
         }
 
         [HttpGet("{id}/info")]
-        public ActionResult<PencaInfoDto> GetInfoPenca(int id)
+        public ActionResult<PencaInfoDto> GetInfoPenca(int id, [FromQuery] bool finalizadas = false)
         {
             try
             {
-                var userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
-                var penca = _pencaService.findPencaCompartidaById(id);                
-                if (penca == null)
+                if (finalizadas)
                 {
-                    return NotFound();
-                }
-                PencaInfoDto pencaInfo = new PencaInfoDto();                
-                pencaInfo.Id = penca.Id;
-                pencaInfo.PencaTitle = penca.Title;
-                pencaInfo.PencaDescription = penca.Description;
-                pencaInfo.Image = penca.Image;                
-                pencaInfo.CampeonatoName = penca.Campeonato.Name;                
-                pencaInfo.DeporteName = _campeonatoService.findCampeonatoById(penca.Campeonato.Id).Deporte.Nombre;
-                var eventos = _pencaService.GetInfoEventosByPencaUsuario(id, userId);
-                pencaInfo.Eventos = eventos;
-                var score = _puntajeUsuarioPencaService.GetTotalByPencaAndUsuario(id, userId);
-                if (score == null)
-                {
-                    pencaInfo.PuntajeTotal = 0;
+                    var userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                    var penca = _pencaService.findPencaCompartidaById(id);
+                    if (penca == null)
+                    {
+                        return NotFound();
+                    }
+                    PencaInfoDto pencaInfo = new PencaInfoDto();
+                    pencaInfo.Id = penca.Id;
+                    pencaInfo.PencaTitle = penca.Title;
+                    pencaInfo.PencaDescription = penca.Description;
+                    pencaInfo.Image = penca.Image;
+                    pencaInfo.CampeonatoName = penca.Campeonato.Name;
+                    pencaInfo.DeporteName = _campeonatoService.findCampeonatoById(penca.Campeonato.Id).Deporte.Nombre;
+                    var eventos = _pencaService.GetInfoEventosByPencaUsuarioFinalizados(id, userId);
+                    pencaInfo.Eventos = eventos;
+                    var score = _puntajeUsuarioPencaService.GetTotalByPencaAndUsuario(id, userId);
+                    if (score == null)
+                    {
+                        pencaInfo.PuntajeTotal = 0;
+                    }
+                    else
+                    {
+                        pencaInfo.PuntajeTotal = score;
+
+                    }
+                    return Ok(pencaInfo);
                 }
                 else
                 {
-                    pencaInfo.PuntajeTotal = score;
+                    var userId = Convert.ToInt32(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                    var penca = _pencaService.findPencaCompartidaById(id);
+                    if (penca == null)
+                    {
+                        return NotFound();
+                    }
+                    PencaInfoDto pencaInfo = new PencaInfoDto();
+                    pencaInfo.Id = penca.Id;
+                    pencaInfo.PencaTitle = penca.Title;
+                    pencaInfo.PencaDescription = penca.Description;
+                    pencaInfo.Image = penca.Image;
+                    pencaInfo.CampeonatoName = penca.Campeonato.Name;
+                    pencaInfo.DeporteName = _campeonatoService.findCampeonatoById(penca.Campeonato.Id).Deporte.Nombre;
+                    var eventos = _pencaService.GetInfoEventosByPencaUsuario(id, userId);
+                    pencaInfo.Eventos = eventos;
+                    var score = _puntajeUsuarioPencaService.GetTotalByPencaAndUsuario(id, userId);
+                    if (score == null)
+                    {
+                        pencaInfo.PuntajeTotal = 0;
+                    }
+                    else
+                    {
+                        pencaInfo.PuntajeTotal = score;
 
+                    }
+                    return Ok(pencaInfo);
                 }
-                return Ok(pencaInfo);                
+               
             }
             catch (Exception e)
             {
