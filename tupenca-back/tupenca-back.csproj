@@ -47,6 +47,5 @@
     <None Remove="Newtonsoft.Json" />
   </ItemGroup>
 
-  <ProjectExtensions><VisualStudio><UserProperties /></VisualStudio></ProjectExtensions>
 
 </Project>
