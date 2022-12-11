@@ -139,6 +139,7 @@ builder.Services.AddScoped<PuntajeService, PuntajeService>();
 builder.Services.AddScoped<PuntajeUsuarioPencaService, PuntajeUsuarioPencaService>();
 builder.Services.AddScoped<ResultadoService, ResultadoService>();
 builder.Services.AddScoped<UsuarioService, UsuarioService>();
+builder.Services.AddScoped<UsuarioPremioService, UsuarioPremioService>();
 builder.Services.AddScoped<LookAndFeelService, LookAndFeelService>();
 builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.AddTransient<INotificationService, NotificationService>();
