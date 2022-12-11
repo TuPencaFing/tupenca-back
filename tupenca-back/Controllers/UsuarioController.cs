@@ -239,6 +239,31 @@ namespace tupenca_back.Controllers
                 throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
+
+        [HttpPost("habilitarUsuario")]
+        public IActionResult HabilitarUsuarioPencaEmpresa(int pencaId)
+        {
+            try
+            {
+                var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+                var penca = _pencaService.findPencaEmpresaById(pencaId);
+                if(penca == null)
+                {
+                    throw new HttpResponseException((int)HttpStatusCode.NotFound, "Penca Empresa not found");
+                }
+                else
+                {
+                    _pencaService.HabilitarUsuario(pencaId, Convert.ToInt32(userId));
+                    return Ok();
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
     }
 
 

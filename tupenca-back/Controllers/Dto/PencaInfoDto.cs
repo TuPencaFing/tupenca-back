@@ -18,7 +18,7 @@ namespace tupenca_back.Controllers.Dto
 
         public string DeporteName { get; set; }
 
-        public IEnumerable<EventoPrediccion> Eventos { get; set; } = new List<EventoPrediccion>();
+        public IEnumerable<EventoPrediccionDto> Eventos { get; set; } = new List<EventoPrediccionDto>();
 
         public int? PuntajeTotal { get; set; }
 
