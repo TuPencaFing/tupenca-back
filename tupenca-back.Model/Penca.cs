@@ -21,7 +21,6 @@ namespace tupenca_back.Model
         public Campeonato? Campeonato { get; set; }
         public int CampeonatoId { get; set; }
 
-        [Required]
         public List<Premio>? Premios { get; set; } = new List<Premio>();
 
         [Required]

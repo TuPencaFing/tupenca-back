@@ -9,6 +9,8 @@ namespace tupenca_back.Controllers.Dto
 
         public int Id { get; set; }
 
+        public string Name { get; set; }
+
         public int CantUser { get; set; }
 
         public decimal PercentageCost { get; set; }

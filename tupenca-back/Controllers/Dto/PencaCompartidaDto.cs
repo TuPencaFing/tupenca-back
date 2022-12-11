@@ -17,7 +17,7 @@ namespace tupenca_back.Controllers.Dto
 
         public CampeonatoDto? Campeonato { get; set; }
 
-        public List<PremioDto>? Premios { get; set; } = new List<PremioDto>();
+        public List<PremioDto>? Premios { get; set; }
 
         public int PuntajeId { get; set; }
         public virtual PuntajeDto? Puntaje { get; set; }
