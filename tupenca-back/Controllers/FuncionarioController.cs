@@ -10,6 +10,7 @@ using tupenca_back.Utilities.EmailService;
 using System.Security.Claims;
 using AutoMapper;
 using tupenca_back.DataAccess.Repository.IRepository;
+using MercadoPago.Resource.User;
 
 namespace tupenca_back.Controllers
 {
@@ -26,9 +27,10 @@ namespace tupenca_back.Controllers
         public readonly IUsuarioPencaRepository _usuariopenca;
         public readonly EmpresaService _empresaService;
         public readonly PlanService _planService;
+        public readonly UsuarioService _usuarioService;
 
         public FuncionarioController(ILogger<FuncionarioController> logger, FuncionarioService funcionarioService, IConfiguration configuration, IMapper mapper, IEmailSender emailSender, 
-                IUsuarioPencaRepository usuariopenca, EmpresaService empresaService, PlanService planService)
+                IUsuarioPencaRepository usuariopenca, EmpresaService empresaService, PlanService planService, UsuarioService usuarioService)
         {
             _logger = logger;
             _funcionarioService = funcionarioService;
@@ -38,6 +40,7 @@ namespace tupenca_back.Controllers
             _usuariopenca = usuariopenca;
             _empresaService = empresaService;
             _planService = planService;
+            _usuarioService = usuarioService;
         }
 
         //GET: api/user
@@ -137,11 +140,31 @@ namespace tupenca_back.Controllers
                 var id = User.FindFirstValue(ClaimTypes.NameIdentifier);
                 //var penca =_funcionarioService.findPenca(int.Parse(id),request.PencaId);
                 string token = _funcionarioService.createInviteToken(int.Parse(id), request.PencaId);
-                var message = new Message(new string[] { request.Email }, "Invitation to join penca", "Join penca in https://tupenca-user-front.azurewebsites.net/invitacion/" + token);
-                _emailSender.SendEmail(message);                
+                var message = new Message(new string[] { request.Email }, "Invitacion a unirse a la penca", "");
+                var templateMessage = $"                    <h2>Hola,</h2>\r\n                    <p>Se te a invitado a unirte a la penca de {empresa.Razonsocial}</p>\r\n                                        <p>Para acceder a la penca, haz click en el boton debajo</p>\r\n                    <a href=\"https://tupenca-user-front.azurewebsites.net/invitacion/{token}\">\r\n                        <button>Ir a penca</button>\r\n                    </a>";
+
+                _emailSender.SendEmailWithTemplate(message, templateMessage);
                 return Ok();
             }
             else return BadRequest("Has llegado a la cantidad maxima de usuarios");
+
+
+        }
+
+        [HttpPost("enviarMensajes"), AllowAnonymous]
+        public IActionResult enviarMensajes(UserMessageDto userIds)
+        {
+            var userEmails = new List<string>();
+
+            foreach (var id in userIds.UserIds)
+            {
+                userEmails.Add(_usuarioService.find(id).Email);
+            }
+                //var penca =_funcionarioService.findPenca(int.Parse(id),request.PencaId);
+                //string token = _funcionarioService.createInviteToken(int.Parse(id), request.PencaId);
+                var message = new Message(userEmails.ToArray(), userIds.topic, "");
+                _emailSender.SendEmailWithTemplate(message, userIds.message);
+                return Ok();
 
 
         }

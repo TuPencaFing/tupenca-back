@@ -11,6 +11,7 @@ namespace tupenca_back.Utilities.EmailService
     public interface IEmailSender
     {
         void SendEmail(Message message);
+        void SendEmailWithTemplate(Message message, string templateMessage);
     }
 
     public class EmailSender : IEmailSender
@@ -22,6 +23,26 @@ namespace tupenca_back.Utilities.EmailService
         }
         public void SendEmail(Message message)
         {
+            var emailMessage = CreateEmailMessage(message);
+            Send(emailMessage);
+        }
+
+        public void SendEmailWithTemplate(Message message, string templateMessage)
+        {
+            string body = string.Empty;
+            string root = System.IO.Directory.GetCurrentDirectory();
+            using (var reader = new System.IO.StreamReader(root + @"/EmailTemplates/ForgotPassword.html"))
+            {
+                string readFile = reader.ReadToEnd();
+                string StrContent = string.Empty;
+                StrContent = readFile;
+                //Assing the field values in the template
+                StrContent = StrContent.Replace("[templateMessage]", templateMessage);
+                //StrContent = StrContent.Replace("[token]", token);
+                //StrContent = StrContent.Replace("[Year]", DateTime.Now.Year.ToString());
+                body = StrContent.ToString();
+                message.Content = body;
+            }
             var emailMessage = CreateEmailMessage(message);
             Send(emailMessage);
         }

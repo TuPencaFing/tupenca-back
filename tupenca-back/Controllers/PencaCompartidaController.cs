@@ -358,7 +358,8 @@ namespace tupenca_back.Controllers
                     pencaInfo.CampeonatoName = penca.Campeonato.Name;
                     pencaInfo.DeporteName = _campeonatoService.findCampeonatoById(penca.Campeonato.Id).Deporte.Nombre;
                     var eventos = _pencaService.GetInfoEventosByPencaUsuarioFinalizados(id, userId);
-                    pencaInfo.Eventos = eventos;
+                    var eventosDto = _mapper.Map<List<EventoPrediccionDto>>(eventos);
+                    pencaInfo.Eventos = eventosDto;
                     var score = _puntajeUsuarioPencaService.GetTotalByPencaAndUsuario(id, userId);
                     if (score == null)
                     {
@@ -387,7 +388,8 @@ namespace tupenca_back.Controllers
                     pencaInfo.CampeonatoName = penca.Campeonato.Name;
                     pencaInfo.DeporteName = _campeonatoService.findCampeonatoById(penca.Campeonato.Id).Deporte.Nombre;
                     var eventos = _pencaService.GetInfoEventosByPencaUsuario(id, userId);
-                    pencaInfo.Eventos = eventos;
+                    var eventosDto = _mapper.Map<List<EventoPrediccionDto>>(eventos);
+                    pencaInfo.Eventos = eventosDto; 
                     var score = _puntajeUsuarioPencaService.GetTotalByPencaAndUsuario(id, userId);
                     if (score == null)
                     {
