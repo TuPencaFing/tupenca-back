@@ -86,7 +86,6 @@ namespace tupenca_back.Controllers
                     if (_pencaService.chekAuthUserEmpresa(TenantCode, userId))
                     {
                         var pencasEmpresa = _pencaService.GetPencasFromEmpresaByUsuario(TenantCode, userId);
-                        Console.WriteLine("ODIO TSI");
                         var pencasEmpresaDto = _mapper.Map<List<PencaEmpresaDto>>(pencasEmpresa);
                         return Ok(pencasEmpresaDto);
                     }
