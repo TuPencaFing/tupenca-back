@@ -87,7 +87,7 @@ namespace tupenca_back.Controllers
                     {
                         var pencasEmpresa = _pencaService.GetPencasFromEmpresaByUsuario(TenantCode, userId);
                         var pencasEmpresaDto = _mapper.Map<List<PencaEmpresaDto>>(pencasEmpresa);
-                        return Ok(pencasEmpresa);
+                        return Ok(pencasEmpresaDto);
                     }
                     else
                     {
@@ -105,7 +105,8 @@ namespace tupenca_back.Controllers
                 throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
-               
+        
+        /*
         //GET: api/pencas-empresas
         [HttpGet("miempresa")]
         public ActionResult<IEnumerable<PencaEmpresaDto>> GetPencasEmpresabyEmpresa()
@@ -128,6 +129,7 @@ namespace tupenca_back.Controllers
                 throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
+        */
 
         //GET: api/pencas-empresas/1
         [HttpGet("{id}")]
@@ -266,7 +268,7 @@ namespace tupenca_back.Controllers
                     return NotFound();
                 }
                 
-                /*
+                
                 if (_pencaService.chekAuthUserEmpresa(penca.Empresa.TenantCode, userId))
                 {
                     PencaInfoDto pencaInfo = new PencaInfoDto();
@@ -277,7 +279,8 @@ namespace tupenca_back.Controllers
                     pencaInfo.CampeonatoName = penca.Campeonato.Name;
                     pencaInfo.DeporteName = _campeonatoService.findCampeonatoById(penca.Campeonato.Id).Deporte.Nombre;
                     var eventos = _pencaService.GetInfoEventosByPencaUsuario(id, userId);
-                    pencaInfo.Eventos = eventos;
+                    var eventosDto = _mapper.Map<List<EventoPrediccionDto>>(eventos);
+                    pencaInfo.Eventos = eventosDto;
                     var score = _puntajeUsuarioPencaService.GetTotalByPencaAndUsuario(id, userId);
                     if (score == null)
                     {
@@ -294,32 +297,6 @@ namespace tupenca_back.Controllers
                 {
                     return Unauthorized();
                 }
-                */
-
-
-                PencaInfoDto pencaInfo = new PencaInfoDto();
-                pencaInfo.Id = penca.Id;
-                pencaInfo.PencaTitle = penca.Title;
-                pencaInfo.PencaDescription = penca.Description;
-                pencaInfo.Image = penca.Image;
-                pencaInfo.CampeonatoName = penca.Campeonato.Name;
-                pencaInfo.DeporteName = _campeonatoService.findCampeonatoById(penca.Campeonato.Id).Deporte.Nombre;
-                var eventos = _pencaService.GetInfoEventosByPencaUsuario(id, userId);
-                var eventosDto = _mapper.Map<List<EventoPrediccionDto>>(eventos);
-                pencaInfo.Eventos = eventosDto;
-                var score = _puntajeUsuarioPencaService.GetTotalByPencaAndUsuario(id, userId);
-                if (score == null)
-                {
-                    pencaInfo.PuntajeTotal = 0;
-                }
-                else
-                {
-                    pencaInfo.PuntajeTotal = score;
-
-                }
-                return Ok(pencaInfo);
-
-
             }
             catch (Exception e)
             {
@@ -327,7 +304,7 @@ namespace tupenca_back.Controllers
             }
         }
 
-        // GET: api/pencas-compartidas/1/evento/1/estadisticas     
+  
         [HttpGet("{id}/eventos/{idEvento}/estadisticas")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -368,6 +345,16 @@ namespace tupenca_back.Controllers
             return Ok(eventodto);
         }
 
+
+        [HttpGet("{id}/usuarios")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<IEnumerable<UsuariosPencaEmpresaDto>>? GetUsuariosPencaEmpresa(int id)
+        {
+            var usuarios = _pencaService.GetUsuariosPencaEmpresa(id);
+            var usuariosDto = _mapper.Map<List<UsuariosPencaEmpresaDto>>(usuarios);
+            return usuariosDto;
+        }
 
     }
 }

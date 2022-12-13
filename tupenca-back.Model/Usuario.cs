@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -11,9 +12,11 @@ namespace tupenca_back.Model
 {
     public class Usuario : Persona
     {
-        public List<Empresa> Empresas { get; set; }
 
-        public List<UsuarioPenca> UsuariosPencas { get; set; }
+        public List<Empresa>? Empresas { get; set; }
+
+        [JsonIgnore]
+        public List<UsuarioPenca>? UsuariosPencas { get; set; }
 
     }
 }

@@ -21,9 +21,9 @@ namespace tupenca_back.Controllers.Dto
 
         public ResultadoDto? Resultado { get; set; }
 
-        public bool IsEmpateValid { get; set; } = true;
+        public bool IsEmpateValid { get; set; }
 
-        public bool IsPuntajeEquipoValid { get; set; } = true;
+        public bool IsPuntajeEquipoValid { get; set; }
 
         public decimal? PorcentajeEmpate { get; set; }
 
