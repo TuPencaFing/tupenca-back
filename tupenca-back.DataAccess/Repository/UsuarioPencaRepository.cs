@@ -143,5 +143,34 @@ namespace tupenca_back.DataAccess.Repository
             _appDbContext.SaveChanges();
         }
 
+        public void RechazarUsuario(int pencaId, int usuarioId)
+        {
+            var userpenca = _appDbContext.UsuariosPencas.Where(p => p.PencaId == pencaId && p.UsuarioId == usuarioId).First();
+            _appDbContext.UsuariosPencas.Remove(userpenca);
+            _appDbContext.SaveChanges();
+        }
+        
+
+        public IEnumerable<UsuariosPencaEmpresa>? GetUsuariosPencaEmpresa(int id)
+        {
+            var usuarios = _appDbContext.UsuariosPencas.Where(p => p.PencaId == id).ToList();
+            if (usuarios == null)
+            {
+                return null;
+            }
+            else
+            {
+                return usuarios.Join(_appDbContext.Personas, p => p.UsuarioId, per => per.Id, (p, per) => new UsuariosPencaEmpresa
+                                {
+                                    Id = per.Id,
+                                    Email = per.Email,
+                                    UserName = per.UserName,
+                                    Image = per.Image,
+                                    habilitado = p.habilitado
+                                }).ToList();
+            }
+        }
+
+
     }
 }

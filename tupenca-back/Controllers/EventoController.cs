@@ -220,7 +220,7 @@ ILogger<EventoController> logger, EventoService eventoService, EquipoService equ
             var prediccionExistente = _prediccionService.getPrediccionByEventoAndPencaAndUsuario(id, pencaId, Convert.ToInt32(userId));
             if (prediccionExistente != null)
             {
-                prediccionExistente.prediccion = prediccionDto.resultado;
+                prediccionExistente.prediccion = prediccionDto.prediccion;
                 prediccionExistente.PuntajeEquipoLocal = prediccionDto.PuntajeEquipoLocal;
                 prediccionExistente.PuntajeEquipoVisitante = prediccionDto.PuntajeEquipoVisitante;
                 _prediccionService.UpdatePrediccion(prediccionExistente);
@@ -229,7 +229,7 @@ ILogger<EventoController> logger, EventoService eventoService, EquipoService equ
             else
             {
                 Prediccion prediccion = new Prediccion();
-                prediccion.prediccion = prediccionDto.resultado;
+                prediccion.prediccion = prediccionDto.prediccion;
                 prediccion.PuntajeEquipoLocal = prediccionDto.PuntajeEquipoLocal;
                 prediccion.PuntajeEquipoVisitante = prediccionDto.PuntajeEquipoVisitante;
                 prediccion.EventoId = id;

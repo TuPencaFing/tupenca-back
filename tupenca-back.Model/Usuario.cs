@@ -12,7 +12,7 @@ namespace tupenca_back.Model
 {
     public class Usuario : Persona
     {
-        [JsonIgnore]
+
         public List<Empresa>? Empresas { get; set; }
 
         [JsonIgnore]

@@ -106,7 +106,8 @@ namespace tupenca_back.Controllers
                 throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
-               
+        
+        /*
         //GET: api/pencas-empresas
         [HttpGet("miempresa")]
         public ActionResult<IEnumerable<PencaEmpresaDto>> GetPencasEmpresabyEmpresa()
@@ -129,6 +130,7 @@ namespace tupenca_back.Controllers
                 throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
+        */
 
         //GET: api/pencas-empresas/1
         [HttpGet("{id}")]
@@ -344,8 +346,16 @@ namespace tupenca_back.Controllers
             return Ok(eventodto);
         }
 
-   
 
+        [HttpGet("{id}/usuarios")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<IEnumerable<UsuariosPencaEmpresaDto>>? GetUsuariosPencaEmpresa(int id)
+        {
+            var usuarios = _pencaService.GetUsuariosPencaEmpresa(id);
+            var usuariosDto = _mapper.Map<List<UsuariosPencaEmpresaDto>>(usuarios);
+            return usuariosDto;
+        }
 
     }
 }
