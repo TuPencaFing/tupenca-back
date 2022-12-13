@@ -27,7 +27,7 @@ namespace tupenca_back.Model
         public int PuntajeId { get; set; }
         public virtual Puntaje? Puntaje { get; set; }
 
-        public List<UsuarioPenca> UsuariosPencas { get; set; }
+        public List<UsuarioPenca>? UsuariosPencas { get; set; }
 
         public bool PremiosEntregados { get; set; } = false;
     }

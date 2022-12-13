@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 using tupenca_back.DataAccess.Repository.IRepository;
 using tupenca_back.Model;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace tupenca_back.DataAccess.Repository
 {
