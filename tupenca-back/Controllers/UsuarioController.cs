@@ -29,8 +29,9 @@ namespace tupenca_back.Controllers
         private readonly PencaService _pencaService;
         private readonly IEmailSender _emailSender;
         public readonly IMapper _mapper;
+        public readonly PuntajeUsuarioPencaService _puntajeUsuarioPencaService;
 
-        public UsuarioController(ILogger<UsuarioController> logger, UsuarioService userService, PencaService pencaService, IConfiguration configuration, IEmailSender emailSender, IMapper imapper)
+        public UsuarioController(ILogger<UsuarioController> logger, UsuarioService userService, PencaService pencaService, IConfiguration configuration, IEmailSender emailSender, IMapper imapper, PuntajeUsuarioPencaService puntajeUsuarioPencaService)
         {
             _logger = logger;
             _userService = userService;
@@ -38,7 +39,7 @@ namespace tupenca_back.Controllers
             _pencaService = pencaService;
             _emailSender = emailSender;
             _mapper = imapper;
-
+            _puntajeUsuarioPencaService = puntajeUsuarioPencaService;
         }
 
         //GET: api/user
@@ -256,6 +257,8 @@ namespace tupenca_back.Controllers
                 else
                 {
                     _pencaService.HabilitarUsuario(pencaId, userId);
+                    PuntajeUsuarioPenca puntajeUsuarioPenca = new PuntajeUsuarioPenca { PencaId = pencaId, UsuarioId = userId };
+                    _puntajeUsuarioPencaService.Create(puntajeUsuarioPenca);
                     return Ok();
                 }
 
