@@ -346,13 +346,7 @@ namespace tupenca_back.Controllers
         }
 
    
-        [HttpGet("{id}/usuarios")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]        
-        public ActionResult<UsuariosPencaEmpresaDto> GetUsuariosPencaEmpresa(int id)
-        {
 
-        }
 
     }
 }

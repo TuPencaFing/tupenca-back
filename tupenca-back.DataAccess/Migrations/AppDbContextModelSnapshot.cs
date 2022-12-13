@@ -34,7 +34,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasIndex("EventosId");
 
-                    b.ToTable("CampeonatoEvento");
+                    b.ToTable("CampeonatoEvento", (string)null);
                 });
 
             modelBuilder.Entity("EmpresaUsuario", b =>
@@ -49,7 +49,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasIndex("UsuariosId");
 
-                    b.ToTable("EmpresaUsuario");
+                    b.ToTable("EmpresaUsuario", (string)null);
                 });
 
             modelBuilder.Entity("PencaPremio", b =>
@@ -64,7 +64,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasIndex("PremiosId");
 
-                    b.ToTable("PencaPremio");
+                    b.ToTable("PencaPremio", (string)null);
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Campeonato", b =>
@@ -99,7 +99,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasIndex("DeporteId");
 
-                    b.ToTable("Campeonatos");
+                    b.ToTable("Campeonatos", (string)null);
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Deporte", b =>
@@ -119,7 +119,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Deportes");
+                    b.ToTable("Deportes", (string)null);
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Empresa", b =>
@@ -159,7 +159,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasIndex("PlanId");
 
-                    b.ToTable("Empresas");
+                    b.ToTable("Empresas", (string)null);
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Equipo", b =>
@@ -179,7 +179,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Equipos");
+                    b.ToTable("Equipos", (string)null);
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Evento", b =>
@@ -214,7 +214,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasIndex("EquipoVisitanteId");
 
-                    b.ToTable("Eventos");
+                    b.ToTable("Eventos", (string)null);
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Foro", b =>
@@ -240,7 +240,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Foros");
+                    b.ToTable("Foros", (string)null);
                 });
 
             modelBuilder.Entity("tupenca_back.Model.LookAndFeel", b =>
@@ -272,7 +272,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LookAndFeels");
+                    b.ToTable("LookAndFeels", (string)null);
                 });
 
             modelBuilder.Entity("tupenca_back.Model.NotificationUserDeviceId", b =>
@@ -286,7 +286,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("NotificationUserDeviceIds");
+                    b.ToTable("NotificationUserDeviceIds", (string)null);
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Penca", b =>
@@ -327,7 +327,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasIndex("PuntajeId");
 
-                    b.ToTable("Pencas");
+                    b.ToTable("Pencas", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Penca");
                 });
@@ -365,7 +365,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Personas");
+                    b.ToTable("Personas", (string)null);
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Persona");
                 });
@@ -382,7 +382,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasIndex("PersonaId");
 
-                    b.ToTable("PersonaResetPassword");
+                    b.ToTable("PersonaResetPassword", (string)null);
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Plan", b =>
@@ -415,7 +415,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Planes");
+                    b.ToTable("Planes", (string)null);
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Prediccion", b =>
@@ -451,7 +451,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasIndex("EventoId");
 
-                    b.ToTable("Predicciones");
+                    b.ToTable("Predicciones", (string)null);
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Premio", b =>
@@ -471,7 +471,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Premios");
+                    b.ToTable("Premios", (string)null);
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Puntaje", b =>
@@ -490,7 +490,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Puntajes");
+                    b.ToTable("Puntajes", (string)null);
                 });
 
             modelBuilder.Entity("tupenca_back.Model.PuntajeUsuarioPenca", b =>
@@ -514,7 +514,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("PuntajeUsuarioPencas");
+                    b.ToTable("PuntajeUsuarioPencas", (string)null);
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Resultado", b =>
@@ -539,7 +539,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Resultados");
+                    b.ToTable("Resultados", (string)null);
                 });
 
             modelBuilder.Entity("tupenca_back.Model.UserInviteToken", b =>
@@ -552,7 +552,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasKey("Token");
 
-                    b.ToTable("UserInviteTokens");
+                    b.ToTable("UserInviteTokens", (string)null);
                 });
 
             modelBuilder.Entity("tupenca_back.Model.UsuarioPenca", b =>
@@ -578,7 +578,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasIndex("UsuarioId");
 
-                    b.ToTable("UsuariosPencas");
+                    b.ToTable("UsuariosPencas", (string)null);
                 });
 
             modelBuilder.Entity("tupenca_back.Model.UsuarioPremio", b =>
@@ -613,7 +613,7 @@ namespace tupenca_back.DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UsuarioPremios");
+                    b.ToTable("UsuarioPremios", (string)null);
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Administrador", b =>
