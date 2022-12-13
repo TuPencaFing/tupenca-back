@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
+using System.Linq.Expressions;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using tupenca_back.DataAccess.Repository.IRepository;
@@ -165,6 +167,12 @@ namespace tupenca_back.DataAccess.Repository
         public PersonaResetPassword getPersonaResetPassword(string access_token)
         {
             return _appDbContext.PersonaResetPassword.Find(access_token);
+        }
+
+        public Usuario GetUsuario(Expression<Func<Usuario, bool>> filter)
+        {
+            var a =  _appDbContext.Usuarios.Include(p => p.Empresas).FirstOrDefault(filter);
+            return a;
         }
         // Generates a random string with a given size.    
         public string RandomString(int size, bool lowerCase = false)

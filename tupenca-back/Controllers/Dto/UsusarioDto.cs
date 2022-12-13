@@ -16,7 +16,7 @@ namespace tupenca_back.Model
 
         [Required]
         [StringLength(40, MinimumLength = 6, ErrorMessage = "Username must be between 6 and 40 character in length.")]
-        public string Username { get; set; }
+        public string UserName { get; set; }
         public string Image { get; set; }
 
 

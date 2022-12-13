@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using tupenca_back.Model;
@@ -22,5 +23,8 @@ namespace tupenca_back.DataAccess.Repository.IRepository
 
         int getCantUsuarios();
         string createResetToken(int id);
+
+        public Usuario GetUsuario(Expression<Func<Usuario, bool>> filter);
+
     }
 }
