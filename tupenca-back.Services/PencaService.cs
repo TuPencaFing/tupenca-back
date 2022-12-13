@@ -23,7 +23,6 @@ namespace tupenca_back.Services
         private readonly UsuarioService _usuarioService;
         private readonly PrediccionService _prediccionService;
         private readonly ImagesService _imagesService;
-        private readonly PuntajeUsuarioPencaService _puntajeUsuarioPencaService;
 
 
         public PencaService(ILogger<PencaService> logger,
@@ -36,8 +35,7 @@ namespace tupenca_back.Services
                             UsuarioService usuarioService,
                             PrediccionService prediccionService,
                             ImagesService imagesService,
-                            IPersonaRepository personaRepository,
-                            PuntajeUsuarioPencaService puntajeUsuarioPencaService)
+                            IPersonaRepository personaRepository)
         {
             _logger = logger;
             _pencaCompartidaRepository = pencaCompartidaRepository;
@@ -49,7 +47,6 @@ namespace tupenca_back.Services
             _usuarioService = usuarioService;
             _prediccionService = prediccionService;
             _imagesService = imagesService;
-            _puntajeUsuarioPencaService = puntajeUsuarioPencaService;
         }
 
 
@@ -322,8 +319,6 @@ namespace tupenca_back.Services
         public void HabilitarUsuario (int pencaId, int usuarioId)
         {
             _usuariopencaRepository.HabilitarUsuario(pencaId, usuarioId);
-            PuntajeUsuarioPenca puntajeUsuarioPenca = new PuntajeUsuarioPenca { PencaId = pencaId, UsuarioId = usuarioId};
-            _puntajeUsuarioPencaService.Create(puntajeUsuarioPenca);
         }
 
         public void RechazarUsuario(int pencaId, int usuarioId)
