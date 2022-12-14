@@ -30,8 +30,9 @@ namespace tupenca_back.Controllers
         private readonly IEmailSender _emailSender;
         public readonly IMapper _mapper;
         public readonly PuntajeUsuarioPencaService _puntajeUsuarioPencaService;
+        public readonly ImagesService _imagesService;
 
-        public UsuarioController(ILogger<UsuarioController> logger, UsuarioService userService, PencaService pencaService, IConfiguration configuration, IEmailSender emailSender, IMapper imapper, PuntajeUsuarioPencaService puntajeUsuarioPencaService)
+        public UsuarioController(ILogger<UsuarioController> logger, UsuarioService userService, PencaService pencaService, IConfiguration configuration, IEmailSender emailSender, IMapper imapper, PuntajeUsuarioPencaService puntajeUsuarioPencaService, ImagesService imagesService)
         {
             _logger = logger;
             _userService = userService;
@@ -40,6 +41,7 @@ namespace tupenca_back.Controllers
             _emailSender = emailSender;
             _mapper = imapper;
             _puntajeUsuarioPencaService = puntajeUsuarioPencaService;
+            _imagesService = imagesService;
         }
 
         //GET: api/user
@@ -89,7 +91,7 @@ namespace tupenca_back.Controllers
         }
 
         [HttpPost("register"), AllowAnonymous]
-        public IActionResult Register(RegisterDTO request)
+        public IActionResult Register([FromForm] RegisterDTO request)
         {
             if (!ModelState.IsValid)
             {
@@ -103,9 +105,10 @@ namespace tupenca_back.Controllers
             {
                 return BadRequest("Username already exists.");
             }
+            string imagen = _imagesService.uploadImage("user_"+request.Username, request.imagenDto.file.OpenReadStream());
             _userService.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
-            var user = new Usuario {UserName = request.Username, Email = request.Email ,HashedPassword = passwordHash, PasswordSalt = passwordSalt};
-            _userService.add(user);
+            var user = new Usuario {UserName = request.Username, Email = request.Email ,HashedPassword = passwordHash, PasswordSalt = passwordSalt, Image = imagen};
+            _userService.add(user);            
             return Ok(new { message = "User added" });
         }
 

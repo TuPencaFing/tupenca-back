@@ -19,6 +19,25 @@ namespace tupenca_back.DataAccess.Repository
             _appDbContext.SaveChanges();
         }
 
+        public UsuarioPremio? GetUsuarioPremioById(int id)
+        {
+            var premio = _appDbContext.UsuarioPremios.Where(u => u.IdUsuario == id).FirstOrDefault();
+            if (premio != null)
+            {
+                premio.Penca = _appDbContext.Pencas.Where(p => p.Id == premio.PencaId).First();
+            }
+            return premio;
+        }
+
+        public UsuarioPremio? GetUsuarioPremioByUsuarioAndPenca(int idUsuario, int idPenca)
+        {
+            var premio = _appDbContext.UsuarioPremios.Where(u => u.IdUsuario == idUsuario && u.PencaId == idPenca).FirstOrDefault();
+            if (premio != null)
+            {
+                premio.Penca = _appDbContext.Pencas.Where(p => p.Id == premio.PencaId).First();
+            }
+            return premio;
+        }
     }
 }
 

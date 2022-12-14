@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using tupenca_back.DataAccess.Repository;
 using tupenca_back.DataAccess.Repository.IRepository;
 using tupenca_back.Model;
@@ -37,14 +38,17 @@ namespace tupenca_back.Services
             else return _usuarioPremioRepository.GetAll();
         }
 
-        public UsuarioPremio? GetUsuarioPremioById(int id) => _usuarioPremioRepository.GetFirstOrDefault(up => up.Id == id);
+        public UsuarioPremio? GetUsuarioPremioById(int id) => _usuarioPremioRepository.GetUsuarioPremioById(id);
 
-        public IEnumerable<UsuarioPremio> GetUsuariosPremioByUsuario(int idUsuario) => _usuarioPremioRepository.FindByCondition(up => up.IdUsuario == idUsuario);
+        public IEnumerable<UsuarioPremio> GetUsuariosPremioByUsuario(int idUsuario) => _usuarioPremioRepository.FindByCondition(up => up.IdUsuario == idUsuario).Include(p => p.Penca);
 
-        public IEnumerable<UsuarioPremio> GetUsuariosPremioByPenca(int idPenca) => _usuarioPremioRepository.FindByCondition(up => up.IdPenca == idPenca);
+        public IEnumerable<UsuarioPremio> GetUsuariosPremioByPenca(int idPenca) => _usuarioPremioRepository.FindByCondition(up => up.PencaId == idPenca).Include(p => p.Penca);
 
-        public UsuarioPremio? GetUsuarioPremioByUsuarioAndPenca(int idUsuario, int idPenca) => _usuarioPremioRepository.GetFirstOrDefault(up => up.IdUsuario == idUsuario && up.IdPenca == idPenca);
+        public UsuarioPremio? GetUsuarioPremioByUsuarioAndPenca(int idUsuario, int idPenca) => _usuarioPremioRepository.GetUsuarioPremioByUsuarioAndPenca(idUsuario, idPenca);
 
+        public IEnumerable<UsuarioPremio> GetUsuarioPremioReclamado(int idUsuario) => _usuarioPremioRepository.FindByCondition(up => up.IdUsuario == idUsuario && up.Reclamado == true).Include(p => p.Penca);
+
+        public IEnumerable<UsuarioPremio> GetUsuarioPremioNoReclamado(int idUsuario) => _usuarioPremioRepository.FindByCondition(up => up.IdUsuario == idUsuario && up.Reclamado == false).Include(p => p.Penca);
 
         public void UpdateUsuarioPremio(UsuarioPremio usuarioPremio)
         {
@@ -75,9 +79,8 @@ namespace tupenca_back.Services
 
             usuarioPremioToUpate.Banco = usuarioPremio.Banco;
             usuarioPremioToUpate.CuentaBancaria = usuarioPremio.CuentaBancaria;
-
+            usuarioPremioToUpate.Reclamado = true;
             UpdateUsuarioPremio(usuarioPremioToUpate);
-
             return usuarioPremioToUpate;
         }
 

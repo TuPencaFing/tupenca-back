@@ -27,7 +27,8 @@ namespace tupenca_back.Model
         public int IdUsuario { get; set; }
 
         [Required]
-        public int IdPenca { get; set; }
+        public int PencaId { get; set; }
+        public virtual Penca? Penca { get; set; }
 
     }
 }

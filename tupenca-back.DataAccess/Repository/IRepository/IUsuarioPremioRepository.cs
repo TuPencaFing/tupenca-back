@@ -1,4 +1,5 @@
 ﻿using System;
+using tupenca_back.DataAccess.Migrations;
 using tupenca_back.Model;
 
 namespace tupenca_back.DataAccess.Repository.IRepository
@@ -7,7 +8,8 @@ namespace tupenca_back.DataAccess.Repository.IRepository
     {
 
         void Save();
-
+        UsuarioPremio? GetUsuarioPremioById(int id);
+        UsuarioPremio? GetUsuarioPremioByUsuarioAndPenca(int idUsuario, int idPenca);
     }
 }
 
