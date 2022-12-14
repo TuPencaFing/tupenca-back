@@ -97,17 +97,21 @@ namespace tupenca_back.Controllers
             {
                 return UnprocessableEntity(ModelState);
             }
-            if(_userService.findByEmail(request.Email) != null)
+            if(_userService.findByEmail(request.email) != null)
             {
                 return BadRequest("Email already exists.");
             }
-            if (_userService.findByUserName(request.Username) != null)
+            if (_userService.findByUserName(request.username) != null)
             {
                 return BadRequest("Username already exists.");
             }
-            string imagen = _imagesService.uploadImage("user_"+request.Username, request.imagenDto.file.OpenReadStream());
-            _userService.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
-            var user = new Usuario {UserName = request.Username, Email = request.Email ,HashedPassword = passwordHash, PasswordSalt = passwordSalt, Image = imagen};
+            string? imagen = null;
+            if (request.image != null)
+            {
+               imagen = _imagesService.uploadImage("user_" + request.username + ".png", request.image.file.OpenReadStream());
+            }           
+            _userService.CreatePasswordHash(request.password, out byte[] passwordHash, out byte[] passwordSalt);
+            var user = new Usuario {UserName = request.username, Email = request.email ,HashedPassword = passwordHash, PasswordSalt = passwordSalt, Image = imagen};
             _userService.add(user);            
             return Ok(new { message = "User added" });
         }
