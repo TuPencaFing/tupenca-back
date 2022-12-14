@@ -58,7 +58,7 @@ namespace tupenca_back.DataAccess.Repository
 
             if (pencas != null)
             {
-                var pencaSearch = pencas.Where(p => p.Title.Contains(searchString)).ToList();
+                var pencaSearch = pencas.Where(p => p.Title.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
                 return pencaSearch;
             }
             return null;
@@ -74,7 +74,7 @@ namespace tupenca_back.DataAccess.Repository
 
             if (pencas != null)
             {
-                var pencaSearch = pencas.Where(p => p.Title.Contains(searchString)).ToList();
+                var pencaSearch = pencas.Where(p => p.Title.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
                 return pencaSearch;
             }
             return null;
