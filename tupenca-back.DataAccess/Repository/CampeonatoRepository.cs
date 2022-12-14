@@ -49,6 +49,22 @@ namespace tupenca_back.DataAccess.Repository.IRepository
         {
             return _appDbContext.Campeonatos.Where(e => e.Name.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
         }
+
+
+        public IEnumerable<Campeonato> GetCampeonatosFinalizados()
+        {
+            return _appDbContext.Campeonatos
+                .Where(c => c.FinishDate < DateTime.Now)
+                .ToList();
+        }
+
+        public IEnumerable<Campeonato> GetCampeonatosNoFinalizados()
+        {
+            return _appDbContext.Campeonatos
+                .Where(c => c.FinishDate > DateTime.Now)
+                .ToList();
+        }
+
     }
 }
 

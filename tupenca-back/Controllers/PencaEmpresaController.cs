@@ -159,7 +159,7 @@ namespace tupenca_back.Controllers
 
         //POST: api/pencas-empresas
         [HttpPost]
-        public IActionResult PostPencaEmpresa(PencaEmpresaDto pencaEmpresaDto)
+        public IActionResult PostPencaEmpresa(PencaEmpresaDto pencaEmpresaDto, [FromQuery] string? tenantCode = null)
         {
             if (pencaEmpresaDto == null)
                 throw new HttpResponseException((int)HttpStatusCode.BadRequest, "La Penca no debe ser nulo");
@@ -169,10 +169,20 @@ namespace tupenca_back.Controllers
 
             try
             {
-                var plan = _planService.FindPlanById(pencaEmpresaDto.Empresa.PlanId);
+                Plan? plan = null;
+                if (tenantCode == null) 
+                {
+                    plan = _planService.FindPlanById(pencaEmpresaDto.Empresa.PlanId);
+                }
+                else
+                {
+                    var empresa = _empresaService.getEmpresaByTenantCode(tenantCode);
+                    plan = empresa.Plan;
+                }                
                 if (plan == null)
-                    throw new NotFoundException("El Plan no existe");
-                
+                throw new NotFoundException("El Plan no existe");
+
+
                 var cantpencas = _pencaService.GetCantPencaEmpresas(pencaEmpresaDto.Empresa.Id);
                 if (cantpencas < plan.CantPencas)
                 {
