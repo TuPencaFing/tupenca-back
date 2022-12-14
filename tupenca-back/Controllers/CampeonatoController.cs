@@ -30,17 +30,30 @@ namespace tupenca_back.Controllers
 
         //GET: api/campeonatos
         [HttpGet]
-        public  ActionResult<IEnumerable<CampeonatoDto>> GetCampeonatos([FromQuery] string? searchString = null)
+        public  ActionResult<IEnumerable<CampeonatoDto>> GetCampeonatos([FromQuery] string? searchString = null, [FromQuery] bool? finalizados = null)
         {
             try
             {
                 if (searchString == null)
                 {
-                    var campeonatos = _campeonatoService.getCampeonatos();
-
-                    var campeonatosDto = _mapper.Map<List<CampeonatoDto>>(campeonatos);
-
-                    return Ok(campeonatosDto);
+                    if(finalizados == null)
+                    {
+                        var campeonatos = _campeonatoService.getCampeonatos();
+                        var campeonatosDto = _mapper.Map<List<CampeonatoDto>>(campeonatos);
+                        return Ok(campeonatosDto);
+                    }
+                    if(finalizados == true)
+                    {
+                        var campeonatos = _campeonatoService.GetCampeonatosFinalizados();
+                        var campeonatosDto = _mapper.Map<List<CampeonatoDto>>(campeonatos);
+                        return Ok(campeonatosDto);
+                    }
+                    else
+                    {
+                        var campeonatos = _campeonatoService.GetCampeonatosNoFinalizados();
+                        var campeonatosDto = _mapper.Map<List<CampeonatoDto>>(campeonatos);
+                        return Ok(campeonatosDto);
+                    }
                 }
                 else
                 {

@@ -162,6 +162,15 @@ namespace tupenca_back.Services
             return _campeonatoRepository.GetCampeonatosFinalized().ToList();
         }
 
+        public IEnumerable<Campeonato> GetCampeonatosFinalizados()
+        {
+            return _campeonatoRepository.GetCampeonatosFinalizados();
+        }
+
+        public IEnumerable<Campeonato> GetCampeonatosNoFinalizados()
+        {
+            return _campeonatoRepository.GetCampeonatosNoFinalizados();
+        }
 
     }
 }
