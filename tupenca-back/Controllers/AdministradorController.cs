@@ -73,16 +73,16 @@ namespace tupenca_back.Controllers
             {
                 return UnprocessableEntity(ModelState);
             }
-            if (_administradorService.findByEmail(request.Email) != null)
+            if (_administradorService.findByEmail(request.email) != null)
             {
                 return BadRequest("Email already exists.");
             }
-            if (_administradorService.findByUserName(request.Username) != null)
+            if (_administradorService.findByUserName(request.username) != null)
             {
                 return BadRequest("Username already exists.");
             }
-            _administradorService.CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
-            var user = new Administrador { UserName = request.Username, Email = request.Email, HashedPassword = passwordHash, PasswordSalt = passwordSalt };
+            _administradorService.CreatePasswordHash(request.password, out byte[] passwordHash, out byte[] passwordSalt);
+            var user = new Administrador { UserName = request.username, Email = request.email, HashedPassword = passwordHash, PasswordSalt = passwordSalt };
             _administradorService.add(user);
             return Ok(new { message = "User added" });
         }
