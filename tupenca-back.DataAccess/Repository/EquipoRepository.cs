@@ -14,7 +14,7 @@ namespace tupenca_back.DataAccess.Repository
 
         public IEnumerable<Equipo>? SearchEquipo(string searchString)
         {
-            return _appDbContext.Equipos.Where(e => e.Nombre.Contains(searchString)).ToList();
+            return _appDbContext.Equipos.Where(e => e.Nombre.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
         }
 
         public void Save()
