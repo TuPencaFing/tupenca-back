@@ -34,13 +34,37 @@ namespace tupenca_back
         //GET: api/usuario-premio       
         [HttpGet]
         public ActionResult<IEnumerable<UsuarioPremioDto>> GetUsuariosPremio([FromQuery(Name = "idUsuario")] int idUsuario,
-                                                                             [FromQuery(Name = "idPenca")] int idPenca)
+                                                                             [FromQuery(Name = "reclamado")] bool? reclamado = null)
         {
             try
             {
-                var usuariosPremio = _usuarioPremioService.GetUsuariosPremio(idUsuario, idPenca);
-                var usuariosPremioDto = _mapper.Map<List<UsuarioPremioDto>>(usuariosPremio);
-                return Ok(usuariosPremioDto);
+                if(idUsuario == 0 && reclamado == null)
+                {
+                    var usuariosPremio = _usuarioPremioService.GetUsuariosPremio(idUsuario, 0);
+                    var usuariosPremioDto = _mapper.Map<List<UsuarioPremioDto>>(usuariosPremio);
+                    return Ok(usuariosPremioDto);
+                }
+                if (reclamado == null)
+                {
+                    var usuariosPremio = _usuarioPremioService.GetUsuariosPremioByUsuario(idUsuario);
+                    var usuariosPremioDto = _mapper.Map<List<UsuarioPremioDto>>(usuariosPremio);
+                    return Ok(usuariosPremioDto);
+                }
+                else
+                {
+                    if(reclamado == true)
+                    {
+                        var usuariosPremio = _usuarioPremioService.GetUsuarioPremioReclamado(idUsuario);
+                        var usuariosPremioDto = _mapper.Map<List<UsuarioPremioDto>>(usuariosPremio);
+                        return Ok(usuariosPremioDto);
+                    }
+                    else
+                    {
+                        var usuariosPremio = _usuarioPremioService.GetUsuarioPremioNoReclamado(idUsuario);
+                        var usuariosPremioDto = _mapper.Map<List<UsuarioPremioDto>>(usuariosPremio);
+                        return Ok(usuariosPremioDto);
+                    }
+                }
             }
             catch (Exception e)
             {

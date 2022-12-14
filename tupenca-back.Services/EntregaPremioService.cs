@@ -49,7 +49,7 @@ namespace tupenca_back.Services
                                 var idUsuario = usuariosPuntaje[premio.Position - 1].UsuarioId;
 
                                 UsuarioPremio usuarioPremio = new UsuarioPremio();
-                                usuarioPremio.IdPenca = penca.Id;
+                                usuarioPremio.PencaId = penca.Id;
                                 usuarioPremio.Reclamado = false;
                                 usuarioPremio.PendientePago = true;
                                 usuarioPremio.IdUsuario = idUsuario;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using tupenca_back.Model;
 
 namespace tupenca_back.Controllers.Dto
 {
@@ -19,7 +20,9 @@ namespace tupenca_back.Controllers.Dto
 
         public int IdUsuario { get; set; }
 
-        public int IdPenca { get; set; }
+        public int PencaId { get; set; }
+
+        public Penca? Penca { get; set; }
 
     }
 }
