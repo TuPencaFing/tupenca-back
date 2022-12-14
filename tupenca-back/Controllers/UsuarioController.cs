@@ -91,7 +91,7 @@ namespace tupenca_back.Controllers
         }
 
         [HttpPost("register"), AllowAnonymous]
-        public IActionResult Register(RegisterDTO request)
+        public IActionResult Register([FromForm] RegisterDTO request)
         {
             if (!ModelState.IsValid)
             {
