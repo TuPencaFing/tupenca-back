@@ -20,7 +20,7 @@ namespace tupenca_back.Controllers
 {
     [ApiController]
     [Route("api/usuarios")]
-    [Authorize(Roles = "Usuario")]
+    [Authorize]
     public class UsuarioController : ControllerBase
     {
         private readonly IConfiguration _configuration;
