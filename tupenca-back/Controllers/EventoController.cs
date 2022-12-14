@@ -140,6 +140,8 @@ ILogger<EventoController> logger, EventoService eventoService, EquipoService equ
             evento.EquipoLocalId = eventoDto.EquipoLocalId;
             evento.EquipoVisitanteId = eventoDto.EquipoVisitanteId;
             evento.FechaInicial = eventoDto.FechaInicial;
+            evento.IsEmpateValid = eventoDto.IsEmpateValid;
+            evento.IsPuntajeEquipoValid = eventoDto.IsPuntajeEquipoValid;
 
             if (!_eventoService.IsEventoCorrect(evento))
                 return BadRequest("No puede tener los mismos equipos enfrentados");
