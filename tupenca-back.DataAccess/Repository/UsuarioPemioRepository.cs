@@ -21,7 +21,7 @@ namespace tupenca_back.DataAccess.Repository
 
         public UsuarioPremio? GetUsuarioPremioById(int id)
         {
-            var premio = _appDbContext.UsuarioPremios.Where(u => u.IdUsuario == id).FirstOrDefault();
+            var premio = _appDbContext.UsuarioPremios.Where(u => u.Id == id).FirstOrDefault();
             if (premio != null)
             {
                 premio.Penca = _appDbContext.Pencas.Where(p => p.Id == premio.PencaId).First();

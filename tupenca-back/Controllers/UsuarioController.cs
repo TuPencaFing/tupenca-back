@@ -227,7 +227,7 @@ namespace tupenca_back.Controllers
             }
             return Ok();
         }
-        [HttpPost("resetPassword")]
+        [HttpPost("resetPassword"), AllowAnonymous]
         public IActionResult ResetPassword(ResetPasswordDto resetDto)
         {
             try
