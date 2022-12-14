@@ -106,7 +106,7 @@ namespace tupenca_back.Controllers
             }
         }
         
-        /*
+        
         //GET: api/pencas-empresas
         [HttpGet("miempresa")]
         public ActionResult<IEnumerable<PencaEmpresaDto>> GetPencasEmpresabyEmpresa()
@@ -129,7 +129,7 @@ namespace tupenca_back.Controllers
                 throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
-        */
+        
 
         //GET: api/pencas-empresas/1
         [HttpGet("{id}")]
