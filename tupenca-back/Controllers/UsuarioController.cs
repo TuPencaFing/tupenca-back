@@ -31,8 +31,9 @@ namespace tupenca_back.Controllers
         public readonly IMapper _mapper;
         public readonly PuntajeUsuarioPencaService _puntajeUsuarioPencaService;
         public readonly ImagesService _imagesService;
+        public readonly EmpresaService _empresaService;
 
-        public UsuarioController(ILogger<UsuarioController> logger, UsuarioService userService, PencaService pencaService, IConfiguration configuration, IEmailSender emailSender, IMapper imapper, PuntajeUsuarioPencaService puntajeUsuarioPencaService, ImagesService imagesService)
+        public UsuarioController(ILogger<UsuarioController> logger, UsuarioService userService, PencaService pencaService, IConfiguration configuration, IEmailSender emailSender, IMapper imapper, PuntajeUsuarioPencaService puntajeUsuarioPencaService, ImagesService imagesService, EmpresaService empresaService)
         {
             _logger = logger;
             _userService = userService;
@@ -42,6 +43,7 @@ namespace tupenca_back.Controllers
             _mapper = imapper;
             _puntajeUsuarioPencaService = puntajeUsuarioPencaService;
             _imagesService = imagesService;
+            _empresaService = empresaService;
         }
 
         //GET: api/user
@@ -251,7 +253,7 @@ namespace tupenca_back.Controllers
         }
 
         [HttpPost("habilitarUsuario")]
-        public IActionResult HabilitarUsuarioPencaEmpresa(int pencaId, int userId)
+        public IActionResult HabilitarUsuarioPencaEmpresa(int pencaId, int userId, string tenantCode)
         {
             try
             {
@@ -263,8 +265,9 @@ namespace tupenca_back.Controllers
                 }
                 else
                 {
+                    var empresa = _empresaService.getEmpresaByTenantCode(tenantCode);
                     var usuario = _userService.find(userId);
-                    usuario.Empresas.Add(penca.Empresa);
+                    usuario.Empresas.Add(empresa);
                     _userService.UpdateUsuario(usuario);
                     _pencaService.HabilitarUsuario(pencaId, userId);
                     PuntajeUsuarioPenca puntajeUsuarioPenca = new PuntajeUsuarioPenca { PencaId = pencaId, UsuarioId = userId };
