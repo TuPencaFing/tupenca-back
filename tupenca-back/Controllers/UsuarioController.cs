@@ -267,6 +267,10 @@ namespace tupenca_back.Controllers
                 {
                     var empresa = _empresaService.getEmpresaByTenantCode(tenantCode);
                     var usuario = _userService.find(userId);
+                    if(usuario.Empresas == null)
+                    {
+                        usuario.Empresas = new List<Empresa> { };
+                    }
                     usuario.Empresas.Add(empresa);
                     _userService.UpdateUsuario(usuario);
                     _pencaService.HabilitarUsuario(pencaId, userId);
