@@ -219,6 +219,7 @@ namespace tupenca_back.Controllers
                     var empresa = _empresaService.getEmpresaByTenantCode(tenantCode);
                     plan = empresa.Plan;
                     idEmpresa = empresa.Id;
+                    pencaEmpresaDto.Empresa = _mapper.Map<EmpresaDto>(empresa);
                 }                
                 if (plan == null)
                 throw new NotFoundException("El Plan no existe");
