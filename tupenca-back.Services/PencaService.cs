@@ -93,7 +93,7 @@ namespace tupenca_back.Services
             _pencaCompartidaRepository.Save();
         }
 
-        public void AddPencaEmpresa(PencaEmpresa pencaEmpresa)
+        public void AddPencaEmpresa(PencaEmpresa pencaEmpresa,int idEmpresa)
         {
 
             var campeonato = _campeonatoService.findCampeonatoById(pencaEmpresa.Campeonato.Id);
@@ -120,7 +120,7 @@ namespace tupenca_back.Services
             pencaEmpresa.Premios = premios;
 
 
-            var empresa = _empresaService.getEmpresaById(pencaEmpresa.Empresa.Id);
+            var empresa = _empresaService.getEmpresaById(idEmpresa);
 
             if (empresa == null)
                 throw new NotFoundException("La Empresa no existe");

@@ -272,6 +272,19 @@ ILogger<EventoController> logger, EventoService eventoService, EquipoService equ
             return Ok(eventos);
         }
 
+        //GET: api/eventos/{id}/prediccion       
+        [HttpGet("{id}/prediccion")]
+        public ActionResult<PrediccionDto> GetResultadoEventoById(int id, [FromQuery] int pencaId)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var prediccion = _prediccionService.getPrediccionByEventoAndPencaAndUsuario(id, pencaId ,Convert.ToInt32(userId));
+            if (prediccion == null)
+            {
+                return NoContent();
+            }
+            return Ok(prediccion);
+        }        
+
     }
 }
 

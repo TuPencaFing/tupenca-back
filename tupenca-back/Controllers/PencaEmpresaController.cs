@@ -230,7 +230,7 @@ namespace tupenca_back.Controllers
                 {
                     var pencaEmpresa = _mapper.Map<PencaEmpresa>(pencaEmpresaDto);
 
-                    _pencaService.AddPencaEmpresa(pencaEmpresa);
+                    _pencaService.AddPencaEmpresa(pencaEmpresa,idEmpresa);
 
                     return CreatedAtAction("GetPencaEmpresa", new { id = pencaEmpresa.Id }, _mapper.Map<PencaEmpresaDto>(pencaEmpresa));
                 }
