@@ -5,7 +5,7 @@ using tupenca_back.Controllers.Dto;
 using System.Net;
 using tupenca_back.Services.Exceptions;
 using Microsoft.AspNetCore.Authorization;
-
+using System.Security.Claims;
 
 namespace tupenca_back.Controllers
 {
@@ -18,34 +18,49 @@ namespace tupenca_back.Controllers
         private readonly ILogger<LookAndFeelController> _logger;
         private readonly LookAndFeelService _lookandfeelService;
         private readonly EmpresaService _empresaService;
+        private readonly FuncionarioService _funcionarioService;
 
         public LookAndFeelController(ILogger<LookAndFeelController> logger,
                                  LookAndFeelService lookandfeelService,
-                                 EmpresaService empresaService)
+                                 EmpresaService empresaService,
+                                 FuncionarioService funcionarioService)
         {
             _logger = logger;
             _lookandfeelService = lookandfeelService;
             _empresaService = empresaService;
+            _funcionarioService = funcionarioService;
         }
 
         //GET: api/lookandfeel/1        
-        [HttpGet("{EmpresaId}")]
-        public ActionResult<LookAndFeel> GetLookAndFeelByEmpresa(int EmpresaId)
+        [HttpGet("{tenantCode}")]
+        public ActionResult<LookAndFeel> GetLookAndFeelByEmpresa(string tenantCode)
         {
-            if (_empresaService.getEmpresaById(EmpresaId) == null) return BadRequest();
-            var lookandfeel = _lookandfeelService.getLookAndFeelByEmpresaId(EmpresaId);
+            var empresa = _empresaService.getEmpresaByTenantCode(tenantCode);
+            if (empresa == null) return BadRequest();
+            var lookandfeel = _lookandfeelService.getLookAndFeelByEmpresaId(empresa.Id);
             if (lookandfeel == null) return NotFound();
             return Ok(lookandfeel);
         }
 
         // POST: api/lookandfeel        
         [HttpPost]
-        public ActionResult CreateLookAndFeel(LookAndFeel lookandfeel)
+        public ActionResult CreateLookAndFeel(LookAndFeelDto lookandfeel)
         {
             try
             {
-                if (_empresaService.getEmpresaById(lookandfeel.EmpresaId) == null) return BadRequest();
-                _lookandfeelService.CreateLookAndFeel(lookandfeel);
+                var funcionarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var funcionario = _funcionarioService.find(Convert.ToInt32(funcionarioId));
+                if (funcionario == null) return BadRequest();
+                if (_empresaService.getEmpresaById(funcionario.EmpresaId) == null) return BadRequest();
+                LookAndFeel look = new LookAndFeel
+                {
+                    EmpresaId = funcionario.EmpresaId,
+                    Navbar = lookandfeel.Navbar,
+                    Generalbackground = lookandfeel.Generalbackground,
+                    Generaltext = lookandfeel.Generaltext,
+                    Textnavbar = lookandfeel.Textnavbar
+                };
+                _lookandfeelService.CreateLookAndFeel(look);
                 return Ok();
             }
             catch (NotFoundException e)
@@ -55,18 +70,21 @@ namespace tupenca_back.Controllers
         }
 
         // PUT: api/lookandfeel        
-        [HttpPut("{EmpresaId}")]
-        public ActionResult UpdateLookAndFeel(int EmpresaId, LookAndFeelDto lookandfeel)
+        [HttpPut]
+        public ActionResult UpdateLookAndFeel(LookAndFeelDto lookandfeel)
         {
             try
             {
-                if (_empresaService.getEmpresaById(EmpresaId) == null) return BadRequest();
-                var existente = _lookandfeelService.getLookAndFeelByEmpresaId(EmpresaId);
+                var funcionarioId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var funcionario = _funcionarioService.find(Convert.ToInt32(funcionarioId));
+                if (funcionario == null) return BadRequest();
+                if (_empresaService.getEmpresaById(funcionario.EmpresaId) == null) return BadRequest();
+                var existente = _lookandfeelService.getLookAndFeelByEmpresaId(funcionario.EmpresaId);
                 if (existente == null)
                 {
                     LookAndFeel look = new LookAndFeel
                     {
-                        EmpresaId = EmpresaId,
+                        EmpresaId = funcionario.EmpresaId,
                         Navbar = lookandfeel.Navbar,
                         Generalbackground = lookandfeel.Generalbackground,
                         Generaltext = lookandfeel.Generaltext,
