@@ -6,6 +6,8 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using tupenca_back.Controllers.Dto;
+using tupenca_back.DataAccess.Repository;
+using tupenca_back.DataAccess.Repository.IRepository;
 using tupenca_back.Model;
 using tupenca_back.Services;
 using tupenca_back.Services.Exceptions;
@@ -31,6 +33,7 @@ namespace tupenca_back.Controllers
         private readonly EventoService _eventoService;
         private readonly UsuarioService _usuarioService;
         private readonly EmpresaService _empresaService;
+        public readonly IUsuarioPencaRepository _usuariopenca;
 
         public PencaEmpresaController(ILogger<PencaEmpresaController> logger,
                                IMapper mapper,
@@ -45,7 +48,8 @@ namespace tupenca_back.Controllers
                                PuntajeUsuarioPencaService puntajeUsuarioPencaService,
                                EventoService eventoService,
                                UsuarioService usuarioService,
-                               EmpresaService empresaService)
+                               EmpresaService empresaService,
+                               IUsuarioPencaRepository usuariopenca)
         {
             _logger = logger;
             _mapper = mapper;
@@ -61,6 +65,40 @@ namespace tupenca_back.Controllers
             _eventoService = eventoService;
             _usuarioService = usuarioService;
             _empresaService = empresaService;
+            _usuariopenca = usuariopenca;
+        }
+
+
+        [HttpGet("pencasRestantes")]
+        public ActionResult<PencasRestantesDto> GetCantRestantesPencasEmpresa([FromQuery] string tenantCode)
+        {
+            var empresa = _empresaService.getEmpresaByTenantCode(tenantCode);
+            if(empresa == null)
+            {
+                return BadRequest();
+            }
+            var empresaPlan = empresa.PlanId;
+            var planCantidad = _planService.FindPlanById(empresaPlan).CantPencas;
+            var cantpencas = _pencaService.GetCantPencaEmpresas(empresa.Id);
+            PencasRestantesDto res = new PencasRestantesDto();
+            res.cantidad = planCantidad - cantpencas;
+            return Ok(res);
+        }
+
+        [HttpGet("{id}/usuariosRestantes")]
+        public ActionResult<PencasRestantesDto> GetCantRestantesPencasEmpresa([FromQuery] string tenantCode, int id)
+        {
+            var empresa = _empresaService.getEmpresaByTenantCode(tenantCode);
+            if (empresa == null)
+            {
+                return BadRequest();
+            }
+            var empresaPlan = empresa.PlanId;
+            var planCantidad = _planService.FindPlanById(empresaPlan).CantUser;
+            var cantusuarios = _usuariopenca.GetCantUsuariosPenca(id);
+            PencasRestantesDto res = new PencasRestantesDto();
+            res.cantidad = planCantidad - cantusuarios;
+            return Ok(res);
         }
 
         //GET: api/pencas-empresas
