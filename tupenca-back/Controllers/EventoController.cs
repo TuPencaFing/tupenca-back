@@ -140,6 +140,8 @@ ILogger<EventoController> logger, EventoService eventoService, EquipoService equ
             evento.EquipoLocalId = eventoDto.EquipoLocalId;
             evento.EquipoVisitanteId = eventoDto.EquipoVisitanteId;
             evento.FechaInicial = eventoDto.FechaInicial;
+            evento.IsEmpateValid = eventoDto.IsEmpateValid;
+            evento.IsPuntajeEquipoValid = eventoDto.IsPuntajeEquipoValid;
 
             if (!_eventoService.IsEventoCorrect(evento))
                 return BadRequest("No puede tener los mismos equipos enfrentados");
@@ -220,7 +222,7 @@ ILogger<EventoController> logger, EventoService eventoService, EquipoService equ
             var prediccionExistente = _prediccionService.getPrediccionByEventoAndPencaAndUsuario(id, pencaId, Convert.ToInt32(userId));
             if (prediccionExistente != null)
             {
-                prediccionExistente.prediccion = prediccionDto.resultado;
+                prediccionExistente.prediccion = prediccionDto.prediccion;
                 prediccionExistente.PuntajeEquipoLocal = prediccionDto.PuntajeEquipoLocal;
                 prediccionExistente.PuntajeEquipoVisitante = prediccionDto.PuntajeEquipoVisitante;
                 _prediccionService.UpdatePrediccion(prediccionExistente);
@@ -229,7 +231,7 @@ ILogger<EventoController> logger, EventoService eventoService, EquipoService equ
             else
             {
                 Prediccion prediccion = new Prediccion();
-                prediccion.prediccion = prediccionDto.resultado;
+                prediccion.prediccion = prediccionDto.prediccion;
                 prediccion.PuntajeEquipoLocal = prediccionDto.PuntajeEquipoLocal;
                 prediccion.PuntajeEquipoVisitante = prediccionDto.PuntajeEquipoVisitante;
                 prediccion.EventoId = id;
@@ -270,17 +272,18 @@ ILogger<EventoController> logger, EventoService eventoService, EquipoService equ
             return Ok(eventos);
         }
 
-        //GET: api/eventos/finalizados        
-        [HttpGet("www"), AllowAnonymous]
-        public ActionResult<IEnumerable<EventoResultado>> www()
+        //GET: api/eventos/{id}/prediccion       
+        [HttpGet("{id}/prediccion")]
+        public ActionResult<PrediccionDto> GetResultadoEventoById(int id, [FromQuery] int pencaId)
         {
-            var eventos = _eventoService.getUsuariosWithoutPredictionForEvent();
-            //if (eventos == null)
-            //{
-            //    return NoContent();
-            //}
-            return Ok();
-        }
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var prediccion = _prediccionService.getPrediccionByEventoAndPencaAndUsuario(id, pencaId ,Convert.ToInt32(userId));
+            if (prediccion == null)
+            {
+                return NoContent();
+            }
+            return Ok(prediccion);
+        }        
 
     }
 }

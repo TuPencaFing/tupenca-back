@@ -6,6 +6,8 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using tupenca_back.Controllers.Dto;
+using tupenca_back.DataAccess.Repository;
+using tupenca_back.DataAccess.Repository.IRepository;
 using tupenca_back.Model;
 using tupenca_back.Services;
 using tupenca_back.Services.Exceptions;
@@ -31,6 +33,7 @@ namespace tupenca_back.Controllers
         private readonly EventoService _eventoService;
         private readonly UsuarioService _usuarioService;
         private readonly EmpresaService _empresaService;
+        public readonly IUsuarioPencaRepository _usuariopenca;
 
         public PencaEmpresaController(ILogger<PencaEmpresaController> logger,
                                IMapper mapper,
@@ -45,7 +48,8 @@ namespace tupenca_back.Controllers
                                PuntajeUsuarioPencaService puntajeUsuarioPencaService,
                                EventoService eventoService,
                                UsuarioService usuarioService,
-                               EmpresaService empresaService)
+                               EmpresaService empresaService,
+                               IUsuarioPencaRepository usuariopenca)
         {
             _logger = logger;
             _mapper = mapper;
@@ -61,6 +65,40 @@ namespace tupenca_back.Controllers
             _eventoService = eventoService;
             _usuarioService = usuarioService;
             _empresaService = empresaService;
+            _usuariopenca = usuariopenca;
+        }
+
+
+        [HttpGet("pencasRestantes")]
+        public ActionResult<PencasRestantesDto> GetCantRestantesPencasEmpresa([FromQuery] string tenantCode)
+        {
+            var empresa = _empresaService.getEmpresaByTenantCode(tenantCode);
+            if(empresa == null)
+            {
+                return BadRequest();
+            }
+            var empresaPlan = empresa.PlanId;
+            var planCantidad = _planService.FindPlanById(empresaPlan).CantPencas;
+            var cantpencas = _pencaService.GetCantPencaEmpresas(empresa.Id);
+            PencasRestantesDto res = new PencasRestantesDto();
+            res.cantidad = planCantidad - cantpencas;
+            return Ok(res);
+        }
+
+        [HttpGet("{id}/usuariosRestantes")]
+        public ActionResult<PencasRestantesDto> GetCantRestantesPencasEmpresa([FromQuery] string tenantCode, int id)
+        {
+            var empresa = _empresaService.getEmpresaByTenantCode(tenantCode);
+            if (empresa == null)
+            {
+                return BadRequest();
+            }
+            var empresaPlan = empresa.PlanId;
+            var planCantidad = _planService.FindPlanById(empresaPlan).CantUser;
+            var cantusuarios = _usuariopenca.GetCantUsuariosPenca(id);
+            PencasRestantesDto res = new PencasRestantesDto();
+            res.cantidad = planCantidad - cantusuarios;
+            return Ok(res);
         }
 
         //GET: api/pencas-empresas
@@ -87,7 +125,7 @@ namespace tupenca_back.Controllers
                     {
                         var pencasEmpresa = _pencaService.GetPencasFromEmpresaByUsuario(TenantCode, userId);
                         var pencasEmpresaDto = _mapper.Map<List<PencaEmpresaDto>>(pencasEmpresa);
-                        return Ok(pencasEmpresa);
+                        return Ok(pencasEmpresaDto);
                     }
                     else
                     {
@@ -105,7 +143,8 @@ namespace tupenca_back.Controllers
                 throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
-               
+        
+        
         //GET: api/pencas-empresas
         [HttpGet("miempresa")]
         public ActionResult<IEnumerable<PencaEmpresaDto>> GetPencasEmpresabyEmpresa()
@@ -128,6 +167,7 @@ namespace tupenca_back.Controllers
                 throw new HttpResponseException((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
+        
 
         //GET: api/pencas-empresas/1
         [HttpGet("{id}")]
@@ -157,7 +197,7 @@ namespace tupenca_back.Controllers
 
         //POST: api/pencas-empresas
         [HttpPost]
-        public IActionResult PostPencaEmpresa(PencaEmpresaDto pencaEmpresaDto)
+        public IActionResult PostPencaEmpresa(PencaEmpresaDto pencaEmpresaDto, [FromQuery] string? tenantCode = null)
         {
             if (pencaEmpresaDto == null)
                 throw new HttpResponseException((int)HttpStatusCode.BadRequest, "La Penca no debe ser nulo");
@@ -167,16 +207,30 @@ namespace tupenca_back.Controllers
 
             try
             {
-                var plan = _planService.FindPlanById(pencaEmpresaDto.Empresa.PlanId);
+                Plan? plan = null;
+                int idEmpresa = 0;
+                if (tenantCode == null) 
+                {
+                    plan = _planService.FindPlanById(pencaEmpresaDto.Empresa.PlanId);
+                    idEmpresa = pencaEmpresaDto.Empresa.Id;
+                }
+                else
+                {
+                    var empresa = _empresaService.getEmpresaByTenantCode(tenantCode);
+                    plan = empresa.Plan;
+                    idEmpresa = empresa.Id;
+                    pencaEmpresaDto.Empresa = _mapper.Map<EmpresaDto>(empresa);
+                }                
                 if (plan == null)
-                    throw new NotFoundException("El Plan no existe");
-                
-                var cantpencas = _pencaService.GetCantPencaEmpresas(pencaEmpresaDto.Empresa.Id);
+                throw new NotFoundException("El Plan no existe");
+
+
+                var cantpencas = _pencaService.GetCantPencaEmpresas(idEmpresa);
                 if (cantpencas < plan.CantPencas)
                 {
                     var pencaEmpresa = _mapper.Map<PencaEmpresa>(pencaEmpresaDto);
 
-                    _pencaService.AddPencaEmpresa(pencaEmpresa);
+                    _pencaService.AddPencaEmpresa(pencaEmpresa,idEmpresa);
 
                     return CreatedAtAction("GetPencaEmpresa", new { id = pencaEmpresa.Id }, _mapper.Map<PencaEmpresaDto>(pencaEmpresa));
                 }
@@ -266,7 +320,7 @@ namespace tupenca_back.Controllers
                     return NotFound();
                 }
                 
-                /*
+                
                 if (_pencaService.chekAuthUserEmpresa(penca.Empresa.TenantCode, userId))
                 {
                     PencaInfoDto pencaInfo = new PencaInfoDto();
@@ -277,7 +331,8 @@ namespace tupenca_back.Controllers
                     pencaInfo.CampeonatoName = penca.Campeonato.Name;
                     pencaInfo.DeporteName = _campeonatoService.findCampeonatoById(penca.Campeonato.Id).Deporte.Nombre;
                     var eventos = _pencaService.GetInfoEventosByPencaUsuario(id, userId);
-                    pencaInfo.Eventos = eventos;
+                    var eventosDto = _mapper.Map<List<EventoPrediccionDto>>(eventos);
+                    pencaInfo.Eventos = eventosDto;
                     var score = _puntajeUsuarioPencaService.GetTotalByPencaAndUsuario(id, userId);
                     if (score == null)
                     {
@@ -294,32 +349,6 @@ namespace tupenca_back.Controllers
                 {
                     return Unauthorized();
                 }
-                */
-
-
-                PencaInfoDto pencaInfo = new PencaInfoDto();
-                pencaInfo.Id = penca.Id;
-                pencaInfo.PencaTitle = penca.Title;
-                pencaInfo.PencaDescription = penca.Description;
-                pencaInfo.Image = penca.Image;
-                pencaInfo.CampeonatoName = penca.Campeonato.Name;
-                pencaInfo.DeporteName = _campeonatoService.findCampeonatoById(penca.Campeonato.Id).Deporte.Nombre;
-                var eventos = _pencaService.GetInfoEventosByPencaUsuario(id, userId);
-                var eventosDto = _mapper.Map<List<EventoPrediccionDto>>(eventos);
-                pencaInfo.Eventos = eventosDto;
-                var score = _puntajeUsuarioPencaService.GetTotalByPencaAndUsuario(id, userId);
-                if (score == null)
-                {
-                    pencaInfo.PuntajeTotal = 0;
-                }
-                else
-                {
-                    pencaInfo.PuntajeTotal = score;
-
-                }
-                return Ok(pencaInfo);
-
-
             }
             catch (Exception e)
             {
@@ -327,7 +356,7 @@ namespace tupenca_back.Controllers
             }
         }
 
-        // GET: api/pencas-compartidas/1/evento/1/estadisticas     
+  
         [HttpGet("{id}/eventos/{idEvento}/estadisticas")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -368,6 +397,16 @@ namespace tupenca_back.Controllers
             return Ok(eventodto);
         }
 
+
+        [HttpGet("{id}/usuarios")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<IEnumerable<UsuariosPencaEmpresaDto>>? GetUsuariosPencaEmpresa(int id)
+        {
+            var usuarios = _pencaService.GetUsuariosPencaEmpresa(id);
+            var usuariosDto = _mapper.Map<List<UsuariosPencaEmpresaDto>>(usuarios);
+            return usuariosDto;
+        }
 
     }
 }

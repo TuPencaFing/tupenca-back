@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Linq.Expressions;
 using tupenca_back.DataAccess.Repository.IRepository;
 using tupenca_back.Model;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace tupenca_back.DataAccess.Repository
 {
@@ -56,7 +58,7 @@ namespace tupenca_back.DataAccess.Repository
 
             if (pencas != null)
             {
-                var pencaSearch = pencas.Where(p => p.Title.Contains(searchString)).ToList();
+                var pencaSearch = pencas.Where(p => p.Title.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
                 return pencaSearch;
             }
             return null;
@@ -72,7 +74,7 @@ namespace tupenca_back.DataAccess.Repository
 
             if (pencas != null)
             {
-                var pencaSearch = pencas.Where(p => p.Title.Contains(searchString)).ToList();
+                var pencaSearch = pencas.Where(p => p.Title.IndexOf(searchString, StringComparison.OrdinalIgnoreCase) >= 0).ToList();
                 return pencaSearch;
             }
             return null;
@@ -140,6 +142,35 @@ namespace tupenca_back.DataAccess.Repository
             _appDbContext.UsuariosPencas.Update(userpenca);
             _appDbContext.SaveChanges();
         }
+
+        public void RechazarUsuario(int pencaId, int usuarioId)
+        {
+            var userpenca = _appDbContext.UsuariosPencas.Where(p => p.PencaId == pencaId && p.UsuarioId == usuarioId).First();
+            _appDbContext.UsuariosPencas.Remove(userpenca);
+            _appDbContext.SaveChanges();
+        }
+        
+
+        public IEnumerable<UsuariosPencaEmpresa>? GetUsuariosPencaEmpresa(int id)
+        {
+            var usuarios = _appDbContext.UsuariosPencas.Where(p => p.PencaId == id).ToList();
+            if (usuarios == null)
+            {
+                return null;
+            }
+            else
+            {
+                return usuarios.Join(_appDbContext.Personas, p => p.UsuarioId, per => per.Id, (p, per) => new UsuariosPencaEmpresa
+                                {
+                                    Id = per.Id,
+                                    Email = per.Email,
+                                    UserName = per.UserName,
+                                    Image = per.Image,
+                                    habilitado = p.habilitado
+                                }).ToList();
+            }
+        }
+
 
     }
 }

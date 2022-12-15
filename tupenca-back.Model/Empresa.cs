@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace tupenca_back.Model
 {
@@ -32,10 +33,11 @@ namespace tupenca_back.Model
 
         public bool Habilitado { get; set; } = false;
 
-        public List<Funcionario> Funcionarios { get; set; }
+        public List<Funcionario>? Funcionarios { get; set; }
 
-        public List<Usuario> Usuarios { get; set; }
+        public List<Usuario>? Usuarios { get; set; }
 
-        public List<PencaEmpresa> Pencas { get; set; }
+        [JsonIgnore]
+        public List<PencaEmpresa>? Pencas { get; set; }
     }
 }

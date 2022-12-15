@@ -5,7 +5,7 @@ namespace tupenca_back.Controllers.Dto
 {
     public class PrediccionDto
     {
-        public TipoResultado resultado { get; set; }
+        public TipoResultado prediccion { get; set; }
 
         public int? PuntajeEquipoLocal { get; set; }
 

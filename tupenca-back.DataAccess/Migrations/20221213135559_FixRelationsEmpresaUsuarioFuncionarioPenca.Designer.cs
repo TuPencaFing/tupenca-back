@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using tupenca_back.DataAccess;
 
@@ -11,9 +12,10 @@ using tupenca_back.DataAccess;
 namespace tupenca_back.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221213135559_FixRelationsEmpresaUsuarioFuncionarioPenca")]
+    partial class FixRelationsEmpresaUsuarioFuncionarioPenca
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -595,10 +597,10 @@ namespace tupenca_back.DataAccess.Migrations
                     b.Property<string>("CuentaBancaria")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IdUsuario")
+                    b.Property<int>("IdPenca")
                         .HasColumnType("int");
 
-                    b.Property<int>("PencaId")
+                    b.Property<int>("IdUsuario")
                         .HasColumnType("int");
 
                     b.Property<bool>("PendientePago")
@@ -612,8 +614,6 @@ namespace tupenca_back.DataAccess.Migrations
                         .HasColumnType("bit");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PencaId");
 
                     b.ToTable("UsuarioPremios");
                 });
@@ -827,17 +827,6 @@ namespace tupenca_back.DataAccess.Migrations
                     b.Navigation("Penca");
 
                     b.Navigation("Usuario");
-                });
-
-            modelBuilder.Entity("tupenca_back.Model.UsuarioPremio", b =>
-                {
-                    b.HasOne("tupenca_back.Model.Penca", "Penca")
-                        .WithMany()
-                        .HasForeignKey("PencaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Penca");
                 });
 
             modelBuilder.Entity("tupenca_back.Model.Funcionario", b =>

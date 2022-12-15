@@ -20,7 +20,7 @@ namespace tupenca_back.Model
         public string Image { get; set; }
 
 
-        public List<EmpresaDto> Empresas { get; set; }
+        public List<EmpresaDto>? Empresas { get; set; }
 
 
     }
