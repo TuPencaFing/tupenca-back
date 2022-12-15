@@ -14,6 +14,7 @@
     <None Remove="Images\**" />
     <None Remove="AutoMapper.Extensions.Microsoft.DependencyInjection" />
     <None Remove="Profiles\" />
+    <None Remove="EmailTemplates\ForgotPassword.html" />
   </ItemGroup>
 
   <ItemGroup>
@@ -47,4 +48,9 @@
     <None Remove="Newtonsoft.Json" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="EmailTemplates\ForgotPassword.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>
