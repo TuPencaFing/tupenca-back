@@ -14,5 +14,7 @@ namespace tupenca_back.DataAccess.Repository.IRepository
         Evento GetFirst(Expression<Func<Evento, bool>> filter);
 
         void Save();
+
+        IEnumerable<Usuario> getUsuariosWithoutPredictionForEvent();
     }
 }

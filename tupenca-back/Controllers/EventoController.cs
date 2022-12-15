@@ -270,6 +270,18 @@ ILogger<EventoController> logger, EventoService eventoService, EquipoService equ
             return Ok(eventos);
         }
 
+        //GET: api/eventos/finalizados        
+        [HttpGet("www"), AllowAnonymous]
+        public ActionResult<IEnumerable<EventoResultado>> www()
+        {
+            var eventos = _eventoService.getUsuariosWithoutPredictionForEvent();
+            //if (eventos == null)
+            //{
+            //    return NoContent();
+            //}
+            return Ok();
+        }
+
     }
 }
 

@@ -129,7 +129,14 @@ namespace tupenca_back.Services
 
             return eventosResultado;
         }
+        public IEnumerable<Usuario> getUsuariosWithoutPredictionForEvent()
+        {
 
+            var usuarios = _eventoRepository.getUsuariosWithoutPredictionForEvent();
+
+            return usuarios;
+        }
+        
     }
 }
 

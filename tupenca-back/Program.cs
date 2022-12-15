@@ -80,9 +80,9 @@ builder.Services.AddQuartz(q =>
 
     q.AddJob<ResultadoJob>(opts => opts.WithIdentity(jobKey));
 
-    var jobKey2 = new JobKey("NotificationEventoProximoJob");
+    var jobKey2 = new JobKey("NotificationResumenPencasJob");
 
-    q.AddJob<NotificationEventoProximoJob>(opts => opts.WithIdentity(jobKey2));
+    q.AddJob<NotificationResumenPencasJob>(opts => opts.WithIdentity(jobKey2));
 
 
     q.AddTrigger(opts => opts
@@ -92,8 +92,18 @@ builder.Services.AddQuartz(q =>
 
     q.AddTrigger(opts => opts
         .ForJob(jobKey2)
+        .WithIdentity("NotificationResumenPencasJob-trigger")
+        .WithCronSchedule(CronScheduleBuilder.DailyAtHourAndMinute(10,42)));
+
+    var jobKey3 = new JobKey("NotificationEventoProximoJob");
+
+    q.AddJob<NotificationEventoProximoJob>(opts => opts.WithIdentity(jobKey3));
+
+
+    q.AddTrigger(opts => opts
+        .ForJob(jobKey3)
         .WithIdentity("NotificationEventoProximoJob-trigger")
-        .WithCronSchedule("1 * * * * ?"));
+        .WithCronSchedule("0 */8 * * * ?"));
 
 
 });
