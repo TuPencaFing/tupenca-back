@@ -208,20 +208,23 @@ namespace tupenca_back.Controllers
             try
             {
                 Plan? plan = null;
+                int idEmpresa = 0;
                 if (tenantCode == null) 
                 {
                     plan = _planService.FindPlanById(pencaEmpresaDto.Empresa.PlanId);
+                    idEmpresa = pencaEmpresaDto.Empresa.Id;
                 }
                 else
                 {
                     var empresa = _empresaService.getEmpresaByTenantCode(tenantCode);
                     plan = empresa.Plan;
+                    idEmpresa = empresa.Id;
                 }                
                 if (plan == null)
                 throw new NotFoundException("El Plan no existe");
 
 
-                var cantpencas = _pencaService.GetCantPencaEmpresas(pencaEmpresaDto.Empresa.Id);
+                var cantpencas = _pencaService.GetCantPencaEmpresas(idEmpresa);
                 if (cantpencas < plan.CantPencas)
                 {
                     var pencaEmpresa = _mapper.Map<PencaEmpresa>(pencaEmpresaDto);
