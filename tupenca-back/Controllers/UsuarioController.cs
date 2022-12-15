@@ -256,13 +256,16 @@ namespace tupenca_back.Controllers
             try
             {
                 //var userId = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
-                var penca = _pencaService.findPencaEmpresaById(pencaId);
+                var penca = _pencaService.findPencaEmpresaById(pencaId);                
                 if(penca == null)
                 {
                     throw new HttpResponseException((int)HttpStatusCode.NotFound, "Penca Empresa not found");
                 }
                 else
                 {
+                    var usuario = _userService.find(userId);
+                    usuario.Empresas.Add(penca.Empresa);
+                    _userService.UpdateUsuario(usuario);
                     _pencaService.HabilitarUsuario(pencaId, userId);
                     PuntajeUsuarioPenca puntajeUsuarioPenca = new PuntajeUsuarioPenca { PencaId = pencaId, UsuarioId = userId };
                     _puntajeUsuarioPencaService.Create(puntajeUsuarioPenca);
