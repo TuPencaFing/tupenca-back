@@ -76,24 +76,26 @@ builder.Services.AddQuartz(q =>
 {
     q.UseMicrosoftDependencyInjectionScopedJobFactory();
 
-    var jobKey = new JobKey("ResultadoJob");
+  
+    var NotificationEventoProximoJobKey = new JobKey("NotificationEventoProximoJob");
 
-    q.AddJob<ResultadoJob>(opts => opts.WithIdentity(jobKey));
-
-    var jobKey2 = new JobKey("NotificationEventoProximoJob");
-
-    q.AddJob<NotificationEventoProximoJob>(opts => opts.WithIdentity(jobKey2));
+    q.AddJob<NotificationEventoProximoJob>(opts => opts.WithIdentity(NotificationEventoProximoJobKey));
 
 
-    q.AddTrigger(opts => opts
-        .ForJob(jobKey)
-        .WithIdentity("ResultadoJob-trigger")
-        .WithCronSchedule("0 * * * * ?"));
+    var PuntajeJobKey = new JobKey("PuntajeJob");
+
+    q.AddJob<PuntajeJob>(opts => opts.WithIdentity(PuntajeJobKey));
+
 
     q.AddTrigger(opts => opts
-        .ForJob(jobKey2)
+        .ForJob(NotificationEventoProximoJobKey)
         .WithIdentity("NotificationEventoProximoJob-trigger")
-        .WithCronSchedule("1 * * * * ?"));
+        .WithCronSchedule("0 0 21 ? * * *"));
+
+    q.AddTrigger(opts => opts
+        .ForJob(PuntajeJobKey)
+        .WithIdentity("PuntajeJob-trigger")
+        .WithCronSchedule("0 0 20 ? * * *"));
 
 
 });
